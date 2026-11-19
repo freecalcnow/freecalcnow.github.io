@@ -204,3 +204,26 @@ p{margin:.5rem 0}
   body{background:#fff}
   .tool-card{border:0;box-shadow:none;padding:0}
 }
+
+/* --- Round 6: daily hero, streak, WhatsApp share --- */
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{background:#1da851}
+.daily-hero{background:linear-gradient(135deg,#166534,#15803d);color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0}
+.daily-hero h2{color:#fff;margin-top:0}
+.daily-hero a{color:#fde68a}
+.daily-hero .streak-pill{display:inline-block;background:#f59e0b;color:#1c1005;font-weight:800;border-radius:999px;padding:4px 12px;margin:4px 0}
+.daily-hero .btn{margin:6px 6px 0 0}
+
+/* --- Round 6: scientific calculator keypad --- */
+.sci-wrap{max-width:520px}
+.sci-display{background:#0f172a;color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:12px;min-height:86px}
+.sci-expr{font-size:15px;color:#94a3b8;min-height:20px;word-break:break-all}
+.sci-out{font-size:32px;font-weight:800;word-break:break-all}
+.sci-keys{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sci-key{padding:14px 4px;font-size:17px;font-weight:700;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer}
+.sci-key:active{background:#dcfce7}
+.sci-key.fn{background:#dcfce7;border-color:#86efac;color:#14532d}
+.sci-key.op{background:#fef3c7;border-color:#fcd34d}
+.sci-key.util{background:#e2e8f0}
+.sci-key.eq{background:#166534;color:#fff;border-color:#166534}
+@media (max-width:480px){.sci-keys{grid-template-columns:repeat(4,1fr)}.sci-key{padding:12px 2px;font-size:15px}}

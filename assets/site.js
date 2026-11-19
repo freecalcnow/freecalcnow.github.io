@@ -304,6 +304,54 @@
   wireSearch($("#home-search"), $("#home-results"));
 
 
+  /* ---------- homepage: daily streak, recently used, share, PWA ---------- */
+  (function home(){
+    var streakEl = document.getElementById("daily-streak");
+    if(streakEl){
+      var n = 0;
+      try{
+        var st = JSON.parse(localStorage.getItem("fcn_daily_streak_v2") || "null");
+        n = (st && st.n) || 0;
+        if(!n){
+          var old = JSON.parse(localStorage.getItem("fcn_daily_streak") || "null");
+          n = (old && old.n) || 0;
+        }
+      }catch(e){}
+      streakEl.textContent = n > 0 ? ("🔥 " + n + "-day streak — keep it alive!") : "No streak yet — play today to start one!";
+    }
+    var recentBox = document.getElementById("recent-list");
+    var recentSec = document.getElementById("recent-sec");
+    if(recentBox && recentSec){
+      var items = [];
+      try{ items = JSON.parse(localStorage.getItem("fcn-recent") || "[]") || []; }catch(e){}
+      if(items.length){
+        recentSec.hidden = false;
+        recentBox.innerHTML = items.slice(0, 6).map(function(t){
+          return '<div class="rel-card"><a href="/' + esc(t.id) + '/">' + esc(t.name) + '</a></div>';
+        }).join("");
+      }
+    }
+    document.querySelectorAll("[data-share-home]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var url = "https://freecalcnow.github.io/";
+        var text = "FreeCalcNow — 15,394 free calculators, 78 games and a new puzzle every day. " + url;
+        if(navigator.share){ navigator.share({title: document.title, text: text, url: url}).catch(function(){}); }
+        else if(navigator.clipboard){ navigator.clipboard.writeText(text).then(function(){ b.textContent = "Link copied!"; setTimeout(function(){ b.textContent = "Share FreeCalcNow"; }, 2000); }); }
+      });
+    });
+    document.querySelectorAll("[data-share-home-wa]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var text = encodeURIComponent("FreeCalcNow — 15,394 free calculators, 78 games and a new puzzle every day. https://freecalcnow.github.io/");
+        window.open("https://wa.me/?text=" + text, "_blank", "noopener");
+      });
+    });
+    if("serviceWorker" in navigator){
+      window.addEventListener("load", function(){
+        navigator.serviceWorker.register("/sw.js").catch(function(){});
+      });
+    }
+  })();
+
   /* ---------- tool page ---------- */
   var T = window.TOOLDATA;
   if(!T) return; // not a tool page
@@ -361,6 +409,56 @@
     });
     var cur=document.getElementById("cur-sel");
     if(cur && saved._cur){ cur.value=saved._cur; try{ window.CUR=saved._cur; }catch(e){} }
+  }
+  /* Shareable result links: ?price=320000&r=6.5 reads straight into the form,
+     so a shared link re-opens with the same numbers and the same answer.
+     URL params win over saved values. */
+  function applyUrlParams(){
+    if(!compute) return;
+    var q;
+    try{ q = new URLSearchParams(location.search); }catch(e){ return; }
+    var changed = false;
+    (T.fields||[]).forEach(function(f){
+      if(!q.has(f.id)) return;
+      var el=document.getElementById("f_"+f.id);
+      if(!el) return;
+      var raw = q.get(f.id);
+      if(f.type==="select"){ el.value=raw; changed=true; return; }
+      var n=parseFloat(raw);
+      if(isFinite(n)){ el.value=n; changed=true; }
+      else if(raw!==""){ el.value=raw; changed=true; }
+    });
+    if(changed) saveVals();
+  }
+  /* The result link: every field, so the recipient sees exactly the same
+     numbers and answer the sender saw. */
+  function resultUrl(){
+    var base = location.origin + location.pathname;
+    var parts = [];
+    (T.fields||[]).forEach(function(f){
+      var el=document.getElementById("f_"+f.id);
+      if(!el) return;
+      var v = el.value;
+      if(v==="" || v==null) return;
+      parts.push(encodeURIComponent(f.id) + "=" + encodeURIComponent(v));
+    });
+    return parts.length ? base + "?" + parts.join("&") : base;
+  }
+  function bigResultText(){
+    var big = document.getElementById("result-big");
+    var text = document.title.replace(" — FreeCalcNow", "");
+    if(big && big.textContent && big.textContent !== "—") text += ": " + big.textContent.trim();
+    return text;
+  }
+  /* Recently used tools, for the homepage row (localStorage only). */
+  function recordRecent(){
+    try{
+      var key = "fcn-recent";
+      var items = JSON.parse(localStorage.getItem(key) || "[]") || [];
+      items = items.filter(function(t){ return t.id !== T.id; });
+      items.unshift({id: T.id, name: (window.FCN_PAGE && window.FCN_PAGE.toolName) || T.id, ts: Date.now()});
+      localStorage.setItem(key, JSON.stringify(items.slice(0, 12)));
+    }catch(e){}
   }
   function renderChart(chart){
     var box=$("#result-chart"); if(!box) return;
@@ -429,6 +527,8 @@
     run(); saveVals();
   });
   restoreVals();
+  applyUrlParams();
+  recordRecent();
   run();
 
   /* ---------- feedback widget ---------- */
@@ -457,9 +557,23 @@
   /* ---------- share / print ---------- */
   document.querySelectorAll("[data-share]").forEach(function(b){
     b.addEventListener("click", function(){
-      var url=location.href, title=document.title;
-      if(navigator.share){ navigator.share({title:title, url:url}).catch(function(){}); }
+      var url=resultUrl(), title=document.title, text=bigResultText();
+      if(navigator.share){ navigator.share({title:title, text:text, url:url}).catch(function(){}); }
       else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ b.textContent="Link copied!"; setTimeout(function(){ b.textContent="Share this calculation"; }, 2000); }); }
+      else { prompt("Copy this link:", url); }
+    });
+  });
+  document.querySelectorAll("[data-share-wa]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var text = bigResultText() + " — try it: " + resultUrl();
+      window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank", "noopener");
+    });
+  });
+  document.querySelectorAll("[data-copy-link]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var url = resultUrl();
+      function done(ok){ b.textContent = ok ? "Result link copied!" : "Copy failed — long-press the address bar"; setTimeout(function(){ b.textContent = "Copy result link"; }, 2500); }
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){ done(true); }).catch(function(){ done(false); }); }
       else { prompt("Copy this link:", url); }
     });
   });

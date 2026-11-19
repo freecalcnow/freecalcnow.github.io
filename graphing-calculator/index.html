@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphing Calculator — Plot Functions Online — FreeCalcNow</title>
+<meta name="description" content="Plot functions on a graph — x², sin(x) and more, with zoom, pan and click-to-trace. Free, instant, no sign-up.">
+<link rel="canonical" href="https://freecalcnow.github.io/graphing-calculator/">
+<meta property="og:title" content="Graphing Calculator — Plot Functions Online — FreeCalcNow">
+<meta property="og:description" content="Plot functions on a graph — x², sin(x) and more, with zoom, pan and click-to-trace. Free, instant, no sign-up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://freecalcnow.github.io/graphing-calculator/">
+<meta property="og:site_name" content="FreeCalcNow">
+<meta property="og:image" content="https://freecalcnow.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#166534"><link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="/assets/style.css?v=5">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Graphing Calculator — Plot Functions Online","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Plot functions on a graph — x², sin(x) and more, with zoom, pan and click-to-trace. Free, instant, no sign-up.","url":"https://freecalcnow.github.io/graphing-calculator/"}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3Y2FGRCKZZ');
+</script>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><b>Free</b>CalcNow</a><nav><a href="/">Home</a><a href="/tools/">All tools</a><a href="/games/">Games</a><a href="/ask/">Ask</a><a href="/about/">About</a></nav><form class="head-search" action="/" method="get" onsubmit="return false;"><input id="head-search" type="search" placeholder="Search calculators…" aria-label="Search calculators"><button type="button" onclick="document.getElementById('head-search').focus()">Search</button></form></div><div class="wrap"><div id="head-results" class="search-results" hidden></div></div></header>
+<main class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/category/math/">Math</a> / Graphing Calculator</nav>
+
+<h1>Graphing Calculator</h1>
+<p>Plot functions on a graph — type f(x) and see it drawn instantly. Up to three functions at once, with zoom, pan and a click-to-trace readout. Your numbers never leave your browser.</p>
+<section class="tool-card">
+<form id="gr-form" onsubmit="return false;">
+<div class="field"><label for="gr_f1" style="color:#166534">f(x) =</label><input id="gr_f1" type="text" value="x^2" placeholder="e.g. x^2"></div>
+<div class="field"><label for="gr_f2" style="color:#b45309">g(x) =</label><input id="gr_f2" type="text" value="sin(x)" placeholder="e.g. sin(x)"></div>
+<div class="field"><label for="gr_f3" style="color:#1d4ed8">h(x) =</label><input id="gr_f3" type="text" value="" placeholder="optional, e.g. 2*x+1"></div>
+<div class="field"><label for="gr_xmin">x from</label><input id="gr_xmin" type="number" value="-10" step="any"></div>
+<div class="field"><label for="gr_xmax">x to</label><input id="gr_xmax" type="number" value="10" step="any"></div>
+<p><button class="btn btn-go" id="gr_plot" type="button">Plot</button> <button class="btn btn-ghost" id="gr_zin" type="button">Zoom in</button> <button class="btn btn-ghost" id="gr_zout" type="button">Zoom out</button> <button class="btn btn-ghost" id="gr_reset" type="button">Reset view</button></p>
+</form>
+<canvas id="gr_cv" width="800" height="480" style="width:100%;border:1px solid #e2e8f0;border-radius:12px;background:#fff;touch-action:none"></canvas>
+<p class="small" id="gr_trace">Tap the graph to read values.</p>
+<p class="note" id="gr_err"></p>
+<p class="small muted">Try: <a href="#" data-preset="x^2">x²</a> · <a href="#" data-preset="sin(x)">sin(x)</a> · <a href="#" data-preset="x^3-3*x">x³−3x</a> · <a href="#" data-preset="1/x">1/x</a> · <a href="#" data-preset="2^x">2ˣ</a> — use x, +, −, *, /, ^, brackets, sin, cos, tan, log, ln, sqrt, abs, pi, e.</p>
+</section>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span>Your ad could reach people doing real maths.</span></div>
+<section><h2>How to use</h2><ol class="steps"><li>Type a function of x, like x^2 or sin(x), and tap Plot.</li><li>Drag the graph to pan; use Zoom in and out, or tap the graph to read exact values.</li><li>Add g(x) and h(x) to compare functions on the same axes.</li></ol></section>
+<section><h2>Frequently asked questions</h2><div class="faq"><b>What can I type?</b><p>x, numbers, + − * / ^, brackets, and sin, cos, tan, asin, acos, atan, log (base 10), ln, sqrt, abs, exp, pi and e. Example: 2*sin(x)+x^2.</p></div><div class="faq"><b>Why is part of the graph missing?</b><p>Some functions have gaps — 1/x is undefined at x = 0, and log(x) only exists for x over 0. The graph skips those points honestly instead of drawing a false line.</p></div><div class="faq"><b>Is my function sent anywhere?</b><p>No. The plotting runs entirely in your browser.</p></div></section><section><h2>Similar tools — you may also like</h2><div class="rel-grid"><div class="rel-card"><a href="/scientific-calculator/">Scientific Calculator</a><p class="small muted">Trig, logs, powers and roots — a full keypad calculator.</p></div><div class="rel-card"><a href="/quadratic-equation/">Quadratic Equation Solver</a><p class="small muted">Solve ax² + bx + c = 0, step by step.</p></div><div class="rel-card"><a href="/trig/">Trigonometry Calculator</a><p class="small muted">All six trig ratios of an angle at once.</p></div><div class="rel-card"><a href="/log/">Logarithm Calculator</a><p class="small muted">Log base 10, base e and base 2, any base you like.</p></div></div></section><section class="feedback" data-slug="graphing-calculator"><h2>Was this calculator helpful?</h2><div class="fb-form"><div class="stars" role="radiogroup" aria-label="Rate this calculator"><button type="button" data-n="1" aria-label="1 stars">☆</button><button type="button" data-n="2" aria-label="2 stars">☆</button><button type="button" data-n="3" aria-label="3 stars">☆</button><button type="button" data-n="4" aria-label="4 stars">☆</button><button type="button" data-n="5" aria-label="5 stars">☆</button></div><textarea class="fb-comment" placeholder="Tell us what could be better (optional)"></textarea><br><br><button type="button" class="btn btn-go fb-send">Send feedback</button><p class="small muted">No account needed. Your feedback is saved only on your device.</p></div><p class="thanks" hidden></p></section><div class="share-row"><button class="btn btn-ghost" type="button" data-share>Share this calculator</button><button class="btn btn-wa" type="button" data-share-wa>WhatsApp</button><button class="btn btn-ghost" type="button" data-copy-link>Copy link</button><button class="btn btn-ghost" type="button" data-print>Print</button></div>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span></span></div>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="sponsor-box"><h4>Sponsors keep every calculator free</h4><p>Brands reach millions of people doing real maths here. To sponsor a placement, email <a href="mailto:malikarslan032154@gmail.com">malikarslan032154@gmail.com</a>.</p></div><div class="cols"><div><h4>FreeCalcNow</h4><ul><li><a href="/about/">About</a></li><li><a href="/methodology/">How we calculate</a></li><li><a href="/guides/">Guides</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/contact/">Contact</a></li><li><a href="/sponsors/">Sponsors</a></li></ul></div><div><h4>Categories</h4><ul><li><a href="/category/finance/">Finance</a></li><li><a href="/category/math/">Math</a></li><li><a href="/category/statistics/">Statistics</a></li><li><a href="/category/health/">Health</a></li><li><a href="/category/everyday/">Everyday life</a></li><li><a href="/category/conversion/">Conversion</a></li><li><a href="/category/physics/">Physics</a></li><li><a href="/category/chemistry/">Chemistry</a></li><li><a href="/category/biology/">Biology</a></li><li><a href="/category/construction/">Construction</a></li><li><a href="/category/food/">Food</a></li><li><a href="/category/sports/">Sports</a></li><li><a href="/category/ecology/">Ecology</a></li><li><a href="/category/other/">Other</a></li></ul></div><div><h4>Popular</h4><ul><li><a href="/games/">Games — 78 mini games</a></li><li><a href="/daily-number/">Daily Number game</a></li><li><a href="/ask/">Ask FreeCalcNow</a></li><li><a href="/tools/">A–Z index — all 15,394 tools</a></li></ul></div></div><p class="small muted" style="margin-top:18px">FreeCalcNow — 15,394 free calculators. Your numbers never leave your browser. © 2026 FreeCalcNow · v5.</p></div></footer>
+<script src="/assets/engine.js?v=5" defer></script>
+<script src="/assets/site.js?v=5" defer></script>
+<script src="/assets/assistant.js?v=5" defer></script>
+<script>
+(function(){
+  var cv=document.getElementById('gr_cv'), ctx=cv.getContext('2d');
+  var f1=document.getElementById('gr_f1'), f2=document.getElementById('gr_f2'), f3=document.getElementById('gr_f3');
+  var xminEl=document.getElementById('gr_xmin'), xmaxEl=document.getElementById('gr_xmax');
+  var traceEl=document.getElementById('gr_trace'), errEl=document.getElementById('gr_err');
+  var COLORS=['#166534','#b45309','#1d4ed8'];
+  var fns=[];
+  function compile(src){
+    var t=String(src||'').trim();
+    if(!t) return null;
+    var low=t.toLowerCase();
+    if(!/^[0-9x+\-*/().,^ ]+$/.test(low.replace(/sin|cos|tan|asin|acos|atan|log|ln|sqrt|abs|exp|pi|e/g,''))) throw new Error('bad characters');
+    var body=low.replace(/\^/g,'**')
+      .replace(/asin\(/g,'Math.asin(').replace(/acos\(/g,'Math.acos(').replace(/atan\(/g,'Math.atan(')
+      .replace(/sin\(/g,'Math.sin(').replace(/cos\(/g,'Math.cos(').replace(/tan\(/g,'Math.tan(')
+      .replace(/log\(/g,'Math.log10(').replace(/ln\(/g,'Math.log(')
+      .replace(/sqrt\(/g,'Math.sqrt(').replace(/abs\(/g,'Math.abs(').replace(/exp\(/g,'Math.exp(')
+      .replace(/\bpi\b/g,'Math.PI').replace(/\be\b/g,'Math.E');
+    var fn=new Function('x','"use strict";return ('+body+');');
+    var t0=fn(0), t1=fn(1);
+    if(!isFinite(t0)&&!isFinite(t1)&&t0!==Infinity&&t1!==Infinity) throw new Error('no values');
+    return fn;
+  }
+  function plot(){
+    var dpr=window.devicePixelRatio||1;
+    var W=cv.clientWidth||800, H=480;
+    cv.width=W*dpr; cv.height=H*dpr; cv.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var xmin=parseFloat(xminEl.value), xmax=parseFloat(xmaxEl.value);
+    if(!isFinite(xmin)||!isFinite(xmax)||xmax<=xmin){ xmin=-10; xmax=10; xminEl.value=xmin; xmaxEl.value=xmax; }
+    var srcs=[f1.value,f2.value,f3.value], errs=[];
+    fns=srcs.map(function(s,i){ try{ return compile(s); }catch(e){ if(s.trim()) errs.push('f'+(i+1)+' could not be plotted — check the formula.'); return null; } });
+    errEl.textContent=errs.join(' ');
+    // y range from sampled values
+    var ymin=Infinity, ymax=-Infinity, N=600;
+    fns.forEach(function(fn){ if(!fn) return; for(var i=0;i<=N;i++){ var x=xmin+(xmax-xmin)*i/N; var y; try{ y=fn(x); }catch(e){ continue; } if(isFinite(y)){ if(y<ymin)ymin=y; if(y>ymax)ymax=y; } } });
+    if(!isFinite(ymin)){ ymin=-10; ymax=10; }
+    var pad=(ymax-ymin)*0.15||1; ymin-=pad; ymax+=pad;
+    // include y=0 and x=0 in view
+    if(ymin>0) ymin=0; if(ymax<0) ymax=0;
+    var X=function(x){ return (x-xmin)/(xmax-xmin)*W; };
+    var Y=function(y){ return H-(y-ymin)/(ymax-ymin)*H; };
+    ctx.clearRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='#e2e8f0'; ctx.lineWidth=1;
+    var step=pickStep(xmin,xmax);
+    for(var gx=Math.ceil(xmin/step)*step; gx<=xmax; gx+=step){ ctx.beginPath(); ctx.moveTo(X(gx),0); ctx.lineTo(X(gx),H); ctx.stroke(); }
+    var ystep=pickStep(ymin,ymax);
+    for(var gy=Math.ceil(ymin/ystep)*ystep; gy<=ymax; gy+=ystep){ ctx.beginPath(); ctx.moveTo(0,Y(gy)); ctx.lineTo(W,Y(gy)); ctx.stroke(); }
+    // axes
+    ctx.strokeStyle='#94a3b8'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(0,Y(0)); ctx.lineTo(W,Y(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(X(0),0); ctx.lineTo(X(0),H); ctx.stroke();
+    // labels
+    ctx.fillStyle='#64748b'; ctx.font='12px system-ui';
+    for(var lx=Math.ceil(xmin/step)*step; lx<=xmax; lx+=step){ if(Math.abs(lx)<1e-9) continue; ctx.fillText(String(Math.round(lx*100)/100), X(lx)+3, Y(0)-4); }
+    for(var ly=Math.ceil(ymin/ystep)*ystep; ly<=ymax; ly+=ystep){ if(Math.abs(ly)<1e-9) continue; ctx.fillText(String(Math.round(ly*100)/100), X(0)+4, Y(ly)-4); }
+    // functions
+    fns.forEach(function(fn,fi){
+      if(!fn) return;
+      ctx.strokeStyle=COLORS[fi]; ctx.lineWidth=2.5; ctx.beginPath();
+      var started=false;
+      for(var i=0;i<=N;i++){ var x=xmin+(xmax-xmin)*i/N, y; try{ y=fn(x); }catch(e){ y=NaN; }
+        if(!isFinite(y)){ started=false; continue; }
+        var px=X(x), py=Y(y);
+        if(!started){ ctx.moveTo(px,py); started=true; } else ctx.lineTo(px,py);
+      }
+      ctx.stroke();
+    });
+    try{ localStorage.setItem('fcn-graph', JSON.stringify({f1:f1.value,f2:f2.value,f3:f3.value,xmin:xmin,xmax:xmax})); }catch(e){}
+  }
+  function pickStep(a,b){ var raw=(b-a)/10, p=Math.pow(10,Math.floor(Math.log10(raw))); var n=raw/p; return n<1.5? p : (n<3.5? 2*p : (n<7.5? 5*p : 10*p)); }
+  function trace(ev){
+    var r=cv.getBoundingClientRect(), px=ev.clientX-r.left;
+    var xmin=parseFloat(xminEl.value), xmax=parseFloat(xmaxEl.value);
+    var x=xmin+(xmax-xmin)*px/r.width;
+    var parts=['x = '+(Math.round(x*100)/100)];
+    fns.forEach(function(fn,i){ if(!fn) return; var y; try{ y=fn(x); }catch(e){ y=NaN; } parts.push('f'+(i+1)+'(x) = '+(isFinite(y)?(Math.round(y*1000)/1000):'—')); });
+    traceEl.textContent=parts.join('  ·  ');
+  }
+  var drag=null;
+  cv.addEventListener('pointerdown', function(e){ drag={x:e.clientX, xmin:parseFloat(xminEl.value), xmax:parseFloat(xmaxEl.value)}; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointermove', function(e){ if(!drag) return; var r=cv.getBoundingClientRect(); var dx=(e.clientX-drag.x)/r.width*(drag.xmax-drag.xmin); xminEl.value=Math.round((drag.xmin-dx)*100)/100; xmaxEl.value=Math.round((drag.xmax-dx)*100)/100; plot(); });
+  cv.addEventListener('pointerup', function(e){ if(drag && Math.abs(e.clientX-drag.x)<4) trace(e); drag=null; });
+  function zoom(f){ var xmin=parseFloat(xminEl.value), xmax=parseFloat(xmaxEl.value), mid=(xmin+xmax)/2, half=(xmax-xmin)/2*f; xminEl.value=Math.round((mid-half)*100)/100; xmaxEl.value=Math.round((mid+half)*100)/100; plot(); }
+  document.getElementById('gr_plot').addEventListener('click', plot);
+  document.getElementById('gr_zin').addEventListener('click', function(){ zoom(0.6); });
+  document.getElementById('gr_zout').addEventListener('click', function(){ zoom(1.6); });
+  document.getElementById('gr_reset').addEventListener('click', function(){ xminEl.value=-10; xmaxEl.value=10; plot(); });
+  document.querySelectorAll('[data-preset]').forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); f1.value=a.getAttribute('data-preset'); plot(); }); });
+  [f1,f2,f3,xminEl,xmaxEl].forEach(function(el){ el.addEventListener('change', plot); });
+  try{
+    var q=new URLSearchParams(location.search);
+    if(q.get('f')) f1.value=q.get('f');
+    else { var sv=JSON.parse(localStorage.getItem('fcn-graph')||'null'); if(sv){ f1.value=sv.f1||f1.value; f2.value=sv.f2||''; f3.value=sv.f3||''; xminEl.value=sv.xmin; xmaxEl.value=sv.xmax; } }
+  }catch(e){}
+  function shareUrl(){ return location.origin+location.pathname+'?f='+encodeURIComponent(f1.value); }
+  document.querySelectorAll('[data-share]').forEach(function(b){ b.addEventListener('click', function(){
+    var u=shareUrl();
+    if(navigator.share){ navigator.share({title:document.title, text:'Graphing Calculator — f(x) = '+f1.value, url:u}).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(u).then(function(){ b.textContent='Link copied!'; setTimeout(function(){ b.textContent='Share this calculator'; },2000); }); }
+  }); });
+  document.querySelectorAll('[data-share-wa]').forEach(function(b){ b.addEventListener('click', function(){
+    window.open('https://wa.me/?text='+encodeURIComponent('Graphing Calculator — f(x) = '+f1.value+' — try it: '+shareUrl()),'_blank','noopener');
+  }); });
+  document.querySelectorAll('[data-copy-link]').forEach(function(b){ b.addEventListener('click', function(){
+    if(navigator.clipboard){ navigator.clipboard.writeText(shareUrl()).then(function(){ b.textContent='Link copied!'; setTimeout(function(){ b.textContent='Copy link'; },2500); }); }
+  }); });
+  document.querySelectorAll('[data-print]').forEach(function(b){ b.addEventListener('click', function(){ window.print(); }); });
+  plot();
+  window.addEventListener('resize', plot);
+})();
+</script>
+<script>window.FCN_PAGE={toolId:"graphing-calculator",toolName:"Graphing Calculator",category:"Math",slug:"graphing-calculator"};</script>
+</body>
+</html>
