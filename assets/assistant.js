@@ -1,12 +1,45 @@
 /* FreeCalcNow assistant — rule-based, context-aware, runs 100% in the browser.
    Knows the current page/tool (window.FCN_PAGE), solves sums, converts units,
-   finds tools, explains the current result, and guides the user. No server, no cost. */
+   finds tools, explains the current result, answers "what is" questions in plain
+   English, chats, and guides the user. No server, no cost. Never a dead end. */
 (function(){
   "use strict";
   var PAGE = window.FCN_PAGE || {toolId:null, toolName:null, category:null, slug:""};
   var INDEX = null, INDEX_LOADING = null;
   function el(html){ var d=document.createElement("div"); d.innerHTML=html.trim(); return d.firstChild; }
   function esc(s){ return String(s==null?"":s).replace(/[&<>\"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  /* ---------- name memory ---------- */
+  var USER_NAME=null;
+  try{ USER_NAME=localStorage.getItem("fcn-name")||null; }catch(e){}
+  function setName(n){
+    n=(n||"").trim().toLowerCase().replace(/[^a-z ]/g,"").trim();
+    if(!n || n.length>20) return false;
+    n=n.charAt(0).toUpperCase()+n.slice(1);
+    USER_NAME=n;
+    try{ localStorage.setItem("fcn-name", n); }catch(e){}
+    return true;
+  }
+  function greetWord(){
+    var h=new Date().getHours();
+    if(h<12) return "Good morning";
+    if(h<17) return "Good afternoon";
+    return "Good evening";
+  }
+  /* ---------- index + search ---------- */
+  var POPULAR=[
+    {id:"mortgage",name:"Mortgage Calculator",cat:"Finance"},
+    {id:"bmi",name:"BMI Calculator",cat:"Health"},
+    {id:"loan",name:"Loan / EMI Calculator",cat:"Finance"},
+    {id:"compound",name:"Compound Interest Calculator",cat:"Finance"},
+    {id:"sip-calculator",name:"SIP Calculator",cat:"Finance"},
+    {id:"percentage-calculator",name:"Percentage Calculator",cat:"Math"},
+    {id:"tip-calculator",name:"Tip Calculator",cat:"Everyday life"},
+    {id:"age-calculator",name:"Age Calculator",cat:"Everyday life"},
+    {id:"salary-hourly",name:"Salary ↔ Hourly Calculator",cat:"Finance"},
+    {id:"calorie",name:"Calorie Calculator",cat:"Health"},
+    {id:"discount",name:"Discount Calculator",cat:"Everyday life"},
+    {id:"games/daily-number",name:"Daily Number game",cat:"Games"}
+  ];
   function loadIndex(){
     if(INDEX) return Promise.resolve(INDEX);
     if(INDEX_LOADING) return INDEX_LOADING;
@@ -16,14 +49,62 @@
     }catch(e){ INDEX=[]; INDEX_LOADING=Promise.resolve(INDEX); }
     return INDEX_LOADING;
   }
+  /* Common words people type, mapped to the words our tools actually use. */
+  var SYNONYMS={
+    "emi":["loan"], "home loan":["mortgage"], "house payment":["mortgage"],
+    "car loan":["loan"], "student loan":["loan"], "weight":["bmi"],
+    "height":["bmi"], "salary":["salary","hourly"], "pay":["salary","hourly"],
+    "take home":["salary"], "per hour":["salary","hourly"],
+    "how old":["age"], "grade":["gpa"], "grade point":["gpa"],
+    "qr":["qr"], "password":["password"], "tip":["tip"],
+    "discount":["discount"], "calorie":["calorie"], "tdee":["tdee"],
+    "inflation":["inflation"], "roi":["roi"], "return on investment":["roi"],
+    "sip":["sip"], "mutual fund":["sip"], "monthly payment":["mortgage","loan"],
+    "body mass":["bmi"], "interest":["compound","loan"], "savings":["compound"],
+    "invest":["compound","sip"], "retire":["retirement"], "pension":["retirement"]
+  };
+  function expandWords(words){
+    var out=words.slice();
+    var joined=" "+words.join(" ")+" ";
+    for(var k in SYNONYMS){
+      if(joined.indexOf(" "+k+" ")>=0){
+        SYNONYMS[k].forEach(function(w){ if(out.indexOf(w)<0) out.push(w); });
+      }
+    }
+    return out;
+  }
+  function lev(a,b){
+    if(Math.abs(a.length-b.length)>1) return 2;
+    var d=[], i, j;
+    for(i=0;i<=a.length;i++) d[i]=[i];
+    for(j=0;j<=b.length;j++) d[0][j]=j;
+    for(i=1;i<=a.length;i++) for(j=1;j<=b.length;j++){
+      d[i][j]=Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+    }
+    return d[a.length][b.length];
+  }
   function searchTools(q, n){
     n = n || 3;
-    if(!INDEX || !INDEX.length) return [];
-    var words = q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){ return w.length>2; });
-    if(!words.length) return [];
-    var scored = INDEX.map(function(t){
-      var hay=(t.name+" "+(t.blurb||"")+" "+t.cat).toLowerCase(), s=0;
-      words.forEach(function(w){ if(t.name.toLowerCase().indexOf(w)>=0) s+=3; else if(hay.indexOf(w)>=0) s+=1; });
+    var raw = q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){ return w.length>2; });
+    if(!raw.length) return [];
+    var words = expandWords(raw);
+    var list = (INDEX && INDEX.length) ? INDEX : POPULAR;
+    var scored = list.map(function(t){
+      var name=t.name.toLowerCase(), hay=(name+" "+(t.blurb||"")+" "+t.cat).toLowerCase(), s=0;
+      words.forEach(function(w){
+        if(name.indexOf(w)>=0) s+=3;
+        else if(hay.indexOf(w)>=0) s+=1;
+        else {
+          /* prefix or one-letter typo, e.g. "mortage", "bmii", "lon" */
+          var nameWords=name.split(/[^a-z]+/);
+          for(var i=0;i<nameWords.length;i++){
+            var nw=nameWords[i];
+            if(nw.length<3 || w.length<3) continue;
+            if(nw.indexOf(w)===0 || w.indexOf(nw)===0){ s+=2; break; }
+            if(w.length>=4 && nw.charAt(0)===w.charAt(0) && lev(nw,w)<=1){ s+=2; break; }
+          }
+        }
+      });
       return {t:t, s:s};
     }).filter(function(x){ return x.s>0; }).sort(function(a,b){ return b.s-a.s; });
     return scored.slice(0,n).map(function(x){ return x.t; });
@@ -84,10 +165,81 @@
     var big = (window.fmtV? fmtV(out) : fmtN(out));
     return {text: fmtN(val)+" "+from+" = "+big+" "+to+".", done:true, link:hit};
   }
+  /* ---------- plain-English concept answers ---------- */
+  var CONCEPTS=[
+    {re:/mortgage|home loan/, text:"A mortgage is a long loan you take to buy a home. You pay it back every month for many years — part of each payment is interest, part pays off the loan itself. Early on, most of each payment is interest.", link:{id:"mortgage", name:"Mortgage Calculator"}},
+    {re:/\bbmi\b|body mass/, text:"BMI (Body Mass Index) is a number from your weight and height. It tells you if you are underweight, healthy, overweight, or obese. It is a rough guide — muscle and age also matter.", link:{id:"bmi", name:"BMI Calculator"}},
+    {re:/\bloan\b|emi\b/, text:"A loan is money you borrow and pay back in monthly parts (EMI = Equated Monthly Instalment). Each part covers some interest plus a bit of the amount you borrowed. The calculator shows your monthly payment, total interest, and payoff plan.", link:{id:"loan", name:"Loan / EMI Calculator"}},
+    {re:/compound interest|compound/, text:"Compound interest means you earn interest on your interest. Your money grows faster over time because each year's interest is added to the amount, and next year earns interest on the bigger amount.", link:{id:"compound", name:"Compound Interest Calculator"}},
+    {re:/\bsip\b|mutual fund/, text:"A SIP (Systematic Investment Plan) is a small fixed amount you invest every month. Over years it can grow a lot, because your returns also earn returns. The calculator shows what a monthly plan could become.", link:{id:"sip-calculator", name:"SIP Calculator"}},
+    {re:/income tax|\btax\b/, text:"Income tax is money the government takes from what you earn. The amount depends on your income and your country's tax bands. The calculator works out your tax and what you keep.", link:{id:"income-tax-calculator", name:"Income Tax Calculator"}},
+    {re:/\btip\b/, text:"A tip is extra money you give for good service — often 10%, 15% or 20% of the bill. The calculator splits the bill and the tip, even between several people.", link:{id:"tip-calculator", name:"Tip Calculator"}},
+    {re:/\bgpa\b|grade point/, text:"GPA (Grade Point Average) is the average of your course grades. Each grade is worth points (A = 4, B = 3, and so on), weighted by how many credits each course is worth.", link:{id:"gpa-calculator", name:"GPA Calculator"}},
+    {re:/qr code|\bqr\b/, text:"A QR code is a square picture that a phone camera can read — it can hold a link, some text, or Wi-Fi details. The generator makes one for free, right in your browser.", link:{id:"qr", name:"QR Code Generator"}},
+    {re:/json/, text:"JSON is a way of writing data that computers share with each other — lists and named values inside { } brackets. The formatter tidies messy JSON and checks if it is valid.", link:{id:"json", name:"JSON Formatter & Validator"}},
+    {re:/password/, text:"A strong password is long and random — a mix of letters, numbers and symbols that nobody can guess. The generator makes one for you, and never sends it anywhere.", link:{id:"password-gen", name:"Password Generator"}},
+    {re:/calorie/, text:"A calorie is a unit of energy in food. Your body burns a number of calories every day just to stay alive, and more when you move. The calculator works out how many you need.", link:{id:"calorie", name:"Calorie Calculator"}},
+    {re:/tdee/, text:"TDEE (Total Daily Energy Expenditure) is the total calories you burn in a day — your body at rest, plus moving, plus exercise. It is the starting point for losing, gaining, or keeping weight.", link:{id:"tdee", name:"TDEE Calculator"}},
+    {re:/inflation/, text:"Inflation is how prices rise over time — so the same money buys less later. $100 today will not buy the same things in 10 years. The calculator shows what money from another year is worth now.", link:{id:"inflation", name:"Inflation Calculator"}},
+    {re:/\broi\b|return on investment/, text:"ROI (Return on Investment) shows how much money you made compared with what you put in. If you invest $100 and get back $120, your ROI is 20%.", link:{id:"roi", name:"Investment Return (ROI) Calculator"}},
+    {re:/salary|hourly|per hour/, text:"Your hourly rate is your yearly salary divided by the hours you work. $50,000 a year is about $24 an hour on a 40-hour week. The calculator works it out both ways.", link:{id:"salary-hourly", name:"Salary ↔ Hourly Calculator"}},
+    {re:/percentage|percent/, text:"A percentage is a part out of 100. 25% of 200 is 50. The calculator works out percentages, percentage change, and “what percent is X of Y”.", link:{id:"percentage-calculator", name:"Percentage Calculator"}},
+    {re:/discount/, text:"A discount is money taken off a price. A 20% discount on $50 means you pay $40. The calculator shows the discount and the price you actually pay.", link:{id:"discount", name:"Discount Calculator"}},
+    {re:/\bage\b|how old/, text:"Your age is the time from your date of birth until today — in years, months and days. The calculator works it out exactly, including leap years.", link:{id:"age-calculator", name:"Age Calculator"}},
+    {re:/retire|pension/, text:"Retirement saving means putting money aside now so you have it when you stop working. Small monthly savings, grown over many years with interest, can become a large amount.", link:{id:"retirement", name:"Retirement Calculator"}}
+  ];
+  function tryConcept(ql){
+    if(!/what is|what'?s|what does|mean|explain|tell me about|^about |^define /.test(ql)) return null;
+    for(var i=0;i<CONCEPTS.length;i++){
+      if(CONCEPTS[i].re.test(ql)){
+        return {text: CONCEPTS[i].text + "\n\nWant the number? Open the tool and type your own figures.", done:true, link: CONCEPTS[i].link};
+      }
+    }
+    return null;
+  }
   /* ---------- answers ---------- */
   function toolLink(t){ return '<a href="/'+t.id+'/">'+esc(t.name)+'</a>'; }
+  function suggestLinks(){
+    return [POPULAR[0], POPULAR[1], POPULAR[2]];
+  }
   function answer(q){
     var ql=q.toLowerCase().trim();
+    /* name capture: "hi i m arslan", "my name is arslan" */
+    var nm = ql.match(/(?:i'?m|i m|i am|my name is|this is|mera naam)\s+([a-z]{2,20})/);
+    var nameGiven = nm ? setName(nm[1]) : false;
+    /* greetings */
+    if(/^(hi+|hello|hey|hii+|salam|aoa|salaam|assalamu alaikum|good morning|good afternoon|good evening)\b/.test(ql) || nameGiven){
+      var hello = greetWord() + (USER_NAME ? ", " + USER_NAME : "") + "! ";
+      if(nameGiven) hello = "Hi " + USER_NAME + "! Great to meet you. ";
+      hello += "I can solve sums, convert units, find any of the 15,390 calculators, or explain a result. Try “15% of 240”, “10 miles to km”, or “mortgage”.";
+      return {text: hello, done:true, links: suggestLinks()};
+    }
+    /* small talk */
+    if(/how are you|how'?s it going|how do you feel/.test(ql)){
+      return {text:"I'm doing great — ready to calculate! What shall we work out" + (USER_NAME ? ", " + USER_NAME : "") + "? A sum, a conversion, or a tool like “mortgage” or “BMI”?", done:true, links: suggestLinks()};
+    }
+    if(/who are you|your name|what are you/.test(ql)){
+      return {text:"I'm Ask FreeCalcNow — the helper built into this site. I know all 15,390 calculators, I solve sums and conversions, and I explain results. Everything runs in your browser, free, no sign-up.", done:true};
+    }
+    if(/\bhelp\b|what can you do/.test(ql)){
+      return {text:"Here's what I can do:\n• Solve a sum — “15% of 240”, “120 + 35”\n• Convert units — “10 miles to km”, “5 kg to lb”\n• Find a tool — “mortgage”, “BMI”, “tip”\n• Explain things — “what is a mortgage?”\n• Explain the calculator you are using — “explain this result”\n\nJust type or tap the microphone and ask by voice.", done:true, links: suggestLinks()};
+    }
+    if(/thank|shukran|thanks/.test(ql)){
+      return {text:"You're welcome" + (USER_NAME ? ", " + USER_NAME : "") + "! Anything else to work out?", done:true, links: suggestLinks()};
+    }
+    if(/\bbye\b|goodbye|see you/.test(ql)){
+      return {text:"Goodbye" + (USER_NAME ? ", " + USER_NAME : "") + "! Come back any time — the calculators and games are always here.", done:true};
+    }
+    if(/joke/.test(ql)){
+      return {text:"Why was 6 afraid of 7? Because 7, 8, 9!\n\nWant another one — or shall we calculate something?", done:true, links: suggestLinks()};
+    }
+    if(/what(?:'?s| is) the time|what time is it|today'?s date|what day is it|what'?s the date/.test(ql)){
+      var now=new Date();
+      return {text:"Right now it is " + now.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}) + " on " + now.toLocaleDateString("en-US",{weekday:"long", year:"numeric", month:"long", day:"numeric"}) + ".", done:true};
+    }
+    /* concept answers ("what is a mortgage?") */
+    var concept = tryConcept(ql);
+    if(concept) return concept;
     // explain current result
     if(/explain|what does this mean|what is this result|my result/.test(ql) && PAGE.toolId){
       var big=document.querySelector("#result-big"), sub=document.querySelector("#result-sub"), formula=document.querySelector(".formula");
@@ -108,7 +260,7 @@
     }
     // site map / categories
     if(/site map|sitemap|what.*on this site|all (tools|calculators)|categories/.test(ql)){
-      return {text:"FreeCalcNow has 15,390 free calculators in 14 categories: Finance, Math, Statistics, Health, Everyday life, Conversion, Physics, Chemistry, Biology, Construction, Food, Sports, Ecology and Other — plus the Daily Number game and 50+ mini games.\n\nUse the search box at the top, or browse the A–Z list on the home page.", done:true, link:{id:"", name:"Browse all tools"}};
+      return {text:"FreeCalcNow has 15,390 free calculators in 14 categories: Finance, Math, Statistics, Health, Everyday life, Conversion, Physics, Chemistry, Biology, Construction, Food, Sports, Ecology and Other — plus the Daily Number game and 50+ mini games.\n\nUse the search box at the top, or browse the A–Z list on the home page.", done:true, link:{id:"tools", name:"Browse all tools"}};
     }
     // games
     if(/game|play|daily number/.test(ql)){
@@ -118,17 +270,18 @@
     if(/how many|what.*new|newest/.test(ql)){
       return {text:"There are 15,390 free calculators on FreeCalcNow right now, plus the Daily Number game and 50+ mini games. Every tool shows its working, and your numbers never leave your browser.", done:true};
     }
-    // find a tool by keywords
+    // find a tool by keywords — never a dead end
     return loadIndex().then(function(){
       var hits=searchTools(ql,3);
       if(hits.length){
-        var txt="Here is what I found:";
-        return {text:txt, done:true, links:hits};
+        return {text:"Here is what I found for you:", done:true, links:hits};
       }
       var ctx = PAGE.toolId ? " You are on the "+PAGE.toolName+" page right now — I can explain its result, or find another tool for you." : "";
-      return {text:"I couldn't find a tool for that."+ctx+"\n\nTry naming the job — for example “mortgage”, “BMI”, “miles to km” — or type a sum like “15% of 240”.", done:true};
+      return {text:"I don't have an exact match for that yet."+ctx+"\n\nHere are three tools people use most — or tell me what you want to work out, for example “mortgage”, “BMI”, a sum like “15% of 240”, or a conversion like “10 miles to km”.", done:true, links: suggestLinks()};
     });
   }
+  /* Test hook (also handy for the /ask/ page): window.FCN_ask("hi") */
+  window.FCN_ask = answer;
   /* ---------- UI ---------- */
   var panel, msgs, input, micBtn, rec=null, listening=false;
   function addMsg(text, who, links){
@@ -192,7 +345,7 @@
     var open=function(){
       panel.hidden=false; loadIndex();
       if(!msgs.children.length){
-        var hello="Hi! I know all 15,390 FreeCalcNow calculators";
+        var hello="Hi" + (USER_NAME ? " " + USER_NAME : "") + "! I know all 15,390 FreeCalcNow calculators";
         if(PAGE.toolName) hello+=" — and you are on the "+PAGE.toolName+" page right now, so I can explain its result too";
         hello+=".\n\nAsk a sum (“15% of 240”), a conversion (“10 miles to km”), or name a tool (“mortgage”). You can also tap the microphone and ask by voice.";
         addMsg(hello,"bot");

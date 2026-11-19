@@ -135,6 +135,7 @@ function resultHTML(r){
   if(r.chart&&r.chart.values.length>1){
     const max=Math.max.apply(null,r.chart.values.concat([1]));
     h+='<div class="bar-wrap" aria-hidden="true">'+r.chart.values.map(v=>'<div class="bar" style="height:'+Math.max(3,Math.round(v/max*100))+'%"></div>').join("")+'</div>';
+    if(r.chart.labels) h+='<div class="bar-labels" aria-hidden="true">'+r.chart.labels.map(l=>'<span>'+esc(l)+'</span>').join("")+'</div>';
     if(r.chart.cap) h+='<p class="bar-cap">'+esc(r.chart.cap)+'</p>';
   }
   if(r.table){
