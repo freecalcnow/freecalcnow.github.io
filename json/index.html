@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JSON Formatter &amp; Validator — FreeCalcNow</title>
+<meta name="description" content="Format, minify and validate JSON — with the exact error position. — free, instant, no sign-up. Your numbers never leave your browser.">
+<link rel="canonical" href="https://freecalcnow.pages.dev/json/">
+<meta property="og:title" content="JSON Formatter &amp; Validator — FreeCalcNow">
+<meta property="og:description" content="Format, minify and validate JSON — with the exact error position. — free, instant, no sign-up. Your numbers never leave your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://freecalcnow.pages.dev/json/">
+<meta property="og:site_name" content="FreeCalcNow">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"JSON Formatter & Validator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Format, minify and validate JSON — with the exact error position. — free, instant, no sign-up. Your numbers never leave your browser."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://freecalcnow.pages.dev/"},{"@type":"ListItem","position":2,"name":"Other","item":"https://freecalcnow.pages.dev/category/other/"},{"@type":"ListItem","position":3,"name":"JSON Formatter & Validator","item":"https://freecalcnow.pages.dev/json/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"HowTo","name":"How to use the JSON Formatter & Validator","step":[{"@type":"HowToStep","text":"Type your numbers in the boxes above."},{"@type":"HowToStep","text":"Tap Calculate — the answer updates instantly."},{"@type":"HowToStep","text":"Read the big answer and the breakdown table below it."}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is my JSON uploaded?","acceptedAnswer":{"@type":"Answer","text":"No. Formatting and validation use JavaScript on your device. You can disconnect from the internet and it still works — that is the point of including it on this site."}},{"@type":"Question","name":"Why does my JSON fail with trailing commas?","acceptedAnswer":{"@type":"Answer","text":"JSON does not allow a comma after the last item in an object or array (unlike JavaScript). It is the single most common validation error — the error position will point right at it."}},{"@type":"Question","name":"Format or minify — which do I want?","acceptedAnswer":{"@type":"Answer","text":"Format (pretty-print) for reading and debugging; minify to shrink a payload before sending or storing it. Both are lossless — the data is identical."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"FreeCalcNow","url":"https://freecalcnow.pages.dev/","email":"malikarslan032154@gmail.com"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"FreeCalcNow","url":"https://freecalcnow.pages.dev/","inLanguage":"en"}</script>
+
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><b>Free</b>CalcNow</a><nav><a href="/tools/">All tools</a><a href="/games/">Games</a><a href="/ask/">Ask</a><a href="/about/">About</a></nav><form class="head-search" action="/" method="get" onsubmit="return false;"><input id="head-search" type="search" placeholder="Search 15,390 calculators…" aria-label="Search calculators"><button type="button" onclick="document.getElementById('head-search').focus()">Search</button></form></div><div class="wrap"><div id="head-results" class="search-results" hidden></div></div></header>
+<main class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/category/other/">Other</a> / JSON Formatter &amp; Validator</nav>
+<h1>JSON Formatter &amp; Validator</h1>
+<p>Paste JSON, get it beautifully formatted, minified, or told exactly where it is broken — character position included. Runs entirely in your browser, so it is safe for API keys and private payloads.</p>
+<section class="tool-card">
+<p class="formula">Validation follows RFC 8259 (the JSON standard) via your browser’s built-in parser — the same rules every API applies.</p>
+<div>
+<div class="field"><label for="json-in">Paste JSON</label><textarea id="json-in" rows="6">{"site":"FreeCalcNow","tools":1000,"free":true,"tags":["money","freelance","daily-game"]}</textarea></div>
+<p><button class="btn btn-go" type="button" id="json-fmt">Format</button> <button class="btn btn-ghost" type="button" id="json-min">Minify</button> <button class="btn btn-ghost" type="button" id="json-val">Validate only</button> <button class="btn btn-ghost" type="button" id="json-copy">Copy output</button></p>
+<div class="result"><div class="big" id="json-msg" style="font-size:1.1rem">—</div><textarea id="json-out" rows="8" readonly style="width:100%;white-space:pre;overflow:auto;background:#f1f5f9;border-radius:10px;padding:12px;font-family:monospace"></textarea></div>
+</div>
+<script>(function(){
+function run(mode){
+  var raw=document.getElementById("json-in").value,msg=document.getElementById("json-msg"),out=document.getElementById("json-out");
+  try{
+    var v=JSON.parse(raw);
+    msg.textContent="✓ Valid JSON.";
+    if(mode!=="val") out.value=mode==="min"?JSON.stringify(v):JSON.stringify(v,null,2);
+  }catch(e){
+    msg.textContent="Invalid JSON — "+e.message;
+    if(mode!=="val") out.value="";
+  }
+}
+document.getElementById("json-fmt").addEventListener("click",function(){run("fmt");});
+document.getElementById("json-min").addEventListener("click",function(){run("min");});
+document.getElementById("json-val").addEventListener("click",function(){run("val");});
+document.getElementById("json-copy").addEventListener("click",function(){
+  var out=document.getElementById("json-out");
+  if(navigator.clipboard&&out.value) navigator.clipboard.writeText(out.value).then(function(){document.getElementById("json-msg").textContent="Copied ✓";});
+});
+run("fmt");
+})();</script></section>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span>Your ad could reach people doing real maths.</span></div>
+<section><h2>Worked example</h2><p>Worked example: paste {&quot;user&quot;:{&quot;name&quot;:&quot;Ayesha&quot;,&quot;tags&quot;:[&quot;pro&quot;,&quot;2026&quot;],&quot;active&quot;:true}} and Format turns it into an indented, readable tree. Paste {&quot;a&quot;: } and validation reports the exact position of the problem instead of a shrug.</p></section>
+<section><h2>How to use</h2><ol class="steps"><li>Type your numbers in the boxes above.</li><li>Tap Calculate — or just type, the answer updates as you go.</li><li>Read the big answer and the breakdown table below it.</li></ol></section>
+<section><h2>Frequently asked questions</h2><div class="faq"><b>Is my JSON uploaded?</b><p>No. Formatting and validation use JavaScript on your device. You can disconnect from the internet and it still works — that is the point of including it on this site.</p></div><div class="faq"><b>Why does my JSON fail with trailing commas?</b><p>JSON does not allow a comma after the last item in an object or array (unlike JavaScript). It is the single most common validation error — the error position will point right at it.</p></div><div class="faq"><b>Format or minify — which do I want?</b><p>Format (pretty-print) for reading and debugging; minify to shrink a payload before sending or storing it. Both are lossless — the data is identical.</p></div></section><section><h2>Similar tools — you may also like</h2><div class="rel-grid"><div class="rel-card"><a href="/password-gen/">Password Generator &amp; Strength Checker</a><p class="small muted">Strong random passwords with a live strength meter — 100% local.</p></div><div class="rel-card"><a href="/qr/">QR Code Generator</a><p class="small muted">Turn any link or text into a QR code you can download.</p></div><div class="rel-card"><a href="/unit/">Unit Converter</a><p class="small muted">Length, weight and temperature — metric and imperial.</p></div><div class="rel-card"><a href="/word-counter/">Word Counter</a><p class="small muted">Words, characters, sentences, paragraphs and reading time for any text.</p></div><div class="rel-card"><a href="/base64/">Base64 Encoder &amp; Decoder</a><p class="small muted">Encode text to Base64 or decode it back — Unicode-safe, fully local.</p></div><div class="rel-card"><a href="/case-converter/">Case Converter</a><p class="small muted">UPPERCASE, lowercase, Title Case, Sentence case and aLtErNaTiNg — instantly.</p></div><div class="rel-card"><a href="/subnet/">Subnet Calculator</a><p class="small muted">Network, broadcast, host range and host count from an IP and CIDR.</p></div><div class="rel-card"><a href="/uuid/">UUID Generator</a><p class="small muted">Random version-4 UUIDs, generated locally — as many as you need.</p></div></div></section><details class="teaser"><summary>🎮 Take a break — play Quick Count <span class="muted small">(tap to open)</span></summary><p>Count the dots — fast! How many are there? Free, no sign-up, and it never disturbs your calculation.</p><p class="play"><a class="btn btn-amber" href="/games/quick-count/">▶ Play Quick Count</a> <a class="btn btn-ghost" href="/games/">All games</a></p></details><section class="feedback" data-slug="json"><h2>Was this calculator helpful?</h2><div class="fb-form"><div class="stars" role="radiogroup" aria-label="Rate this calculator"><button type="button" data-n="1" aria-label="1 stars">☆</button><button type="button" data-n="2" aria-label="2 stars">☆</button><button type="button" data-n="3" aria-label="3 stars">☆</button><button type="button" data-n="4" aria-label="4 stars">☆</button><button type="button" data-n="5" aria-label="5 stars">☆</button></div><textarea class="fb-comment" placeholder="Tell us what could be better (optional)"></textarea><br><br><button type="button" class="btn btn-go fb-send">Send feedback</button><p class="small muted">No account needed. Your feedback is saved only on your device.</p></div><p class="thanks" hidden></p></section><div class="share-row"><button class="btn btn-ghost" type="button" data-share>Share this calculation</button><button class="btn btn-ghost" type="button" data-print>Print</button></div>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span></span></div>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="sponsor-box"><h4>Sponsors keep every calculator free</h4><p>Brands reach millions of people doing real maths here. To sponsor a placement, email <a href="mailto:malikarslan032154@gmail.com">malikarslan032154@gmail.com</a>.</p></div><div class="cols"><div><h4>FreeCalcNow</h4><ul><li><a href="/about/">About</a></li><li><a href="/methodology/">How we calculate</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/contact/">Contact</a></li><li><a href="/sponsors/">Sponsors</a></li></ul></div><div><h4>Categories</h4><ul><li><a href="/category/finance/">Finance</a></li><li><a href="/category/math/">Math</a></li><li><a href="/category/statistics/">Statistics</a></li><li><a href="/category/health/">Health</a></li><li><a href="/category/everyday/">Everyday life</a></li><li><a href="/category/conversion/">Conversion</a></li><li><a href="/category/physics/">Physics</a></li><li><a href="/category/chemistry/">Chemistry</a></li><li><a href="/category/biology/">Biology</a></li><li><a href="/category/construction/">Construction</a></li><li><a href="/category/food/">Food</a></li><li><a href="/category/sports/">Sports</a></li><li><a href="/category/ecology/">Ecology</a></li><li><a href="/category/other/">Other</a></li></ul></div><div><h4>Popular</h4><ul><li><a href="/games/">Games — 50+ mini games</a></li><li><a href="/daily-number/">Daily Number game</a></li><li><a href="/ask/">Ask FreeCalcNow</a></li><li><a href="/tools/">A–Z index — all 15,390 tools</a></li></ul></div></div><p class="small muted" style="margin-top:18px">FreeCalcNow — 15,390 free calculators. Your numbers never leave your browser. © 2026 FreeCalcNow.</p></div></footer>
+<script src="/assets/engine.js" defer></script>
+<script src="/assets/site.js" defer></script>
+<script src="/assets/assistant.js" defer></script>
+<script>window.TOOLDATA={"id":"json","computeSrc":null,"fields":[]};window.FCN_PAGE={"toolId":"json","toolName":"JSON Formatter & Validator","category":"Other","slug":"json"};</script>
+</body>
+</html>

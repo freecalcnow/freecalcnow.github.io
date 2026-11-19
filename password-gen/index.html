@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Password Generator &amp; Strength Checker — FreeCalcNow</title>
+<meta name="description" content="Strong random passwords with a live strength meter — 100% local. — free, instant, no sign-up. Your numbers never leave your browser.">
+<link rel="canonical" href="https://freecalcnow.pages.dev/password-gen/">
+<meta property="og:title" content="Password Generator &amp; Strength Checker — FreeCalcNow">
+<meta property="og:description" content="Strong random passwords with a live strength meter — 100% local. — free, instant, no sign-up. Your numbers never leave your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://freecalcnow.pages.dev/password-gen/">
+<meta property="og:site_name" content="FreeCalcNow">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Password Generator & Strength Checker","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Strong random passwords with a live strength meter — 100% local. — free, instant, no sign-up. Your numbers never leave your browser."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://freecalcnow.pages.dev/"},{"@type":"ListItem","position":2,"name":"Other","item":"https://freecalcnow.pages.dev/category/other/"},{"@type":"ListItem","position":3,"name":"Password Generator & Strength Checker","item":"https://freecalcnow.pages.dev/password-gen/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"HowTo","name":"How to use the Password Generator & Strength Checker","step":[{"@type":"HowToStep","text":"Type your numbers in the boxes above."},{"@type":"HowToStep","text":"Tap Calculate — the answer updates instantly."},{"@type":"HowToStep","text":"Read the big answer and the breakdown table below it."}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What length should I use?","acceptedAnswer":{"@type":"Answer","text":"16 or more characters for anything important, with a unique password per account — a password manager makes that painless. The generator’s default of 16 is a good floor."}},{"@type":"Question","name":"Why not just use a memorable password?","acceptedAnswer":{"@type":"Answer","text":"Because humans are predictable: names, dates, keyboard patterns and “clever” substitutions are all in cracking dictionaries. Genuine randomness is the whole defence."}},{"@type":"Question","name":"Is it safe that this runs in a web page?","acceptedAnswer":{"@type":"Answer","text":"Generation happens entirely on your device using crypto.getRandomValues. No server sees it — you can verify by loading the page and switching off your network: it still works."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"FreeCalcNow","url":"https://freecalcnow.pages.dev/","email":"malikarslan032154@gmail.com"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"FreeCalcNow","url":"https://freecalcnow.pages.dev/","inLanguage":"en"}</script>
+
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><b>Free</b>CalcNow</a><nav><a href="/tools/">All tools</a><a href="/games/">Games</a><a href="/ask/">Ask</a><a href="/about/">About</a></nav><form class="head-search" action="/" method="get" onsubmit="return false;"><input id="head-search" type="search" placeholder="Search 15,390 calculators…" aria-label="Search calculators"><button type="button" onclick="document.getElementById('head-search').focus()">Search</button></form></div><div class="wrap"><div id="head-results" class="search-results" hidden></div></div></header>
+<main class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/category/other/">Other</a> / Password Generator &amp; Strength Checker</nav>
+<h1>Password Generator &amp; Strength Checker</h1>
+<p>Random passwords generated with the Web Crypto API — the same cryptographic randomness your browser uses for secure connections — with a live strength meter built in, so you can see the entropy of every password the moment it is made. Nothing is sent anywhere; close the tab and the password is gone unless you saved it.</p>
+<section class="tool-card">
+<p class="formula">Entropy = length × log₂(character pool size). A 16-character password from a 72-character pool carries ≈ 98.7 bits of entropy.</p>
+<div>
+<div class="field"><label for="pg-len">Length: <b id="pg-len-v">16</b></label><input id="pg-len" type="range" min="8" max="64" value="16" style="width:100%"></div>
+<div class="field"><label><input type="checkbox" id="pg-upper" checked> Uppercase (A–Z)</label><br><label><input type="checkbox" id="pg-lower" checked> Lowercase (a–z)</label><br><label><input type="checkbox" id="pg-digits" checked> Digits (0–9)</label><br><label><input type="checkbox" id="pg-symbols" checked> Symbols (!@#$…)</label><br><label><input type="checkbox" id="pg-nolook"> Avoid look-alikes (0 O 1 l I)</label></div>
+<p><button class="btn btn-go" type="button" id="pg-gen">Generate a new password</button> <button class="btn btn-ghost" type="button" id="pg-copy">Copy password</button></p>
+<div class="result"><div class="big pwd-out" id="pg-out" style="font-size:1.3rem;overflow-wrap:anywhere">—</div>
+<div class="meter" style="height:10px;background:#e2e8f0;border-radius:5px;margin-top:10px;overflow:hidden"><div id="pg-meter" style="height:100%;width:0%;background:#166534"></div></div>
+<p class="sub" id="pg-ent"></p><p class="note" id="pg-copied"></p></div>
+</div>
+<script>(function(){
+var U="ABCDEFGHIJKLMNOPQRSTUVWXYZ",L="abcdefghijklmnopqrstuvwxyz",D="0123456789",S="!@#$%^&*()-_=+[]{};:,.<>?";
+function pool(){
+  var p="";
+  if(document.getElementById("pg-upper").checked)p+=U;
+  if(document.getElementById("pg-lower").checked)p+=L;
+  if(document.getElementById("pg-digits").checked)p+=D;
+  if(document.getElementById("pg-symbols").checked)p+=S;
+  if(document.getElementById("pg-nolook").checked) p=p.replace(/[0O1lI]/g,"");
+  return p;
+}
+function gen(){
+  var p=pool(), out=document.getElementById("pg-out"), ent=document.getElementById("pg-ent"), meter=document.getElementById("pg-meter");
+  var len=parseInt(document.getElementById("pg-len").value,10);
+  if(!p){ out.textContent="Tick at least one character set."; ent.textContent=""; meter.style.width="0%"; return; }
+  var buf=new Uint32Array(len);
+  if(window.crypto&&crypto.getRandomValues) crypto.getRandomValues(buf); else for(var i=0;i<len;i++) buf[i]=Math.floor(Math.random()*4294967296);
+  var s=""; for(var j=0;j<len;j++) s+=p[buf[j]%p.length];
+  out.textContent=s;
+  var bits=len*Math.log2(p.length);
+  var label=bits<45?"Weak":bits<65?"Fair":bits<90?"Strong":"Excellent";
+  var color=bits<45?"#B3372C":bits<65?"#C77F0A":"#166534";
+  meter.style.width=Math.min(100,Math.round(bits/120*100))+"%"; meter.style.background=color;
+  var combos=Math.pow(p.length,len).toExponential(1).replace("e+"," × 10^");
+  ent.textContent="Strength: "+label+" — ≈ "+bits.toFixed(1)+" bits of entropy · pool of "+p.length+" characters · "+combos+" combinations. Above ~60 bits resists offline cracking for years; above 80 is excellent.";
+}
+document.getElementById("pg-len").addEventListener("input",function(e){document.getElementById("pg-len-v").textContent=e.target.value; gen();});
+document.getElementById("pg-gen").addEventListener("click",gen);
+document.querySelectorAll("#pg-upper,#pg-lower,#pg-digits,#pg-symbols,#pg-nolook").forEach(function(c){c.addEventListener("change",gen);});
+document.getElementById("pg-copy").addEventListener("click",function(){
+  var t=document.getElementById("pg-out").textContent;
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(function(){document.getElementById("pg-copied").textContent="Copied ✓ — now save it in your password manager.";});
+});
+gen();
+})();</script></section>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span>Your ad could reach people doing real maths.</span></div>
+<section><h2>Worked example</h2><p>Worked example: a 12-character password using upper, lower, digits and symbols draws from about 94 characters — roughly 79 bits of entropy, or about 4.8 × 10²³ combinations. Length beats cleverness: four random words beat one short “clever” password.</p></section>
+<section><h2>How to use</h2><ol class="steps"><li>Type your numbers in the boxes above.</li><li>Tap Calculate — or just type, the answer updates as you go.</li><li>Read the big answer and the breakdown table below it.</li></ol></section>
+<section><h2>Frequently asked questions</h2><div class="faq"><b>What length should I use?</b><p>16 or more characters for anything important, with a unique password per account — a password manager makes that painless. The generator’s default of 16 is a good floor.</p></div><div class="faq"><b>Why not just use a memorable password?</b><p>Because humans are predictable: names, dates, keyboard patterns and “clever” substitutions are all in cracking dictionaries. Genuine randomness is the whole defence.</p></div><div class="faq"><b>Is it safe that this runs in a web page?</b><p>Generation happens entirely on your device using crypto.getRandomValues. No server sees it — you can verify by loading the page and switching off your network: it still works.</p></div></section><section><h2>Similar tools — you may also like</h2><div class="rel-grid"><div class="rel-card"><a href="/json/">JSON Formatter &amp; Validator</a><p class="small muted">Format, minify and validate JSON — with the exact error position.</p></div><div class="rel-card"><a href="/qr/">QR Code Generator</a><p class="small muted">Turn any link or text into a QR code you can download.</p></div><div class="rel-card"><a href="/unit/">Unit Converter</a><p class="small muted">Length, weight and temperature — metric and imperial.</p></div><div class="rel-card"><a href="/word-counter/">Word Counter</a><p class="small muted">Words, characters, sentences, paragraphs and reading time for any text.</p></div><div class="rel-card"><a href="/base64/">Base64 Encoder &amp; Decoder</a><p class="small muted">Encode text to Base64 or decode it back — Unicode-safe, fully local.</p></div><div class="rel-card"><a href="/case-converter/">Case Converter</a><p class="small muted">UPPERCASE, lowercase, Title Case, Sentence case and aLtErNaTiNg — instantly.</p></div><div class="rel-card"><a href="/subnet/">Subnet Calculator</a><p class="small muted">Network, broadcast, host range and host count from an IP and CIDR.</p></div><div class="rel-card"><a href="/uuid/">UUID Generator</a><p class="small muted">Random version-4 UUIDs, generated locally — as many as you need.</p></div></div></section><details class="teaser"><summary>🎮 Take a break — play Breakout Mini <span class="muted small">(tap to open)</span></summary><p>Break all the bricks with the bouncing ball. Endless levels! Free, no sign-up, and it never disturbs your calculation.</p><p class="play"><a class="btn btn-amber" href="/games/breakout-mini/">▶ Play Breakout Mini</a> <a class="btn btn-ghost" href="/games/">All games</a></p></details><section class="feedback" data-slug="password-gen"><h2>Was this calculator helpful?</h2><div class="fb-form"><div class="stars" role="radiogroup" aria-label="Rate this calculator"><button type="button" data-n="1" aria-label="1 stars">☆</button><button type="button" data-n="2" aria-label="2 stars">☆</button><button type="button" data-n="3" aria-label="3 stars">☆</button><button type="button" data-n="4" aria-label="4 stars">☆</button><button type="button" data-n="5" aria-label="5 stars">☆</button></div><textarea class="fb-comment" placeholder="Tell us what could be better (optional)"></textarea><br><br><button type="button" class="btn btn-go fb-send">Send feedback</button><p class="small muted">No account needed. Your feedback is saved only on your device.</p></div><p class="thanks" hidden></p></section><div class="share-row"><button class="btn btn-ghost" type="button" data-share>Share this calculation</button><button class="btn btn-ghost" type="button" data-print>Print</button></div>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span></span></div>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="sponsor-box"><h4>Sponsors keep every calculator free</h4><p>Brands reach millions of people doing real maths here. To sponsor a placement, email <a href="mailto:malikarslan032154@gmail.com">malikarslan032154@gmail.com</a>.</p></div><div class="cols"><div><h4>FreeCalcNow</h4><ul><li><a href="/about/">About</a></li><li><a href="/methodology/">How we calculate</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/contact/">Contact</a></li><li><a href="/sponsors/">Sponsors</a></li></ul></div><div><h4>Categories</h4><ul><li><a href="/category/finance/">Finance</a></li><li><a href="/category/math/">Math</a></li><li><a href="/category/statistics/">Statistics</a></li><li><a href="/category/health/">Health</a></li><li><a href="/category/everyday/">Everyday life</a></li><li><a href="/category/conversion/">Conversion</a></li><li><a href="/category/physics/">Physics</a></li><li><a href="/category/chemistry/">Chemistry</a></li><li><a href="/category/biology/">Biology</a></li><li><a href="/category/construction/">Construction</a></li><li><a href="/category/food/">Food</a></li><li><a href="/category/sports/">Sports</a></li><li><a href="/category/ecology/">Ecology</a></li><li><a href="/category/other/">Other</a></li></ul></div><div><h4>Popular</h4><ul><li><a href="/games/">Games — 50+ mini games</a></li><li><a href="/daily-number/">Daily Number game</a></li><li><a href="/ask/">Ask FreeCalcNow</a></li><li><a href="/tools/">A–Z index — all 15,390 tools</a></li></ul></div></div><p class="small muted" style="margin-top:18px">FreeCalcNow — 15,390 free calculators. Your numbers never leave your browser. © 2026 FreeCalcNow.</p></div></footer>
+<script src="/assets/engine.js" defer></script>
+<script src="/assets/site.js" defer></script>
+<script src="/assets/assistant.js" defer></script>
+<script>window.TOOLDATA={"id":"password-gen","computeSrc":null,"fields":[]};window.FCN_PAGE={"toolId":"password-gen","toolName":"Password Generator & Strength Checker","category":"Other","slug":"password-gen"};</script>
+</body>
+</html>
