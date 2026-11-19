@@ -46,6 +46,8 @@
   /* Searchable pool: POPULAR plus every shard loaded so far. */
   var POOL={}, POOL_LIST=null;
   POPULAR.forEach(function(t){ POOL[t.id]=t; });
+  var POPULAR_IDS={};
+  POPULAR.forEach(function(t){ POPULAR_IDS[t.id]=1; });
   function currentPool(){
     if(POOL_LIST) return POOL_LIST;
     POOL_LIST=Object.keys(POOL).map(function(k){ return POOL[k]; });
@@ -143,9 +145,9 @@
     for(i=0;i<nameWords.length;i++){
       nw=nameWords[i];
       if(nw===alt) return 5;
-      if(alt.length>=3 && nw.indexOf(alt)===0) best=Math.max(best,4);
+      if(alt.length>=2 && nw.indexOf(alt)===0) best=Math.max(best,4);
       else if(nw.length>=4 && alt.length>=4 && alt.indexOf(nw)===0) best=Math.max(best,4);
-      else if(alt.length>=3 && nw.indexOf(alt)>0) best=Math.max(best,3);
+      else if(alt.length>=2 && nw.indexOf(alt)>0) best=Math.max(best,3);
     }
     if(best>=4) return best;
     if(idLower===alt) return 4;
@@ -194,6 +196,9 @@
     }
     out.sort(function(a,b){
       if(b.s!==a.s) return b.s-a.s;
+      /* Same score: the most-used tools first, then the shortest name. */
+      var ap=POPULAR_IDS[a.t.id]?0:1, bp=POPULAR_IDS[b.t.id]?0:1;
+      if(ap!==bp) return ap-bp;
       var al=a.t.name.length, bl=b.t.name.length;
       if(al!==bl) return al-bl;
       return a.t.name<b.t.name?-1:(a.t.name>b.t.name?1:0);
@@ -208,12 +213,50 @@
     }).join("");
     box.hidden=false;
   }
+  /* Tools whose name starts with one letter, shortest name first.
+     Used for single-letter queries, which the normal scorer can't handle
+     because it drops 1-letter words. */
+  function prefixHits(letter, n){
+    var list=currentPool(), out=[], i, t;
+    for(i=0;i<list.length;i++){
+      t=list[i];
+      if(t.name && t.name.toLowerCase().charAt(0)===letter) out.push({t:t, s:0});
+    }
+    out.sort(function(a,b){
+      /* Most-used tools first, then the shortest name. */
+      var ap=POPULAR_IDS[a.t.id]?0:1, bp=POPULAR_IDS[b.t.id]?0:1;
+      if(ap!==bp) return ap-bp;
+      var al=a.t.name.length, bl=b.t.name.length;
+      if(al!==bl) return al-bl;
+      return a.t.name<b.t.name?-1:(a.t.name>b.t.name?1:0);
+    });
+    return out.slice(0, n||6);
+  }
   /* Run a search. go=true means the user pressed Search/Enter: a single clear
      match (or an exact name match) opens straight away, using whatever
      results are already available — it never waits on a shard. */
   function runSearch(input, box, go){
     var q=input.value.trim();
-    if(q.length<2){ box.hidden=true; box.innerHTML=""; return; }
+    if(!q.length){ box.hidden=true; box.innerHTML=""; return; }
+    if(q.length===1){
+      /* Single letter: show tools starting with it. Instant results from
+         the loaded pool if any, otherwise a loading line — then the full
+         letter shard refines the list when it arrives. */
+      var L=q.toLowerCase();
+      if(!/^[a-z]$/.test(L)){ box.hidden=true; box.innerHTML=""; return; }
+      var first=prefixHits(L, 6);
+      if(first.length){ renderHits(box, first); }
+      else { box.innerHTML='<div class="search-loading">Loading tools starting with “'+L.toUpperCase()+'”…</div>'; box.hidden=false; }
+      loadShard(L).then(function(entries){
+        var added=false, i;
+        for(i=0;i<entries.length;i++){
+          if(!POOL[entries[i].id]){ POOL[entries[i].id]=entries[i]; added=true; }
+        }
+        if(added) POOL_LIST=null;
+        if(input.value.trim()===q && !box.hidden) renderHits(box, prefixHits(L, 6));
+      });
+      return;
+    }
     /* 1. Instant results from the loaded pool (POPULAR at minimum). */
     var hits=scoreTools(q, 6);
     if(go){
@@ -246,7 +289,7 @@
     input.addEventListener("input", function(){
       clearTimeout(timer);
       var q=input.value.trim();
-      if(q.length<2){ box.hidden=true; box.innerHTML=""; return; }
+      if(!q.length){ box.hidden=true; box.innerHTML=""; return; }
       timer=setTimeout(function(){ runSearch(input, box, false); }, 180);
     });
     input.addEventListener("keydown", function(e){

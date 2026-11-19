@@ -352,14 +352,27 @@
       }
       input.focus();
     };
-    fab.addEventListener("click",function(){ if(panel.hidden){ open(); } else { panel.hidden=true; fab.style.display=""; } });
-    panel.querySelector("#ask-close").addEventListener("click",function(){ panel.hidden=true; fab.style.display=""; });
+    fab.addEventListener("click",function(){ if(panel.hidden){ open(); } else { panel.hidden=true; fab.style.display=""; syncFab(); } });
+    panel.querySelector("#ask-close").addEventListener("click",function(){ panel.hidden=true; fab.style.display=""; syncFab(); });
     panel.querySelector("#ask-send").addEventListener("click",function(){ send(input.value); });
     input.addEventListener("keydown",function(e){ if(e.key==="Enter") send(input.value); });
     micBtn.addEventListener("click",toggleMic);
     panel.querySelectorAll(".ask-chips button").forEach(function(b){
       b.addEventListener("click",function(){ send(b.getAttribute("data-q")); });
     });
+    /* Keep the floating button off the hero: while the hero's bottom edge
+       is still on screen the button would cover the hero text, so hide it
+       until the user scrolls past the hero. Pages without a hero (tool
+       pages, games) always show it. */
+    function syncFab(){
+      if(panel && !panel.hidden) return; /* panel open: button stays hidden */
+      var hero=document.querySelector(".hero");
+      var hide=hero ? hero.getBoundingClientRect().bottom > window.innerHeight-120 : false;
+      fab.classList.toggle("fab-hidden", hide);
+    }
+    window.addEventListener("scroll", syncFab, {passive:true});
+    window.addEventListener("resize", syncFab);
+    syncFab();
   }
   if(document.readyState==="loading"){ document.addEventListener("DOMContentLoaded",build); } else { build(); }
 })();
