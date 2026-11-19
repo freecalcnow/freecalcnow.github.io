@@ -160,18 +160,20 @@ p{margin:.5rem 0}
 .pill{display:inline-block;background:var(--green-l);color:var(--green-d);border-radius:999px;padding:3px 10px;font-size:.85rem;font-weight:600}
 .muted{color:var(--muted)}
 .small{font-size:.88rem}
-.share-row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+/* v7.1: the share row now sits directly under the result (moved by
+   site.js) — keep it compact so it never pushes the answer around. */
+.share-row{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0;align-items:center}
+.share-row .btn{padding:8px 12px;font-size:.92rem;border-radius:9px}
+.share-row .fav-btn{padding:8px 12px !important;font-size:.92rem !important}
 @media (max-width:640px){
   h1{font-size:1.45rem}
   .hero h1{font-size:1.6rem}
-  /* Header nav must never wrap to a second line: one horizontal row that
-     scrolls if the five links don't fit a narrow phone. */
+  /* v7.3: the header nav must fit the screen with NO sideways scrolling.
+     On a narrow phone the seven links take a full-width row of their own
+     and wrap into two neat rows — every link visible, clean readable type. */
   .site-head .wrap{gap:8px;padding-top:4px;padding-bottom:4px}
-  .site-head nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%;gap:3px}
-  .site-head nav::-webkit-scrollbar{display:none}
-  /* All five links must fit a 360px screen: 14px type + tight padding
-     measures ~294px total (checked), inside the 328px content width. */
-  .site-head nav a{white-space:nowrap;flex:0 0 auto;font-size:.875rem;padding:5px 7px}
+  .site-head nav{flex:1 1 100%;flex-wrap:wrap;max-width:100%;gap:3px}
+  .site-head nav a{white-space:nowrap;font-size:.9rem;padding:6px 9px}
   .search-big input,.head-search input{font-size:1rem}
   .head-search{width:100%;margin-left:0}
   .head-search input{flex:1;width:auto}
@@ -200,7 +202,7 @@ p{margin:.5rem 0}
 }
 /* printing a tool: only the calculator and its answer, nothing else */
 @media print{
-  .site-head nav,.head-search,.site-foot,.ad-slot,.feedback,.teaser,.ask-fab,.ask-panel,.share-row,.hero,.crumbs,.rel-grid,.daily-hero{display:none !important}
+  .site-head nav,.head-search,.site-foot,.ad-slot,.feedback,.teaser,.ask-fab,.ask-panel,.share-row,.hero,.crumbs,.rel-grid,.daily-hero,.fcn-modal-backdrop{display:none !important}
   body{background:#fff}
   .tool-card{border:0;box-shadow:none;padding:0}
 }
@@ -271,3 +273,18 @@ body.fcn-custom-bg{background-size:cover;background-attachment:fixed;background-
 @media (max-width:640px){.gcard .gpic{width:64px;height:64px;border-radius:16px}.gcard .gpic .gicon{font-size:36px}.rec-row{grid-auto-columns:minmax(210px,78vw)}}
 /* offline banner (site.js) */
 .offline-banner{background:#fef3c7;color:#78350f;font-weight:700;padding:10px 16px;text-align:center;border-bottom:2px solid #f59e0b}
+
+/* v7.3: download modal — a popup over the current page, never a navigation.
+   Opens only when the header "Download app" button is tapped; closes with
+   the × button, a tap on the dim area, or Escape. It never covers results
+   while you calculate: it only exists while open, and the page behind it
+   keeps its place. */
+.fcn-modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,.62);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:24px 14px;overflow-y:auto}
+.fcn-modal-backdrop[hidden]{display:none}
+.fcn-modal{background:var(--surface);color:var(--ink);border-radius:18px;box-shadow:0 18px 50px rgba(2,6,23,.35);max-width:560px;width:100%;padding:20px 20px 14px;position:relative}
+.fcn-modal h2{margin:.2rem 0 .4rem;font-size:1.3rem;padding-right:36px}
+.fcn-modal h3{margin:1.1rem 0 .3rem}
+.fcn-modal .fcn-modal-close{position:absolute;top:10px;right:10px;border:0;background:var(--line);color:var(--ink);border-radius:999px;width:36px;height:36px;font-size:1.1rem;line-height:1;cursor:pointer}
+.fcn-modal .fcn-dl-install{margin:2px 0}
+.fcn-modal .dl-note{margin:.35rem 0 .9rem}
+body.fcn-modal-open{overflow:hidden}

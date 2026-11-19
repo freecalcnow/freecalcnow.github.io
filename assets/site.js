@@ -602,6 +602,22 @@
     });
     sr.appendChild(btn);
   })();
+
+  /* ---------- share row: sit directly under the result (v7.1) ----------
+     The share block is baked at the bottom of every tool page (after the
+     feedback section), so on a phone it sat far below the answer. Move it
+     to directly after the result, inside the calculator card. This runs in
+     a deferred script, before first paint, so nothing jumps around. Only
+     on tool pages (guard on #tool-form). The Save-result button above and
+     the Favourite button from favs.js are both appended INTO .share-row,
+     so they travel with the row wherever it sits. No handlers change. */
+  (function(){
+    if(!document.querySelector("#tool-form")) return;
+    var sr=document.querySelector(".share-row");
+    var res=document.querySelector(".result");
+    if(!sr || !res) return;
+    res.parentNode.insertBefore(sr, res.nextSibling);
+  })();
 })();
 
 /* Offline banner — shows whenever the browser reports offline, and hides
@@ -680,4 +696,105 @@
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", fire);
   else fire();
+})();
+
+/* ---------- v7.3: download modal + version marker ----------
+   The header "Download app" button opens a popup over the current page
+   instead of navigating to /download/. The modal carries the same honest
+   install options as the download page (real PWA install via
+   window.FCN_INSTALL, manual steps where the browser offers no prompt,
+   no fake files). The footer version marker is stamped at runtime so the
+   owner can see which build is live. */
+(function(){
+  "use strict";
+  var VER="v7.3";
+  function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
+  function stampVersion(){
+    try{
+      var ps=document.querySelectorAll(".site-foot p");
+      for(var i=0;i<ps.length;i++){
+        if(ps[i].textContent.indexOf("© 2026 FreeCalcNow · v")===-1) continue;
+        (function walk(node){
+          for(var j=0;j<node.childNodes.length;j++){
+            var c=node.childNodes[j];
+            if(c.nodeType===3){ c.nodeValue=c.nodeValue.replace(/· v[\d.]+/,"· "+VER); }
+            else if(c.nodeType===1){ walk(c); }
+          }
+        })(ps[i]);
+      }
+    }catch(e){}
+  }
+  var lastFocus=null;
+  function buildModal(){
+    var old=document.getElementById("fcn-dl-backdrop");
+    if(old) return old;
+    var bd=document.createElement("div");
+    bd.className="fcn-modal-backdrop"; bd.id="fcn-dl-backdrop"; bd.hidden=true;
+    bd.innerHTML=
+      '<div class="fcn-modal" role="dialog" aria-modal="true" aria-labelledby="fcn-dl-title">'+
+      '<button type="button" class="fcn-modal-close" id="fcn-dl-close" aria-label="Close">✕</button>'+
+      '<h2 id="fcn-dl-title">Download FreeCalcNow — install the app</h2>'+
+      '<p class="small">Free, no account, no app-store download. It opens fast and works offline for pages you have already opened.</p>'+
+      '<h3>🤖 Android (phone or tablet)</h3>'+
+      '<p><button class="btn btn-go fcn-dl-install" type="button" data-fcn-dl="android">⬇ Install FreeCalcNow</button></p>'+
+      '<p class="small dl-note" id="fcn-dl-msg-android">One tap installs the app from your browser. If the button shows a message instead, use Chrome → ⋮ menu → <b>Install app</b> (or “Add to Home screen”).</p>'+
+      '<h3>🍎 iPhone &amp; iPad (iOS)</h3>'+
+      '<p class="small">Apple does not allow a one-tap install button — it takes 10 seconds: open this site in <b>Safari</b> → tap <b>Share</b> → <b>Add to Home Screen</b> → <b>Add</b>.</p>'+
+      '<h3>🪟 Windows &amp; 🍏 Mac</h3>'+
+      '<p><button class="btn btn-go fcn-dl-install" type="button" data-fcn-dl="desktop">⬇ Install on Windows / Mac</button></p>'+
+      '<p class="small dl-note" id="fcn-dl-msg-desktop">There is no .exe or .dmg file — the honest way is the browser install. In <b>Chrome or Edge</b>: ⋮ menu → <b>Install FreeCalcNow</b>. In Safari on Mac: <b>File</b> → <b>Add to Dock</b>.</p>'+
+      '<p class="small"><a href="/download/">Open the full download page →</a></p>'+
+      '</div>';
+    document.body.appendChild(bd);
+    return bd;
+  }
+  function openModal(){
+    var bd=buildModal();
+    lastFocus=document.activeElement;
+    bd.hidden=false;
+    document.body.classList.add("fcn-modal-open");
+    var c=document.getElementById("fcn-dl-close");
+    if(c) c.focus();
+  }
+  function closeModal(){
+    var bd=document.getElementById("fcn-dl-backdrop");
+    if(!bd) return;
+    bd.hidden=true;
+    document.body.classList.remove("fcn-modal-open");
+    if(lastFocus && lastFocus.focus){ try{ lastFocus.focus(); }catch(e){} }
+  }
+  function armInstall(btn){
+    btn.addEventListener("click",function(){
+      var msg=document.getElementById(btn.getAttribute("data-fcn-dl")==="android"?"fcn-dl-msg-android":"fcn-dl-msg-desktop");
+      function note(t){ if(msg) msg.textContent=t; }
+      var I=window.FCN_INSTALL;
+      if(!I){ note("Install is not ready yet — please reload the page and try again."); return; }
+      if(I.isStandalone()){ note("FreeCalcNow is already installed — you are using the app right now. ✓"); return; }
+      if(I.isIOS()){ note("On iPhone/iPad there is no install button — follow the steps above (Safari → Share → Add to Home Screen)."); return; }
+      if(!I.canPrompt()){ note("Your browser has not offered an install yet — use the manual way above (menu → Install app). It starts within seconds."); return; }
+      var old=btn.textContent;
+      btn.disabled=true; btn.textContent="Starting install…";
+      I.promptInstall(function(r){
+        if(r && r.ok){ note("Install started — follow your browser’s prompt. ✓"); }
+        else{ btn.disabled=false; btn.textContent=old; note("Install did not start — use the manual way above."); }
+      });
+    });
+  }
+  function init(){
+    stampVersion();
+    buildModal();
+    var c=document.getElementById("fcn-dl-close");
+    if(c) c.addEventListener("click",closeModal);
+    var bd=document.getElementById("fcn-dl-backdrop");
+    if(bd) bd.addEventListener("click",function(e){ if(e.target===bd) closeModal(); });
+    document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeModal(); });
+    document.querySelectorAll(".dl-btn").forEach(function(a){
+      a.addEventListener("click",function(e){
+        if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return; /* let new-tab clicks navigate */
+        e.preventDefault(); openModal();
+      });
+    });
+    document.querySelectorAll(".fcn-dl-install").forEach(armInstall);
+  }
+  ready(init);
 })();
