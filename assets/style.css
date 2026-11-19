@@ -1,7 +1,7 @@
 /* FreeCalcNow — shared site stylesheet. Mobile-first, clean calculator look.
    Palette: forest green #166534, off-white #F8FAFC, ink #0F172A, amber #F59E0B. */
 :root{
-  --green:#166534; --green-d:#14532d; --green-l:#dcfce7;
+  --accent:#166534; --green:var(--accent,#166534); --green-d:#14532d; --green-l:#dcfce7;
   --bg:#F8FAFC; --surface:#ffffff; --ink:#0F172A; --muted:#475569;
   --line:#e2e8f0; --amber:#F59E0B; --amber-l:#fef3c7;
   --radius:14px; --max:1060px;
@@ -9,7 +9,7 @@
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.55}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:var(--fs,16px);line-height:1.55}
 main{padding-bottom:120px} /* keep content clear of the fixed Ask FAB */
 a{color:var(--green);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -34,7 +34,7 @@ p{margin:.5rem 0}
 .head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;width:180px}
 .head-search button{border:0;border-radius:9px;background:var(--amber);color:#1c1005;font-weight:700;padding:8px 12px;cursor:pointer}
 /* hero */
-.hero{background:linear-gradient(180deg,#166534,#15803d);color:#fff;padding:28px 0 24px}
+.hero{background:linear-gradient(180deg,#166534,#15803d);background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;padding:28px 0 24px}
 .hero h1{color:#fff;font-size:2rem;margin:0 0 8px}
 .hero p{color:#dcfce7;margin:0 0 14px}
 .hero .count-pill{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:4px 12px;font-size:.9rem;margin-bottom:12px}
@@ -133,7 +133,7 @@ p{margin:.5rem 0}
 .ask-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
 .ask-msg{background:#f1f5f9;border-radius:12px;padding:9px 11px;max-width:92%;white-space:pre-wrap;overflow-wrap:anywhere}
 .ask-msg.user{background:var(--green-l);color:#0F172A;align-self:flex-end}
-.ask-msg.user a{color:#166534}
+.ask-msg.user a{color:var(--accent)}
 .ask-msg a{color:var(--green);font-weight:600}
 .ask-chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 8px}
 .ask-chips button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 10px;cursor:pointer;font-size:.88rem}
@@ -187,7 +187,7 @@ p{margin:.5rem 0}
   a{color:#4ade80}
   .feedback .thanks,.cat-tile .n{color:#4ade80}
   .ask-msg a{color:#4ade80}
-  .ask-msg.user a{color:#166534}
+  .ask-msg.user a{color:var(--accent)}
   .head-search input,.search-big input,.ask-input input,.feedback textarea{background:#0b1220;color:var(--ink);border-color:#334155}
   .search-results,.search-results a{color:var(--ink)}
   .search-results{background:#111c33}
@@ -200,7 +200,7 @@ p{margin:.5rem 0}
 }
 /* printing a tool: only the calculator and its answer, nothing else */
 @media print{
-  .site-head nav,.head-search,.site-foot,.ad-slot,.feedback,.teaser,.ask-fab,.ask-panel,.share-row,.hero{display:none !important}
+  .site-head nav,.head-search,.site-foot,.ad-slot,.feedback,.teaser,.ask-fab,.ask-panel,.share-row,.hero,.crumbs,.rel-grid,.daily-hero{display:none !important}
   body{background:#fff}
   .tool-card{border:0;box-shadow:none;padding:0}
 }
@@ -208,7 +208,7 @@ p{margin:.5rem 0}
 /* --- Round 6: daily hero, streak, WhatsApp share --- */
 .btn-wa{background:#25D366;color:#fff}
 .btn-wa:hover{background:#1da851}
-.daily-hero{background:linear-gradient(135deg,#166534,#15803d);color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0}
+.daily-hero{background:linear-gradient(135deg,#166534,#15803d);background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0}
 .daily-hero h2{color:#fff;margin-top:0}
 .daily-hero a{color:#fde68a}
 .daily-hero .streak-pill{display:inline-block;background:#f59e0b;color:#1c1005;font-weight:800;border-radius:999px;padding:4px 12px;margin:4px 0}
@@ -225,5 +225,40 @@ p{margin:.5rem 0}
 .sci-key.fn{background:#dcfce7;border-color:#86efac;color:#14532d}
 .sci-key.op{background:#fef3c7;border-color:#fcd34d}
 .sci-key.util{background:#e2e8f0}
-.sci-key.eq{background:#166534;color:#fff;border-color:#166534}
+.sci-key.eq{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media (max-width:480px){.sci-keys{grid-template-columns:repeat(4,1fr)}.sci-key{padding:12px 2px;font-size:15px}}
+
+/* --- Round 6 (v6): settings — themes, light/dark, font size, backgrounds --- */
+html[data-fcn-theme="ocean"]{--bg:#eff6ff;--surface:#ffffff;--ink:#0c2d4d;--muted:#475569;--line:#bfdbfe;--accent:#0369a1;--green:#0369a1;--green-d:#075985;--green-l:#e0f2fe}
+html[data-fcn-theme="sunset"]{--bg:#fff7ed;--surface:#ffffff;--ink:#431407;--muted:#57534e;--line:#fed7aa;--accent:#ea580c;--green:#ea580c;--green-d:#9a3412;--green-l:#ffedd5}
+html[data-fcn-theme="forest"]{--bg:#f0fdf4;--surface:#ffffff;--ink:#052e16;--muted:#475569;--line:#bbf7d0;--accent:#15803d;--green:#15803d;--green-d:#14532d;--green-l:#dcfce7}
+html[data-fcn-theme="grape"]{--bg:#faf5ff;--surface:#ffffff;--ink:#3b0764;--muted:#57534e;--line:#e9d5ff;--accent:#7e22ce;--green:#7e22ce;--green-d:#581c87;--green-l:#f3e8ff}
+html[data-fcn-theme="midnight"]{--bg:#0b1220;--surface:#111c33;--ink:#e2e8f0;--muted:#94a3b8;--line:#243449;--accent:#38bdf8;--green:#38bdf8;--green-d:#0284c7;--green-l:#0c4a6e}
+html[data-fcn-mode="dark"]{--bg:#0b1220;--surface:#111c33;--ink:#e2e8f0;--muted:#94a3b8;--line:#243449}
+html[data-fcn-mode="light"]{--bg:#F8FAFC;--surface:#ffffff;--ink:#0F172A;--muted:#475569;--line:#e2e8f0}
+html[data-fcn-font="small"]{--fs:15px}
+html[data-fcn-font="large"]{--fs:18px}
+html[data-fcn-font="xl"]{--fs:20px}
+html[data-fcn-bg="mist"] body{background:linear-gradient(180deg,#f0f9ff,#dbeafe)}
+html[data-fcn-bg="sunrise"] body{background:linear-gradient(180deg,#fff7ed,#fde68a)}
+html[data-fcn-bg="meadow"] body{background:linear-gradient(180deg,#f0fdf4,#bbf7d0)}
+html[data-fcn-bg="lavender"] body{background:linear-gradient(180deg,#faf5ff,#e9d5ff)}
+html[data-fcn-bg="peach"] body{background:linear-gradient(180deg,#fff1f2,#fecdd3)}
+body.fcn-custom-bg{background-size:cover;background-attachment:fixed;background-position:center}
+/* header Download button */
+.dl-btn{display:inline-block;background:#F59E0B;color:#0F172A;font-weight:800;padding:8px 12px;border-radius:10px;text-decoration:none;white-space:nowrap;margin-left:8px}
+.dl-btn:hover{background:#fbbf24}
+/* settings page */
+.set-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}
+.set-row button{padding:10px 14px;font-size:15px;font-weight:700;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;color:#0F172A}
+.set-row button:hover{border-color:#94a3b8}
+.set-chip{color:#fff}
+/* favourite heart button (also styled inline by favs.js as a fallback) */
+.fav-btn{padding:10px 14px;font-size:15px;font-weight:800;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;color:#0F172A}
+/* games hub: colourful Play Store-style cards */
+.gcard{border-radius:16px!important;overflow:hidden}
+.gcard .gicon{font-size:34px;line-height:1}
+.gcard .gname{font-size:17px;font-weight:800}
+.gcard .glevel{font-size:13px;font-weight:700;margin-top:4px}
+/* offline banner (site.js) */
+.offline-banner{background:#fef3c7;color:#78350f;font-weight:700;padding:10px 16px;text-align:center;border-bottom:2px solid #f59e0b}

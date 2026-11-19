@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Challenge — Play Today's Puzzles & Compare Scores — FreeCalcNow</title>
+<meta name="description" content="Three daily puzzles, one shared streak — Daily Number, Word Guess and Sudoku. Copy your score link and see who did better, you or your friend. Free, no sign-up.">
+<link rel="canonical" href="https://freecalcnow.github.io/daily-challenge/">
+<meta property="og:title" content="Daily Challenge — Play Today's Puzzles & Compare Scores — FreeCalcNow">
+<meta property="og:description" content="Three daily puzzles, one shared streak — Daily Number, Word Guess and Sudoku. Copy your score link and see who did better, you or your friend. Free, no sign-up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://freecalcnow.github.io/daily-challenge/">
+<meta property="og:site_name" content="FreeCalcNow">
+<meta property="og:image" content="https://freecalcnow.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#166534"><link rel="manifest" href="/manifest.json"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="FreeCalcNow"><script>try{var _s=JSON.parse(localStorage.getItem('fcn-settings-v1')||'{}');var _h=document.documentElement;if(_s.theme)_h.setAttribute('data-fcn-theme',_s.theme);if(_s.mode)_h.setAttribute('data-fcn-mode',_s.mode);if(_s.font)_h.setAttribute('data-fcn-font',_s.font);if(_s.bg)_h.setAttribute('data-fcn-bg',_s.bg);if(_s.accent)_h.style.setProperty('--accent',_s.accent);}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Daily Challenge — Play Today's Puzzles & Compare Scores","description":"Three daily puzzles, one shared streak — Daily Number, Word Guess and Sudoku. Copy your score link and see who did better, you or your friend. Free, no sign-up.","url":"https://freecalcnow.github.io/daily-challenge/","author":{"@type":"Organization","name":"FreeCalcNow"},"publisher":{"@type":"Organization","name":"FreeCalcNow","url":"https://freecalcnow.github.io/"},"datePublished":"2026-11-19","dateModified":"2026-11-19"}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3Y2FGRCKZZ');
+</script>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><b>Free</b>CalcNow</a><nav><a href="/" data-i18n="nav.home">Home</a><a href="/tools/" data-i18n="nav.tools">All tools</a><a href="/games/" data-i18n="nav.games">Games</a><a href="/ask/" data-i18n="nav.ask">Ask</a><a href="/about/" data-i18n="nav.about">About</a><a href="/favourites/" data-i18n="nav.favourites">Favourites</a><a href="/settings/" data-i18n="nav.settings">Settings</a></nav><a class="dl-btn" href="/download/"><span aria-hidden="true">⬇ </span><span data-i18n="nav.download">Download app</span></a><form class="head-search" action="/" method="get" onsubmit="return false;"><input id="head-search" type="search" placeholder="Search calculators…" aria-label="Search calculators" data-i18n-ph="search.placeholder"><button type="button" onclick="document.getElementById('head-search').focus()">Search</button></form></div><div class="wrap"><div id="head-results" class="search-results" hidden></div></div></header>
+<main class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/games/">Games</a> / Daily Challenge</nav>
+
+<h1>Daily Challenge — Play Today's Puzzles &amp; Compare Scores</h1>
+<p>Three small puzzles, one shared streak, every day. Finish all three and your streak grows. Copy your score link and send it to a friend — they can open it, play the same puzzles, and see who did better.</p>
+<section class="tool-card">
+<h2>Today's challenge — <span id="dc-date">today</span></h2>
+<p>🔥 Your streak: <b id="dc-streak">0</b> days &nbsp;·&nbsp; <span id="dc-done">0 of 3 puzzles done today</span></p>
+<div class="rel-grid" id="dc-games">
+<div class="rel-card"><a href="/games/daily-number/?mode=daily">🎯 Daily Number</a><p class="small muted" id="dc-n">Not played yet today</p></div>
+<div class="rel-card"><a href="/games/word-guess/?mode=daily">🔤 Daily Word Guess</a><p class="small muted" id="dc-w">Not played yet today</p></div>
+<div class="rel-card"><a href="/games/sudoku-mini/?mode=daily">🧩 Daily Sudoku</a><p class="small muted" id="dc-s">Not played yet today</p></div>
+</div>
+<p><button class="btn btn-go" type="button" id="dc-copy">📋 Copy my score link</button> <button class="btn btn-ghost" type="button" id="dc-remind">🔔 Remind me every day</button></p>
+<p class="small muted" id="dc-copy-msg">Your score link carries today's scores in the web address — no account, no server. A friend who opens it sees your scores next to theirs.</p>
+<p class="small muted">Reminders appear when you open FreeCalcNow — a website cannot send notifications while it is closed, because there is no server behind it. You can turn the reminder off in <a href="/settings/">Settings</a>.</p>
+</section>
+<section id="dc-friend" hidden>
+<h2>👥 You vs your friend</h2>
+<p id="dc-friend-date" class="small muted"></p>
+<table id="dc-table"></table>
+<p class="big" id="dc-verdict" style="font-size:20px;font-weight:800"></p>
+<p><a class="btn btn-go" href="/daily-challenge/">Play today's challenge</a></p>
+</section>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span>Your ad could reach people doing real maths.</span></div>
+<section><h2>How the challenge works</h2><ol class="steps"><li>Play all three daily puzzles — Daily Number, Daily Word Guess and Daily Sudoku.</li><li>Each puzzle you finish counts toward the same streak. Miss a day and the streak starts again at 1.</li><li>Copy your score link and send it to a friend. When they open it, this page shows both scores side by side — fewest tries wins.</li><li>Come back tomorrow: new puzzles, same streak.</li></ol></section>
+<section><h2>Similar tools — you may also like</h2><div class="rel-grid"><div class="rel-card"><a href="/daily-number/">Daily Number</a><p class="small muted">Guess the number in as few tries as you can — new every day.</p></div><div class="rel-card"><a href="/games/word-guess/">Word Guess</a><p class="small muted">Guess the hidden word in six tries.</p></div><div class="rel-card"><a href="/games/sudoku-mini/">Sudoku Mini</a><p class="small muted">A small Sudoku, solved in a few minutes.</p></div><div class="rel-card"><a href="/games/">All games</a><p class="small muted">81 free mini games — play them all.</p></div><div class="rel-card"><a href="/money-iq/">Money IQ Quiz</a><p class="small muted">8 quick questions — then the 3 tools most useful for you.</p></div><div class="rel-card"><a href="/daily-money/">Daily Money News</a><p class="small muted">One line a day: dollar, gold and petrol.</p></div></div></section><div class="share-row"><button class="btn btn-ghost" type="button" data-page-print>Print</button><button class="btn btn-ghost" type="button" data-page-share>Share this page</button></div>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span></span></div>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="sponsor-box"><h4>Sponsors keep every calculator free</h4><p>Brands reach millions of people doing real maths here. To sponsor a placement, email <a href="mailto:malikarslan032154@gmail.com">malikarslan032154@gmail.com</a>.</p></div><div class="cols"><div><h4>FreeCalcNow</h4><ul><li><a href="/about/">About</a></li><li><a href="/methodology/">How we calculate</a></li><li><a href="/guides/">Guides</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/contact/">Contact</a></li><li><a href="/sponsors/">Sponsors</a></li></ul></div><div><h4>Categories</h4><ul><li><a href="/category/finance/">Finance</a></li><li><a href="/category/math/">Math</a></li><li><a href="/category/statistics/">Statistics</a></li><li><a href="/category/health/">Health</a></li><li><a href="/category/everyday/">Everyday life</a></li><li><a href="/category/conversion/">Conversion</a></li><li><a href="/category/physics/">Physics</a></li><li><a href="/category/chemistry/">Chemistry</a></li><li><a href="/category/biology/">Biology</a></li><li><a href="/category/construction/">Construction</a></li><li><a href="/category/food/">Food</a></li><li><a href="/category/sports/">Sports</a></li><li><a href="/category/ecology/">Ecology</a></li><li><a href="/category/other/">Other</a></li></ul></div><div><h4>Popular</h4><ul><li><a href="/games/">Games — 81 mini games</a></li><li><a href="/daily-number/">Daily Number game</a></li><li><a href="/ask/">Ask FreeCalcNow</a></li><li><a href="/tools/">A–Z index — all 15,402 tools</a></li></ul></div></div><p class="small muted" style="margin-top:18px">FreeCalcNow — 15,402 free calculators. Your numbers never leave your browser. © 2026 FreeCalcNow · v6.</p></div></footer>
+<script src="/assets/engine.js?v=6" defer></script>
+<script src="/assets/site.js?v=6" defer></script>
+<script src="/assets/assistant.js?v=6" defer></script>
+<script src="/assets/settings.js?v=6" defer></script>
+<script src="/assets/favs.js?v=6" defer></script>
+<script src="/assets/install.js?v=6" defer></script>
+<script src="/assets/i18n.js?v=6" defer></script>
+<script src="/assets/daily.js?v=6"></script><script>
+
+(function(){
+  document.querySelectorAll('[data-page-print]').forEach(function(b){ b.addEventListener('click', function(){ window.print(); }); });
+  document.querySelectorAll('[data-page-share]').forEach(function(b){ b.addEventListener('click', function(){
+    var url=location.href, text=document.title.replace(' — FreeCalcNow','');
+    if(navigator.share){ navigator.share({title:text, url:url}).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ b.textContent='Link copied!'; setTimeout(function(){ b.textContent='Share this page'; }, 2000); }); }
+    else { prompt('Copy this link:', url); }
+  }); });
+})();
+
+(function(){
+  var D = window.FCN_DAILY;
+  var today = D ? D.todayStr() : new Date().toISOString().slice(0,10);
+  document.getElementById('dc-date').textContent = today;
+  var scores = D ? D.getScores() : {};
+  var streak = D ? D.get().n : 0;
+  document.getElementById('dc-streak').textContent = streak;
+  var done = 0;
+  function set(id, txt, isDone){ document.getElementById(id).textContent = txt; if(isDone) done++; }
+  if(scores['daily-number'] !== undefined) set('dc-n', 'Done today — solved in ' + scores['daily-number'] + ' tries', true);
+  if(scores['word-guess'] !== undefined) set('dc-w', 'Done today — solved in ' + scores['word-guess'] + ' tries', true);
+  if(scores['sudoku-mini'] !== undefined) set('dc-s', 'Solved today ✓', true);
+  document.getElementById('dc-done').textContent = done + ' of 3 puzzles done today';
+  var copyBtn = document.getElementById('dc-copy');
+  copyBtn.addEventListener('click', function(){
+    if(done === 0){ document.getElementById('dc-copy-msg').textContent = 'Play at least one puzzle first — then your link will carry a score.'; return; }
+    var link = D ? D.scoreLink() : location.origin + '/daily-challenge/';
+    function ok(){ document.getElementById('dc-copy-msg').textContent = 'Score link copied — send it to a friend!'; copyBtn.textContent = '✓ Link copied'; }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(link).then(ok, function(){ prompt('Copy this link:', link); }); }
+    else prompt('Copy this link:', link);
+  });
+  document.getElementById('dc-remind').addEventListener('click', function(){
+    var b = this;
+    if(!('Notification' in window)){ b.textContent = 'Notifications not supported in this browser'; return; }
+    function enable(){ try{ localStorage.setItem('fcn-remind','1'); }catch(e){} b.textContent = '✓ Reminder on — see you tomorrow!'; }
+    if(Notification.permission === 'granted') enable();
+    else if(Notification.permission === 'denied') b.textContent = 'Notifications are blocked — allow them in your browser settings';
+    else Notification.requestPermission().then(function(p){ if(p === 'granted') enable(); else b.textContent = 'No problem — you can turn it on later'; });
+  });
+  /* Friend comparison from URL params: ?d=DATE&n=TRIES&w=TRIES&s=1 */
+  var q = new URLSearchParams(location.search);
+  var fd = q.get('d');
+  if(fd){
+    var fn = q.get('n'), fw = q.get('w'), fs = q.get('s');
+    if(fn !== null || fw !== null || fs !== null){
+      var sec = document.getElementById('dc-friend'); sec.hidden = false;
+      document.getElementById('dc-friend-date').textContent = 'Your friend played on ' + fd + ' — scores below are theirs vs yours (today).';
+      var rows = [['Puzzle','Friend','You','Winner']];
+      var fwins = 0, ywins = 0;
+      function cmp(label, f, y, lowerBetter){
+        var fTxt = (f === null || f === undefined) ? '—' : (lowerBetter ? f + ' tries' : (f ? 'Solved ✓' : 'Not solved'));
+        var yTxt = (y === null || y === undefined) ? '—' : (lowerBetter ? y + ' tries' : (y ? 'Solved ✓' : 'Not solved'));
+        var win = '—';
+        if(f !== null && f !== undefined && y !== null && y !== undefined){
+          if(lowerBetter){ if(f < y){ win = 'Friend'; fwins++; } else if(y < f){ win = 'You'; ywins++; } else win = 'Tie'; }
+          else { if(f && !y){ win = 'Friend'; fwins++; } else if(y && !f){ win = 'You'; ywins++; } else if(f && y) win = 'Tie'; }
+        }
+        rows.push([label, fTxt, yTxt, win]);
+      }
+      cmp('Daily Number', fn === null ? null : parseInt(fn, 10), scores['daily-number'], true);
+      cmp('Daily Word Guess', fw === null ? null : parseInt(fw, 10), scores['word-guess'], true);
+      cmp('Daily Sudoku', fs === null ? null : (fs === '1'), scores['sudoku-mini'] ? true : null, false);
+      var html = '';
+      rows.forEach(function(r, i){
+        html += '<tr>' + r.map(function(c){ return i === 0 ? '<th>' + c + '</th>' : '<td>' + c + '</td>'; }).join('') + '</tr>';
+      });
+      document.getElementById('dc-table').innerHTML = html;
+      document.getElementById('dc-verdict').textContent =
+        (fwins === 0 && ywins === 0) ? 'No winner yet — play the puzzles above and your scores will appear here.'
+        : (ywins > fwins ? '🎉 You are winning ' + ywins + '–' + fwins + '!' : fwins > ywins ? 'Your friend is winning ' + fwins + '–' + ywins + ' — play the puzzles above to catch up!' : 'It is a tie, ' + ywins + '–' + fwins + '!');
+    }
+  }
+})();
+
+</script>
+<script>window.FCN_PAGE={toolId:"",toolName:"Daily Challenge",category:"FreeCalcNow",slug:"daily-challenge"};</script>
+</body>
+</html>

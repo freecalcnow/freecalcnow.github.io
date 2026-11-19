@@ -580,4 +580,104 @@
   document.querySelectorAll("[data-print]").forEach(function(b){
     b.addEventListener("click", function(){ window.print(); });
   });
+
+  /* ---------- save this result (for the /saved/ page) ---------- */
+  (function(){
+    var sr=document.querySelector(".share-row");
+    if(!sr) return;
+    var btn=document.createElement("button");
+    btn.type="button"; btn.className="btn btn-ghost";
+    btn.textContent="\u{1F4BE} Save result";
+    btn.addEventListener("click", function(){
+      try{
+        var key="fcn-saved-v1";
+        var items=JSON.parse(localStorage.getItem(key)||"[]")||[];
+        var url=resultUrl();
+        items=items.filter(function(it){ return it.url!==url; });
+        items.unshift({name:(window.FCN_PAGE&&window.FCN_PAGE.toolName)||document.title.replace(" — FreeCalcNow",""), url:url, result:bigResultText(), ts:Date.now()});
+        localStorage.setItem(key, JSON.stringify(items.slice(0,50)));
+        btn.textContent="\u2713 Saved — see /saved/";
+        setTimeout(function(){ btn.textContent="\u{1F4BE} Save result"; }, 2500);
+      }catch(e){ btn.textContent="Could not save on this device"; }
+    });
+    sr.appendChild(btn);
+  })();
+})();
+
+/* Offline banner — shows whenever the browser reports offline, and hides
+   again when the connection returns. Simple English, no fake data. */
+(function(){
+  function lastRatesWhen(){
+    try{
+      var best=null;
+      for(var i=0;i<localStorage.length;i++){
+        var k=localStorage.key(i);
+        if(k && k.indexOf('fcn-rates-')===0){
+          var v=JSON.parse(localStorage.getItem(k)||'null');
+          if(v && v.fetchedAt && (!best || v.fetchedAt>best)) best=v.fetchedAt;
+        }
+      }
+      if(!best) return '';
+      var d=new Date(best);
+      if(isNaN(d)) return '';
+      return d.toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    }catch(e){ return ''; }
+  }
+  function banner(){
+    var off=(typeof navigator!=='undefined' && navigator.onLine===false);
+    var b=document.getElementById('fcn-offline');
+    if(!off){ if(b) b.hidden=true; return; }
+    if(!b){
+      b=document.createElement('div');
+      b.id='fcn-offline'; b.className='offline-banner'; b.setAttribute('role','status');
+      var m=document.querySelector('main');
+      if(m && m.parentNode) m.parentNode.insertBefore(b, m);
+      else if(document.body) document.body.insertBefore(b, document.body.firstChild);
+    }
+    var when=lastRatesWhen();
+    b.textContent=when
+      ? ('You are offline — showing last prices from '+when+'. Calculators still work.')
+      : 'You are offline — calculators still work. Live prices need internet.';
+    b.hidden=false;
+  }
+  window.addEventListener('online', banner);
+  window.addEventListener('offline', banner);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', banner);
+  else banner();
+})();
+
+/* Daily reminder — opt-in only. If the user turned it on (localStorage
+   fcn-remind=1) and today's daily puzzles are not all done yet, show one
+   browser notification when they open the site. No server, no push:
+   a website cannot notify while it is closed. Fires at most once a day. */
+(function(){
+  function todayStr(){ try{ return new Date().toISOString().slice(0,10); }catch(e){ return ""; } }
+  function allDone(){
+    try{
+      var sc=JSON.parse(localStorage.getItem("fcn-daily-scores-v1")||"null");
+      if(!sc || sc.date!==todayStr()) return false;
+      var n=0; ["daily-number","word-guess","sudoku-mini"].forEach(function(g){ if(sc.scores && sc.scores[g]!==undefined) n++; });
+      return n>=3;
+    }catch(e){ return false; }
+  }
+  function fire(){
+    try{
+      if(localStorage.getItem("fcn-remind")!=="1") return;
+      if(!("Notification" in window) || Notification.permission!=="granted") return;
+      if(allDone()) return;
+      var t=todayStr();
+      if(localStorage.getItem("fcn-remind-shown")===t) return;
+      localStorage.setItem("fcn-remind-shown", t);
+      var title="FreeCalcNow — your daily puzzles are waiting";
+      var opts={body:"Daily Number, Word Guess and Sudoku are ready. Keep your streak alive!", tag:"fcn-daily"};
+      if(navigator.serviceWorker && navigator.serviceWorker.getRegistration){
+        navigator.serviceWorker.getRegistration().then(function(reg){
+          if(reg && reg.showNotification) reg.showNotification(title, opts);
+          else new Notification(title, opts);
+        }).catch(function(){ try{ new Notification(title, opts); }catch(e){} });
+      } else new Notification(title, opts);
+    }catch(e){}
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", fire);
+  else fire();
 })();

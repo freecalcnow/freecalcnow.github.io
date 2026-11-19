@@ -5,6 +5,7 @@
 (function(){
   "use strict";
   var KEY = "fcn_daily_streak_v2";
+  var SCORE_KEY = "fcn-daily-scores-v1"; /* {date:"YYYY-MM-DD", scores:{gameId: number}} */
   function todayStr(){
     try{ return new Date().toISOString().slice(0,10); }catch(e){ return "2026-11-19"; }
   }
@@ -33,8 +34,16 @@
   }
   /* Record that this game was completed today. Counts once per game per day.
      Returns the streak count after recording. */
-  function record(gameId){
+  function record(gameId, score){
     var st = load(), t = todayStr();
+    if(score !== undefined && score !== null){
+      try{
+        var sc = JSON.parse(localStorage.getItem(SCORE_KEY) || "null");
+        if(!sc || sc.date !== t) sc = {date: t, scores: {}};
+        sc.scores[gameId] = score;
+        localStorage.setItem(SCORE_KEY, JSON.stringify(sc));
+      }catch(e){}
+    }
     if(st.days[gameId] === t) return st.n; /* already counted today */
     if(st.last === yesterdayStr()) st.n += 1;
     else if(st.last !== t) st.n = 1;
@@ -46,6 +55,23 @@
   function get(){
     var st = load();
     return {n: st.n, last: st.last};
+  }
+  /* Today's per-game scores, e.g. {number: 4, word: 3, sudoku: 1}. Empty if nothing played yet. */
+  function getScores(){
+    try{
+      var sc = JSON.parse(localStorage.getItem(SCORE_KEY) || "null");
+      if(sc && sc.date === todayStr()) return sc.scores || {};
+    }catch(e){}
+    return {};
+  }
+  /* Shareable Daily Challenge link: encodes today's scores in the URL, no server. */
+  function scoreLink(){
+    var sc = getScores(), t = todayStr();
+    var q = ["d=" + t];
+    if(sc["daily-number"] !== undefined) q.push("n=" + sc["daily-number"]);
+    if(sc["word-guess"] !== undefined) q.push("w=" + sc["word-guess"]);
+    if(sc["sudoku-mini"] !== undefined) q.push("s=" + sc["sudoku-mini"]);
+    return "https://freecalcnow.github.io/daily-challenge/?" + q.join("&");
   }
   function emojiRows(rows){
     /* rows: arrays of "g" (green), "a" (amber), "x" (grey) */
@@ -85,6 +111,8 @@
     todayStr: todayStr,
     record: record,
     get: get,
+    getScores: getScores,
+    scoreLink: scoreLink,
     emojiRows: emojiRows,
     shareText: shareText,
     copyText: copyText

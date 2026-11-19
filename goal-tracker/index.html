@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Goal Tracker — Savings Goal & Weight-Loss Tracker — FreeCalcNow</title>
+<meta name="description" content="Track a savings goal and a weight-loss goal in one place — target, progress, and exactly how much to save or lose each day. Saved on your device. Free, no sign-up.">
+<link rel="canonical" href="https://freecalcnow.github.io/goal-tracker/">
+<meta property="og:title" content="Goal Tracker — Savings Goal & Weight-Loss Tracker — FreeCalcNow">
+<meta property="og:description" content="Track a savings goal and a weight-loss goal in one place — target, progress, and exactly how much to save or lose each day. Saved on your device. Free, no sign-up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://freecalcnow.github.io/goal-tracker/">
+<meta property="og:site_name" content="FreeCalcNow">
+<meta property="og:image" content="https://freecalcnow.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#166534"><link rel="manifest" href="/manifest.json"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="FreeCalcNow"><script>try{var _s=JSON.parse(localStorage.getItem('fcn-settings-v1')||'{}');var _h=document.documentElement;if(_s.theme)_h.setAttribute('data-fcn-theme',_s.theme);if(_s.mode)_h.setAttribute('data-fcn-mode',_s.mode);if(_s.font)_h.setAttribute('data-fcn-font',_s.font);if(_s.bg)_h.setAttribute('data-fcn-bg',_s.bg);if(_s.accent)_h.style.setProperty('--accent',_s.accent);}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Goal Tracker — Savings Goal & Weight-Loss Tracker","description":"Track a savings goal and a weight-loss goal in one place — target, progress, and exactly how much to save or lose each day. Saved on your device. Free, no sign-up.","url":"https://freecalcnow.github.io/goal-tracker/","author":{"@type":"Organization","name":"FreeCalcNow"},"publisher":{"@type":"Organization","name":"FreeCalcNow","url":"https://freecalcnow.github.io/"},"datePublished":"2026-11-19","dateModified":"2026-11-19"}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3Y2FGRCKZZ');
+</script>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><b>Free</b>CalcNow</a><nav><a href="/" data-i18n="nav.home">Home</a><a href="/tools/" data-i18n="nav.tools">All tools</a><a href="/games/" data-i18n="nav.games">Games</a><a href="/ask/" data-i18n="nav.ask">Ask</a><a href="/about/" data-i18n="nav.about">About</a><a href="/favourites/" data-i18n="nav.favourites">Favourites</a><a href="/settings/" data-i18n="nav.settings">Settings</a></nav><a class="dl-btn" href="/download/"><span aria-hidden="true">⬇ </span><span data-i18n="nav.download">Download app</span></a><form class="head-search" action="/" method="get" onsubmit="return false;"><input id="head-search" type="search" placeholder="Search calculators…" aria-label="Search calculators" data-i18n-ph="search.placeholder"><button type="button" onclick="document.getElementById('head-search').focus()">Search</button></form></div><div class="wrap"><div id="head-results" class="search-results" hidden></div></div></header>
+<main class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / Goal Tracker</nav>
+
+<h1>Goal Tracker — Savings Goal &amp; Weight-Loss Tracker</h1>
+<p>Two trackers, one page. Set a target, enter where you are now, pick a date — and see exactly how much you need to save (or lose) each day, with a progress bar that moves as you do. Everything is saved on this device only.</p>
+<section class="tool-card">
+<h2>💰 Savings goal</h2>
+<div class="field"><label for="gt-s-target">Target amount ($)</label><input id="gt-s-target" type="number" inputmode="decimal" value="1000" min="0"></div>
+<div class="field"><label for="gt-s-now">Saved so far ($)</label><input id="gt-s-now" type="number" inputmode="decimal" value="250" min="0"></div>
+<div class="field"><label for="gt-s-date">Reach it by</label><input id="gt-s-date" type="date" value="2027-02-19"></div>
+<p><button class="btn btn-go" type="button" id="gt-s-save">Save my savings goal</button></p>
+<div class="result"><div class="big" id="gt-s-big">—</div><p class="sub" id="gt-s-sub"></p>
+<div style="background:#e2e8f0;border-radius:999px;height:18px;overflow:hidden"><div id="gt-s-bar" style="height:100%;width:0%;background:#16a34a"></div></div>
+<p class="small muted" id="gt-s-pct"></p></div>
+</section>
+<section class="tool-card">
+<h2>⚖️ Weight-loss tracker</h2>
+<div class="field"><label for="gt-w-start">Starting weight (kg)</label><input id="gt-w-start" type="number" inputmode="decimal" value="90" min="0"></div>
+<div class="field"><label for="gt-w-now">Current weight (kg)</label><input id="gt-w-now" type="number" inputmode="decimal" value="86" min="0"></div>
+<div class="field"><label for="gt-w-target">Target weight (kg)</label><input id="gt-w-target" type="number" inputmode="decimal" value="75" min="0"></div>
+<div class="field"><label for="gt-w-date">Reach it by</label><input id="gt-w-date" type="date" value="2027-05-19"></div>
+<p><button class="btn btn-go" type="button" id="gt-w-save">Save my weight goal</button></p>
+<div class="result"><div class="big" id="gt-w-big">—</div><p class="sub" id="gt-w-sub"></p>
+<div style="background:#e2e8f0;border-radius:999px;height:18px;overflow:hidden"><div id="gt-w-bar" style="height:100%;width:0%;background:#0891b2"></div></div>
+<p class="small muted" id="gt-w-pct"></p></div>
+<p class="small muted">A safe pace is about 0.5–1 kg a week. If the tracker asks for much more than that, give yourself more time — crash diets do not last.</p>
+</section>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span>Your ad could reach people doing real maths.</span></div>
+<section><h2>Similar tools — you may also like</h2><div class="rel-grid"><div class="rel-card"><a href="/savings-goal/">Savings Goal Calculator</a><p class="small muted">How much to save each month to reach your goal.</p></div><div class="rel-card"><a href="/money-health/">Money Health Score</a><p class="small muted">Your money in 2 minutes — a score out of 100.</p></div><div class="rel-card"><a href="/money-iq/">Money IQ Quiz</a><p class="small muted">8 quick questions — then the 3 tools most useful for you.</p></div><div class="rel-card"><a href="/bmi/">BMI Calculator</a><p class="small muted">Is your weight healthy for your height?</p></div></div></section><div class="share-row"><button class="btn btn-ghost" type="button" data-page-print>Print</button><button class="btn btn-ghost" type="button" data-page-share>Share this page</button></div>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span></span></div>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="sponsor-box"><h4>Sponsors keep every calculator free</h4><p>Brands reach millions of people doing real maths here. To sponsor a placement, email <a href="mailto:malikarslan032154@gmail.com">malikarslan032154@gmail.com</a>.</p></div><div class="cols"><div><h4>FreeCalcNow</h4><ul><li><a href="/about/">About</a></li><li><a href="/methodology/">How we calculate</a></li><li><a href="/guides/">Guides</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/contact/">Contact</a></li><li><a href="/sponsors/">Sponsors</a></li></ul></div><div><h4>Categories</h4><ul><li><a href="/category/finance/">Finance</a></li><li><a href="/category/math/">Math</a></li><li><a href="/category/statistics/">Statistics</a></li><li><a href="/category/health/">Health</a></li><li><a href="/category/everyday/">Everyday life</a></li><li><a href="/category/conversion/">Conversion</a></li><li><a href="/category/physics/">Physics</a></li><li><a href="/category/chemistry/">Chemistry</a></li><li><a href="/category/biology/">Biology</a></li><li><a href="/category/construction/">Construction</a></li><li><a href="/category/food/">Food</a></li><li><a href="/category/sports/">Sports</a></li><li><a href="/category/ecology/">Ecology</a></li><li><a href="/category/other/">Other</a></li></ul></div><div><h4>Popular</h4><ul><li><a href="/games/">Games — 81 mini games</a></li><li><a href="/daily-number/">Daily Number game</a></li><li><a href="/ask/">Ask FreeCalcNow</a></li><li><a href="/tools/">A–Z index — all 15,402 tools</a></li></ul></div></div><p class="small muted" style="margin-top:18px">FreeCalcNow — 15,402 free calculators. Your numbers never leave your browser. © 2026 FreeCalcNow · v6.</p></div></footer>
+<script src="/assets/engine.js?v=6" defer></script>
+<script src="/assets/site.js?v=6" defer></script>
+<script src="/assets/assistant.js?v=6" defer></script>
+<script src="/assets/settings.js?v=6" defer></script>
+<script src="/assets/favs.js?v=6" defer></script>
+<script src="/assets/install.js?v=6" defer></script>
+<script src="/assets/i18n.js?v=6" defer></script>
+<script>
+
+(function(){
+  document.querySelectorAll('[data-page-print]').forEach(function(b){ b.addEventListener('click', function(){ window.print(); }); });
+  document.querySelectorAll('[data-page-share]').forEach(function(b){ b.addEventListener('click', function(){
+    var url=location.href, text=document.title.replace(' — FreeCalcNow','');
+    if(navigator.share){ navigator.share({title:text, url:url}).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ b.textContent='Link copied!'; setTimeout(function(){ b.textContent='Share this page'; }, 2000); }); }
+    else { prompt('Copy this link:', url); }
+  }); });
+})();
+
+(function(){
+  var KEY='fcn-goals-v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ return {}; } }
+  function save(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  function daysLeft(dateStr){
+    if(!dateStr) return null;
+    var d=new Date(dateStr+'T00:00:00'), now=new Date();
+    now.setHours(0,0,0,0);
+    return Math.round((d-now)/86400000);
+  }
+  function money(x){ return '$'+Number(x).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+  function renderSavings(){
+    var t=parseFloat(document.getElementById('gt-s-target').value)||0;
+    var n=parseFloat(document.getElementById('gt-s-now').value)||0;
+    var dl=daysLeft(document.getElementById('gt-s-date').value);
+    var pct=t>0?Math.max(0,Math.min(100,n/t*100)):0;
+    var left=Math.max(0,t-n);
+    document.getElementById('gt-s-bar').style.width=pct+'%';
+    document.getElementById('gt-s-pct').textContent=Math.round(pct)+'% of your goal — '+money(n)+' of '+money(t);
+    if(dl===null){ document.getElementById('gt-s-big').textContent=money(left)+' to go'; document.getElementById('gt-s-sub').textContent='Pick a date to see how much to save each day.'; }
+    else if(dl<=0){ document.getElementById('gt-s-big').textContent=money(left)+' to go'; document.getElementById('gt-s-sub').textContent='Your date has passed — pick a new date to keep going.'; }
+    else { document.getElementById('gt-s-big').textContent='Save '+money(left/dl)+' a day'; document.getElementById('gt-s-sub').textContent=money(left)+' left, '+dl+' days to go. That is '+money(left/dl*7)+' a week.'; }
+  }
+  function renderWeight(){
+    var st=parseFloat(document.getElementById('gt-w-start').value)||0;
+    var nw=parseFloat(document.getElementById('gt-w-now').value)||0;
+    var tg=parseFloat(document.getElementById('gt-w-target').value)||0;
+    var dl=daysLeft(document.getElementById('gt-w-date').value);
+    var total=Math.abs(st-tg), done=Math.abs(st-nw);
+    var pct=total>0?Math.max(0,Math.min(100,done/total*100)):0;
+    var left=Math.abs(nw-tg);
+    document.getElementById('gt-w-bar').style.width=pct+'%';
+    document.getElementById('gt-w-pct').textContent=Math.round(pct)+'% there — '+done.toFixed(1)+' kg of '+total.toFixed(1)+' kg';
+    if(dl===null){ document.getElementById('gt-w-big').textContent=left.toFixed(1)+' kg to go'; document.getElementById('gt-w-sub').textContent='Pick a date to see the weekly pace.'; }
+    else if(dl<=0){ document.getElementById('gt-w-big').textContent=left.toFixed(1)+' kg to go'; document.getElementById('gt-w-sub').textContent='Your date has passed — pick a new date to keep going.'; }
+    else {
+      var perWeek=left/(dl/7);
+      document.getElementById('gt-w-big').textContent=left.toFixed(1)+' kg to go — '+perWeek.toFixed(2)+' kg a week';
+      document.getElementById('gt-w-sub').textContent=dl+' days left. '+(perWeek>1?'That is faster than the safe 0.5–1 kg a week — give yourself more time if you can.':'That is a safe, steady pace. Keep going!');
+    }
+  }
+  var g=load();
+  if(g.savings){ document.getElementById('gt-s-target').value=g.savings.target; document.getElementById('gt-s-now').value=g.savings.now; document.getElementById('gt-s-date').value=g.savings.date; }
+  if(g.weight){ document.getElementById('gt-w-start').value=g.weight.start; document.getElementById('gt-w-now').value=g.weight.now; document.getElementById('gt-w-target').value=g.weight.target; document.getElementById('gt-w-date').value=g.weight.date; }
+  ['gt-s-target','gt-s-now','gt-s-date'].forEach(function(id){ document.getElementById(id).addEventListener('input', renderSavings); });
+  ['gt-w-start','gt-w-now','gt-w-target','gt-w-date'].forEach(function(id){ document.getElementById(id).addEventListener('input', renderWeight); });
+  document.getElementById('gt-s-save').addEventListener('click', function(){
+    var gg=load(); gg.savings={target:document.getElementById('gt-s-target').value, now:document.getElementById('gt-s-now').value, date:document.getElementById('gt-s-date').value}; save(gg);
+    this.textContent='✓ Saved on this device'; var b=this; setTimeout(function(){ b.textContent='Save my savings goal'; }, 2000);
+  });
+  document.getElementById('gt-w-save').addEventListener('click', function(){
+    var gg=load(); gg.weight={start:document.getElementById('gt-w-start').value, now:document.getElementById('gt-w-now').value, target:document.getElementById('gt-w-target').value, date:document.getElementById('gt-w-date').value}; save(gg);
+    this.textContent='✓ Saved on this device'; var b=this; setTimeout(function(){ b.textContent='Save my weight goal'; }, 2000);
+  });
+  renderSavings(); renderWeight();
+})();
+
+</script>
+<script>window.FCN_PAGE={toolId:"",toolName:"Goal Tracker",category:"FreeCalcNow",slug:"goal-tracker"};</script>
+</body>
+</html>

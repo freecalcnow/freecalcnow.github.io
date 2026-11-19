@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings — Customize FreeCalcNow</title>
+<meta name="description" content="Make FreeCalcNow yours — colour themes, accent colour, light/dark mode, text size and your own background picture. Saved only on your device, no sign-up.">
+<link rel="canonical" href="https://freecalcnow.github.io/settings/">
+<meta property="og:title" content="Settings — Customize FreeCalcNow">
+<meta property="og:description" content="Make FreeCalcNow yours — colour themes, accent colour, light/dark mode, text size and your own background picture. Saved only on your device, no sign-up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://freecalcnow.github.io/settings/">
+<meta property="og:site_name" content="FreeCalcNow">
+<meta property="og:image" content="https://freecalcnow.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#166534"><link rel="manifest" href="/manifest.json"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="FreeCalcNow"><script>try{var _s=JSON.parse(localStorage.getItem('fcn-settings-v1')||'{}');var _h=document.documentElement;if(_s.theme)_h.setAttribute('data-fcn-theme',_s.theme);if(_s.mode)_h.setAttribute('data-fcn-mode',_s.mode);if(_s.font)_h.setAttribute('data-fcn-font',_s.font);if(_s.bg)_h.setAttribute('data-fcn-bg',_s.bg);if(_s.accent)_h.style.setProperty('--accent',_s.accent);}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Settings — Customize FreeCalcNow","description":"Make FreeCalcNow yours — colour themes, accent colour, light/dark mode, text size and your own background picture. Saved only on your device, no sign-up.","url":"https://freecalcnow.github.io/settings/","author":{"@type":"Organization","name":"FreeCalcNow"},"publisher":{"@type":"Organization","name":"FreeCalcNow","url":"https://freecalcnow.github.io/"},"datePublished":"2026-11-19","dateModified":"2026-11-19"}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3Y2FGRCKZZ');
+</script>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><b>Free</b>CalcNow</a><nav><a href="/" data-i18n="nav.home">Home</a><a href="/tools/" data-i18n="nav.tools">All tools</a><a href="/games/" data-i18n="nav.games">Games</a><a href="/ask/" data-i18n="nav.ask">Ask</a><a href="/about/" data-i18n="nav.about">About</a><a href="/favourites/" data-i18n="nav.favourites">Favourites</a><a href="/settings/" data-i18n="nav.settings">Settings</a></nav><a class="dl-btn" href="/download/"><span aria-hidden="true">⬇ </span><span data-i18n="nav.download">Download app</span></a><form class="head-search" action="/" method="get" onsubmit="return false;"><input id="head-search" type="search" placeholder="Search calculators…" aria-label="Search calculators" data-i18n-ph="search.placeholder"><button type="button" onclick="document.getElementById('head-search').focus()">Search</button></form></div><div class="wrap"><div id="head-results" class="search-results" hidden></div></div></header>
+<main class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / Settings</nav>
+
+<h1>Settings — make FreeCalcNow yours</h1>
+<p>Change the colours, text size and background of the whole website. Everything is saved <b>only on this device</b> (your browser) — no account, no server, nothing is uploaded anywhere. Come back tomorrow and it will still be how you left it.</p>
+<section class="tool-card">
+<h2>Colour theme</h2>
+<div class="set-row" id="set-theme">
+<button type="button" data-theme="default" style="background:linear-gradient(135deg,#166534,#dcfce7)">Default green</button>
+<button type="button" data-theme="ocean" style="background:linear-gradient(135deg,#0369a1,#bae6fd)">Ocean blue</button>
+<button type="button" data-theme="sunset" style="background:linear-gradient(135deg,#ea580c,#fed7aa)">Sunset orange</button>
+<button type="button" data-theme="forest" style="background:linear-gradient(135deg,#14532d,#bbf7d0)">Forest</button>
+<button type="button" data-theme="grape" style="background:linear-gradient(135deg,#7e22ce,#e9d5ff)">Grape purple</button>
+<button type="button" data-theme="midnight" style="background:linear-gradient(135deg,#1e293b,#94a3b8);color:#fff">Midnight dark</button>
+</div>
+<h2>Accent colour</h2>
+<p class="small muted">The accent colours the header, buttons and links. Pick any colour you like.</p>
+<div class="set-row"><input type="color" id="set-accent" value="#166534" aria-label="Pick an accent colour" style="width:64px;height:44px;padding:2px;border:2px solid #cbd5e1;border-radius:10px;cursor:pointer">
+<button type="button" class="set-chip" data-accent="#166534" style="background:#166534;color:#fff">Green</button>
+<button type="button" class="set-chip" data-accent="#0369a1" style="background:#0369a1;color:#fff">Blue</button>
+<button type="button" class="set-chip" data-accent="#dc2626" style="background:#dc2626;color:#fff">Red</button>
+<button type="button" class="set-chip" data-accent="#ea580c" style="background:#ea580c;color:#fff">Orange</button>
+<button type="button" class="set-chip" data-accent="#7e22ce" style="background:#7e22ce;color:#fff">Purple</button>
+<button type="button" class="set-chip" data-accent="#db2777" style="background:#db2777;color:#fff">Pink</button></div>
+<h2>Light or dark</h2>
+<div class="set-row" id="set-mode">
+<button type="button" data-mode="auto">Auto (follows your device)</button>
+<button type="button" data-mode="light">☀ Light</button>
+<button type="button" data-mode="dark">🌙 Dark</button>
+</div>
+<h2>Text size</h2>
+<div class="set-row" id="set-font">
+<button type="button" data-font="small">Small</button>
+<button type="button" data-font="medium">Medium</button>
+<button type="button" data-font="large">Large</button>
+<button type="button" data-font="xl">Extra large</button>
+</div>
+<h2 data-i18n="settings.language">Language</h2>
+<p class="small muted">The menus, buttons and homepage in your language — the website offers the top 10 languages. Tool pages stay in English for now. More languages come with the store apps later.</p>
+<div class="set-row"><select id="set-lang" style="padding:10px 12px;font-size:16px;border:2px solid #cbd5e1;border-radius:10px;max-width:100%" aria-label="Language"></select></div>
+<h2>Daily reminder</h2>
+<p class="small muted">Get a browser reminder to play the daily puzzles. It appears when you open FreeCalcNow — a website cannot send notifications while it is closed, because there is no server behind it.</p>
+<div class="set-row"><button type="button" id="set-remind">🔔 Turn on daily reminder</button></div>
+<p class="small muted" id="set-remind-msg"></p>
+<h2>Background</h2>
+<p class="small muted">Pick a soft background, or upload your own picture — it stays on this device only.</p>
+<div class="set-row" id="set-bg">
+<button type="button" data-bg="none">None (plain)</button>
+<button type="button" data-bg="mist" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe)">Mist blue</button>
+<button type="button" data-bg="sunrise" style="background:linear-gradient(135deg,#fff7ed,#fde68a)">Sunrise</button>
+<button type="button" data-bg="meadow" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0)">Meadow</button>
+<button type="button" data-bg="lavender" style="background:linear-gradient(135deg,#faf5ff,#e9d5ff)">Lavender</button>
+<button type="button" data-bg="peach" style="background:linear-gradient(135deg,#fff1f2,#fecdd3)">Peach</button>
+</div>
+<p><label class="btn btn-ghost" for="set-upload" style="cursor:pointer">📷 Upload my own background picture</label>
+<input type="file" id="set-upload" accept="image/*" hidden>
+<button type="button" class="btn btn-ghost" id="set-remove-bg">Remove my picture</button></p>
+<p class="small muted" id="set-upload-msg"></p>
+<h2>Start over</h2>
+<p><button type="button" class="btn btn-ghost" id="set-reset">Reset everything to default</button></p>
+<p class="small muted">Your game levels, favourites and daily streak are saved separately and are not touched by Reset.</p>
+<p id="set-saved" class="small" style="color:#166534;font-weight:700"></p>
+</section>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span>Your ad could reach people doing real maths.</span></div>
+<section><h2>Similar pages — you may also like</h2><div class="rel-grid"><div class="rel-card"><a href="/favourites/">Your favourites</a><p class="small muted">The calculators and games you saved with the heart button.</p></div><div class="rel-card"><a href="/download/">Download the app</a><p class="small muted">Install FreeCalcNow on Android, iPhone, Windows, Mac or tablet.</p></div><div class="rel-card"><a href="/games/">Mini games</a><p class="small muted">78 free games — now with levels, progress and favourites.</p></div><div class="rel-card"><a href="/about/">About FreeCalcNow</a><p class="small muted">What this site is and how it works.</p></div></div></section>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="sponsor-box"><h4>Sponsors keep every calculator free</h4><p>Brands reach millions of people doing real maths here. To sponsor a placement, email <a href="mailto:malikarslan032154@gmail.com">malikarslan032154@gmail.com</a>.</p></div><div class="cols"><div><h4>FreeCalcNow</h4><ul><li><a href="/about/">About</a></li><li><a href="/methodology/">How we calculate</a></li><li><a href="/guides/">Guides</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/contact/">Contact</a></li><li><a href="/sponsors/">Sponsors</a></li></ul></div><div><h4>Categories</h4><ul><li><a href="/category/finance/">Finance</a></li><li><a href="/category/math/">Math</a></li><li><a href="/category/statistics/">Statistics</a></li><li><a href="/category/health/">Health</a></li><li><a href="/category/everyday/">Everyday life</a></li><li><a href="/category/conversion/">Conversion</a></li><li><a href="/category/physics/">Physics</a></li><li><a href="/category/chemistry/">Chemistry</a></li><li><a href="/category/biology/">Biology</a></li><li><a href="/category/construction/">Construction</a></li><li><a href="/category/food/">Food</a></li><li><a href="/category/sports/">Sports</a></li><li><a href="/category/ecology/">Ecology</a></li><li><a href="/category/other/">Other</a></li></ul></div><div><h4>Popular</h4><ul><li><a href="/games/">Games — 81 mini games</a></li><li><a href="/daily-number/">Daily Number game</a></li><li><a href="/ask/">Ask FreeCalcNow</a></li><li><a href="/tools/">A–Z index — all 15,402 tools</a></li></ul></div></div><p class="small muted" style="margin-top:18px">FreeCalcNow — 15,402 free calculators. Your numbers never leave your browser. © 2026 FreeCalcNow · v6.</p></div></footer>
+<script src="/assets/engine.js?v=6" defer></script>
+<script src="/assets/site.js?v=6" defer></script>
+<script src="/assets/assistant.js?v=6" defer></script>
+<script src="/assets/settings.js?v=6" defer></script>
+<script src="/assets/favs.js?v=6" defer></script>
+<script src="/assets/install.js?v=6" defer></script>
+<script src="/assets/i18n.js?v=6" defer></script>
+<script>
+(function(){
+  function S(){ return window.FCN_SETTINGS ? FCN_SETTINGS.load() : {theme:'default',accent:'#166534',mode:'auto',font:'medium',bg:'none'}; }
+  function save(s){ if(window.FCN_SETTINGS){ FCN_SETTINGS.save(s); FCN_SETTINGS.apply(s); } var el=document.getElementById('set-saved'); if(el){ el.textContent='Saved on this device ✓'; setTimeout(function(){ el.textContent=''; }, 2000); } paint(); }
+  function paint(){
+    var s=S();
+    document.querySelectorAll('#set-theme [data-theme]').forEach(function(b){ b.style.outline=(b.getAttribute('data-theme')===s.theme)?'3px solid #0F172A':'none'; });
+    document.querySelectorAll('#set-mode [data-mode]').forEach(function(b){ b.style.outline=(b.getAttribute('data-mode')===s.mode)?'3px solid #0F172A':'none'; });
+    document.querySelectorAll('#set-font [data-font]').forEach(function(b){ b.style.outline=(b.getAttribute('data-font')===s.font)?'3px solid #0F172A':'none'; });
+    document.querySelectorAll('#set-bg [data-bg]').forEach(function(b){ b.style.outline=(b.getAttribute('data-bg')===s.bg)?'3px solid #0F172A':'none'; });
+    var ac=document.getElementById('set-accent'); if(ac) ac.value=s.accent||'#166534';
+  }
+  document.querySelectorAll('#set-theme [data-theme]').forEach(function(b){ b.addEventListener('click', function(){ var s=S(); s.theme=b.getAttribute('data-theme'); save(s); }); });
+  document.querySelectorAll('#set-mode [data-mode]').forEach(function(b){ b.addEventListener('click', function(){ var s=S(); s.mode=b.getAttribute('data-mode'); save(s); }); });
+  document.querySelectorAll('#set-font [data-font]').forEach(function(b){ b.addEventListener('click', function(){ var s=S(); s.font=b.getAttribute('data-font'); save(s); }); });
+  document.querySelectorAll('#set-bg [data-bg]').forEach(function(b){ b.addEventListener('click', function(){ var s=S(); s.bg=b.getAttribute('data-bg'); save(s); }); });
+  document.querySelectorAll('.set-chip[data-accent]').forEach(function(b){ b.addEventListener('click', function(){ var s=S(); s.accent=b.getAttribute('data-accent'); save(s); }); });
+  var ac=document.getElementById('set-accent');
+  if(ac) ac.addEventListener('input', function(){ var s=S(); s.accent=ac.value; save(s); });
+  var up=document.getElementById('set-upload'), um=document.getElementById('set-upload-msg');
+  if(up) up.addEventListener('change', function(){
+    var f=up.files && up.files[0]; if(!f) return;
+    if(!/^image\//.test(f.type)){ um.textContent='That file is not a picture — please pick an image.'; return; }
+    var r=new FileReader();
+    r.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var max=1600, w=img.width, h=img.height, sc=Math.min(1, max/Math.max(w,h));
+        var cv=document.createElement('canvas'); cv.width=Math.round(w*sc); cv.height=Math.round(h*sc);
+        cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+        var url=cv.toDataURL('image/jpeg', 0.8);
+        if(window.FCN_SETTINGS){ FCN_SETTINGS.saveBgImage(url, function(ok){
+          um.textContent=ok?'Your picture is set as the background — saved on this device only.':'Could not save the picture on this browser — try a smaller image.';
+          if(ok){ var s=S(); s.bg='none'; save(s); }
+        }); } else { um.textContent='Settings are not ready yet — please try again.'; }
+      };
+      img.onerror=function(){ um.textContent='That picture could not be read — please try another one.'; };
+      img.src=r.result;
+    };
+    r.readAsDataURL(f);
+  });
+  var rb=document.getElementById('set-remove-bg');
+  if(rb) rb.addEventListener('click', function(){
+    if(window.FCN_SETTINGS){ FCN_SETTINGS.clearBgImage(function(ok){ um.textContent=ok?'Your picture was removed.':'Nothing to remove.'; }); }
+  });
+  var rs=document.getElementById('set-reset');
+  if(rs) rs.addEventListener('click', function(){
+    if(window.FCN_SETTINGS){ var d=window.FCN_SETTINGS.DEFAULTS; FCN_SETTINGS.save(d); FCN_SETTINGS.apply(d);
+      FCN_SETTINGS.clearBgImage(function(){}); paint(); var el=document.getElementById('set-saved'); if(el) el.textContent='Reset to default ✓'; }
+  });
+  var langSel=document.getElementById('set-lang');
+  if(langSel && window.FCN_I18N){
+    window.FCN_I18N.LANGS.forEach(function(L){
+      var o=document.createElement('option'); o.value=L.code; o.textContent=L.native+' — '+L.name; langSel.appendChild(o);
+    });
+    langSel.value=window.FCN_I18N.lang();
+    langSel.addEventListener('change', function(){
+      window.FCN_I18N.setLang(langSel.value);
+      var el=document.getElementById('set-saved'); if(el){ el.textContent='Language saved ✓'; setTimeout(function(){ el.textContent=''; }, 2000); }
+      paint();
+    });
+  }
+  var remBtn=document.getElementById('set-remind');
+  var remMsg=document.getElementById('set-remind-msg');
+  function paintRemind(){
+    var on=false; try{ on=localStorage.getItem('fcn-remind')==='1'; }catch(e){}
+    if(remBtn) remBtn.textContent=on?'🔔 Daily reminder is on — tap to turn off':'🔔 Turn on daily reminder';
+  }
+  if(remBtn){
+    paintRemind();
+    remBtn.addEventListener('click', function(){
+      var on=false; try{ on=localStorage.getItem('fcn-remind')==='1'; }catch(e){}
+      if(on){ try{ localStorage.setItem('fcn-remind','0'); }catch(e){} if(remMsg) remMsg.textContent='Reminder turned off.'; paintRemind(); return; }
+      if(!('Notification' in window)){ if(remMsg) remMsg.textContent='Notifications are not supported in this browser.'; return; }
+      function enable(){ try{ localStorage.setItem('fcn-remind','1'); }catch(e){} if(remMsg) remMsg.textContent='Reminder on — see you tomorrow!'; paintRemind(); }
+      if(Notification.permission==='granted') enable();
+      else if(Notification.permission==='denied'){ if(remMsg) remMsg.textContent='Notifications are blocked — allow them in your browser settings first.'; }
+      else Notification.requestPermission().then(function(p){ if(p==='granted') enable(); else if(remMsg) remMsg.textContent='No problem — you can turn it on later.'; });
+    });
+  }
+  paint();
+})();
+</script>
+<script>window.FCN_PAGE={toolId:null,toolName:"Settings",category:"Other",slug:"settings"};</script>
+</body>
+</html>

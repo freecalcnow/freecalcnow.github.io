@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dukaan / Small Business Hisab — Daily Sales, Costs & Profit — FreeCalcNow</title>
+<meta name="description" content="Small business hisab in one place — today's sales, costs, profit and margin, a discount check, and a monthly summary saved on your device. Free, no sign-up.">
+<link rel="canonical" href="https://freecalcnow.github.io/dukaan-hisab/">
+<meta property="og:title" content="Dukaan / Small Business Hisab — Daily Sales, Costs & Profit — FreeCalcNow">
+<meta property="og:description" content="Small business hisab in one place — today's sales, costs, profit and margin, a discount check, and a monthly summary saved on your device. Free, no sign-up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://freecalcnow.github.io/dukaan-hisab/">
+<meta property="og:site_name" content="FreeCalcNow">
+<meta property="og:image" content="https://freecalcnow.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#166534"><link rel="manifest" href="/manifest.json"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="FreeCalcNow"><script>try{var _s=JSON.parse(localStorage.getItem('fcn-settings-v1')||'{}');var _h=document.documentElement;if(_s.theme)_h.setAttribute('data-fcn-theme',_s.theme);if(_s.mode)_h.setAttribute('data-fcn-mode',_s.mode);if(_s.font)_h.setAttribute('data-fcn-font',_s.font);if(_s.bg)_h.setAttribute('data-fcn-bg',_s.bg);if(_s.accent)_h.style.setProperty('--accent',_s.accent);}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Dukaan / Small Business Hisab — Daily Sales, Costs & Profit","description":"Small business hisab in one place — today's sales, costs, profit and margin, a discount check, and a monthly summary saved on your device. Free, no sign-up.","url":"https://freecalcnow.github.io/dukaan-hisab/","author":{"@type":"Organization","name":"FreeCalcNow"},"publisher":{"@type":"Organization","name":"FreeCalcNow","url":"https://freecalcnow.github.io/"},"datePublished":"2026-11-19","dateModified":"2026-11-19"}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3Y2FGRCKZZ');
+</script>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><b>Free</b>CalcNow</a><nav><a href="/" data-i18n="nav.home">Home</a><a href="/tools/" data-i18n="nav.tools">All tools</a><a href="/games/" data-i18n="nav.games">Games</a><a href="/ask/" data-i18n="nav.ask">Ask</a><a href="/about/" data-i18n="nav.about">About</a><a href="/favourites/" data-i18n="nav.favourites">Favourites</a><a href="/settings/" data-i18n="nav.settings">Settings</a></nav><a class="dl-btn" href="/download/"><span aria-hidden="true">⬇ </span><span data-i18n="nav.download">Download app</span></a><form class="head-search" action="/" method="get" onsubmit="return false;"><input id="head-search" type="search" placeholder="Search calculators…" aria-label="Search calculators" data-i18n-ph="search.placeholder"><button type="button" onclick="document.getElementById('head-search').focus()">Search</button></form></div><div class="wrap"><div id="head-results" class="search-results" hidden></div></div></header>
+<main class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / Dukaan / Small Business Hisab</nav>
+
+<h1>Dukaan / Small Business Hisab — Daily Sales, Costs &amp; Profit</h1>
+<p>Run a small shop or business? Enter today's sales and today's costs — see your profit and margin straight away, save the day, and watch the month add up. Everything is saved on this device only.</p>
+<section class="tool-card">
+<h2>Today's hisab</h2>
+<div class="field"><label for="dk-sales">Today's sales (Rs)</label><input id="dk-sales" type="number" inputmode="decimal" value="5000" min="0"></div>
+<div class="field"><label for="dk-costs">Today's costs (Rs) — stock, rent share, bills</label><input id="dk-costs" type="number" inputmode="decimal" value="3500" min="0"></div>
+<div class="result"><div class="big" id="dk-big">—</div><p class="sub" id="dk-sub"></p></div>
+<p><button class="btn btn-go" type="button" id="dk-save">💾 Save today</button> <span class="small muted" id="dk-msg"></span></p>
+</section>
+<section class="tool-card">
+<h2>🏷️ Quick discount check</h2>
+<div class="field"><label for="dk-price">Price (Rs)</label><input id="dk-price" type="number" inputmode="decimal" value="1000" min="0"></div>
+<div class="field"><label for="dk-disc">Discount (%)</label><input id="dk-disc" type="number" inputmode="decimal" value="20" min="0" max="100"></div>
+<div class="result"><div class="big" id="dk-d-big">—</div><p class="sub" id="dk-d-sub"></p></div>
+</section>
+<section>
+<h2>📅 This month's summary</h2>
+<div class="result"><div class="big" id="dk-m-big">—</div><p class="sub" id="dk-m-sub"></p></div>
+<div id="dk-list"></div>
+</section>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span>Your ad could reach people doing real maths.</span></div>
+<section><h2>Similar tools — you may also like</h2><div class="rel-grid"><div class="rel-card"><a href="/discount/">Discount Calculator</a><p class="small muted">Price after discount, and how much you save.</p></div><div class="rel-card"><a href="/margin/">Margin Calculator</a><p class="small muted">Margin and markup on any sale.</p></div><div class="rel-card"><a href="/freelancer-rate/">Freelancer Rate Calculator</a><p class="small muted">Fiverr & Upwork fees, PKR and hourly rate.</p></div><div class="rel-card"><a href="/goal-tracker/">Goal Tracker</a><p class="small muted">Savings goal and weight-loss tracker.</p></div></div></section><div class="share-row"><button class="btn btn-ghost" type="button" data-page-print>Print</button><button class="btn btn-ghost" type="button" data-page-share>Share this page</button></div>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span></span></div>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="sponsor-box"><h4>Sponsors keep every calculator free</h4><p>Brands reach millions of people doing real maths here. To sponsor a placement, email <a href="mailto:malikarslan032154@gmail.com">malikarslan032154@gmail.com</a>.</p></div><div class="cols"><div><h4>FreeCalcNow</h4><ul><li><a href="/about/">About</a></li><li><a href="/methodology/">How we calculate</a></li><li><a href="/guides/">Guides</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/contact/">Contact</a></li><li><a href="/sponsors/">Sponsors</a></li></ul></div><div><h4>Categories</h4><ul><li><a href="/category/finance/">Finance</a></li><li><a href="/category/math/">Math</a></li><li><a href="/category/statistics/">Statistics</a></li><li><a href="/category/health/">Health</a></li><li><a href="/category/everyday/">Everyday life</a></li><li><a href="/category/conversion/">Conversion</a></li><li><a href="/category/physics/">Physics</a></li><li><a href="/category/chemistry/">Chemistry</a></li><li><a href="/category/biology/">Biology</a></li><li><a href="/category/construction/">Construction</a></li><li><a href="/category/food/">Food</a></li><li><a href="/category/sports/">Sports</a></li><li><a href="/category/ecology/">Ecology</a></li><li><a href="/category/other/">Other</a></li></ul></div><div><h4>Popular</h4><ul><li><a href="/games/">Games — 81 mini games</a></li><li><a href="/daily-number/">Daily Number game</a></li><li><a href="/ask/">Ask FreeCalcNow</a></li><li><a href="/tools/">A–Z index — all 15,402 tools</a></li></ul></div></div><p class="small muted" style="margin-top:18px">FreeCalcNow — 15,402 free calculators. Your numbers never leave your browser. © 2026 FreeCalcNow · v6.</p></div></footer>
+<script src="/assets/engine.js?v=6" defer></script>
+<script src="/assets/site.js?v=6" defer></script>
+<script src="/assets/assistant.js?v=6" defer></script>
+<script src="/assets/settings.js?v=6" defer></script>
+<script src="/assets/favs.js?v=6" defer></script>
+<script src="/assets/install.js?v=6" defer></script>
+<script src="/assets/i18n.js?v=6" defer></script>
+<script>
+
+(function(){
+  document.querySelectorAll('[data-page-print]').forEach(function(b){ b.addEventListener('click', function(){ window.print(); }); });
+  document.querySelectorAll('[data-page-share]').forEach(function(b){ b.addEventListener('click', function(){
+    var url=location.href, text=document.title.replace(' — FreeCalcNow','');
+    if(navigator.share){ navigator.share({title:text, url:url}).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ b.textContent='Link copied!'; setTimeout(function(){ b.textContent='Share this page'; }, 2000); }); }
+    else { prompt('Copy this link:', url); }
+  }); });
+})();
+
+(function(){
+  var KEY='fcn-dukaan-v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]')||[]; }catch(e){ return []; } }
+  function save(l){ try{ localStorage.setItem(KEY, JSON.stringify(l)); }catch(e){} }
+  function rs(x){ return 'Rs '+Math.round(x).toLocaleString('en-US'); }
+  function todayStr(){ try{ return new Date().toISOString().slice(0,10); }catch(e){ return ''; } }
+  function renderToday(){
+    var s=parseFloat(document.getElementById('dk-sales').value)||0;
+    var c=parseFloat(document.getElementById('dk-costs').value)||0;
+    var p=s-c, m=s>0?p/s*100:0;
+    document.getElementById('dk-big').textContent='Profit today: '+rs(p);
+    document.getElementById('dk-sub').textContent='Sales '+rs(s)+' − costs '+rs(c)+' = '+rs(p)+' profit. Margin: '+m.toFixed(1)+'%'+(m<0?' — you lost money today. Check your costs.':m<10?' — a thin margin. Can you raise prices or cut costs?':' — a healthy margin. Well done.');
+  }
+  function renderDisc(){
+    var pr=parseFloat(document.getElementById('dk-price').value)||0;
+    var d=parseFloat(document.getElementById('dk-disc').value)||0;
+    var pay=pr*(1-d/100), sv=pr-pay;
+    document.getElementById('dk-d-big').textContent='Customer pays '+rs(pay);
+    document.getElementById('dk-d-sub').textContent='After '+d+'% off '+rs(pr)+', the customer saves '+rs(sv)+' and you keep '+rs(pay)+'.';
+  }
+  function renderMonth(){
+    var l=load();
+    var now=new Date(), ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+    var m=l.filter(function(e){ return (e.date||'').slice(0,7)===ym; });
+    var host=document.getElementById('dk-list');
+    if(!m.length){
+      document.getElementById('dk-m-big').textContent='No days saved this month yet';
+      document.getElementById('dk-m-sub').textContent='Save today above and the month will add up here.';
+      host.innerHTML=''; return;
+    }
+    var ts=0, tc=0, best=null;
+    m.forEach(function(e){ ts+=e.sales; tc+=e.costs; if(!best || e.profit>best.profit) best=e; });
+    var tp=ts-tc;
+    document.getElementById('dk-m-big').textContent='This month: '+rs(tp)+' profit';
+    document.getElementById('dk-m-sub').textContent=m.length+' day'+(m.length===1?'':'s')+' saved · Sales '+rs(ts)+' · Costs '+rs(tc)+' · Average profit '+rs(tp/m.length)+' a day · Best day '+best.date+' ('+rs(best.profit)+')';
+    var html='<table><tr><th>Date</th><th>Sales</th><th>Costs</th><th>Profit</th><th></th></tr>';
+    m.slice().sort(function(a,b){ return a.date<b.date?-1:1; }).forEach(function(e){
+      html+='<tr><td>'+e.date+'</td><td>'+rs(e.sales)+'</td><td>'+rs(e.costs)+'</td><td>'+rs(e.profit)+'</td><td><button type="button" class="btn btn-ghost" data-del="'+e.date+'">Delete</button></td></tr>';
+    });
+    html+='</table>';
+    host.innerHTML=html;
+    host.querySelectorAll('[data-del]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var ll=load().filter(function(e){ return e.date!==b.getAttribute('data-del'); });
+        save(ll); renderMonth();
+      });
+    });
+  }
+  ['dk-sales','dk-costs'].forEach(function(id){ document.getElementById(id).addEventListener('input', renderToday); });
+  ['dk-price','dk-disc'].forEach(function(id){ document.getElementById(id).addEventListener('input', renderDisc); });
+  document.getElementById('dk-save').addEventListener('click', function(){
+    var s=parseFloat(document.getElementById('dk-sales').value)||0;
+    var c=parseFloat(document.getElementById('dk-costs').value)||0;
+    var t=todayStr();
+    var l=load().filter(function(e){ return e.date!==t; });
+    l.push({date:t, sales:s, costs:c, profit:s-c});
+    save(l);
+    document.getElementById('dk-msg').textContent='✓ Saved for '+t+'. Tap again tomorrow to add the next day.';
+    renderMonth();
+  });
+  renderToday(); renderDisc(); renderMonth();
+})();
+
+</script>
+<script>window.FCN_PAGE={toolId:"",toolName:"Dukaan / Small Business Hisab",category:"FreeCalcNow",slug:"dukaan-hisab"};</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bill Splitter + Group Hisab — Split Any Bill Fairly — FreeCalcNow</title>
+<meta name="description" content="Split any bill fairly — total, tip and each person's share, with a WhatsApp message for the whole group. Free, instant, no sign-up.">
+<link rel="canonical" href="https://freecalcnow.github.io/bill-splitter/">
+<meta property="og:title" content="Bill Splitter + Group Hisab — Split Any Bill Fairly — FreeCalcNow">
+<meta property="og:description" content="Split any bill fairly — total, tip and each person's share, with a WhatsApp message for the whole group. Free, instant, no sign-up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://freecalcnow.github.io/bill-splitter/">
+<meta property="og:site_name" content="FreeCalcNow">
+<meta property="og:image" content="https://freecalcnow.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#166534"><link rel="manifest" href="/manifest.json"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="FreeCalcNow"><script>try{var _s=JSON.parse(localStorage.getItem('fcn-settings-v1')||'{}');var _h=document.documentElement;if(_s.theme)_h.setAttribute('data-fcn-theme',_s.theme);if(_s.mode)_h.setAttribute('data-fcn-mode',_s.mode);if(_s.font)_h.setAttribute('data-fcn-font',_s.font);if(_s.bg)_h.setAttribute('data-fcn-bg',_s.bg);if(_s.accent)_h.style.setProperty('--accent',_s.accent);}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=6">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Bill Splitter + Group Hisab — Split Any Bill Fairly","description":"Split any bill fairly — total, tip and each person's share, with a WhatsApp message for the whole group. Free, instant, no sign-up.","url":"https://freecalcnow.github.io/bill-splitter/","author":{"@type":"Organization","name":"FreeCalcNow"},"publisher":{"@type":"Organization","name":"FreeCalcNow","url":"https://freecalcnow.github.io/"},"datePublished":"2026-11-19","dateModified":"2026-11-19"}</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3Y2FGRCKZZ');
+</script>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><b>Free</b>CalcNow</a><nav><a href="/" data-i18n="nav.home">Home</a><a href="/tools/" data-i18n="nav.tools">All tools</a><a href="/games/" data-i18n="nav.games">Games</a><a href="/ask/" data-i18n="nav.ask">Ask</a><a href="/about/" data-i18n="nav.about">About</a><a href="/favourites/" data-i18n="nav.favourites">Favourites</a><a href="/settings/" data-i18n="nav.settings">Settings</a></nav><a class="dl-btn" href="/download/"><span aria-hidden="true">⬇ </span><span data-i18n="nav.download">Download app</span></a><form class="head-search" action="/" method="get" onsubmit="return false;"><input id="head-search" type="search" placeholder="Search calculators…" aria-label="Search calculators" data-i18n-ph="search.placeholder"><button type="button" onclick="document.getElementById('head-search').focus()">Search</button></form></div><div class="wrap"><div id="head-results" class="search-results" hidden></div></div></header>
+<main class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/category/finance/">Finance</a> / Bill Splitter</nav>
+
+<h1>Bill Splitter + Group Hisab — Split Any Bill Fairly</h1>
+<p>One bill, many people, no arguments. Enter the total, add each person with their share, and see exactly who pays what — then send the split to the group on WhatsApp with one tap.</p>
+<section class="tool-card">
+<div class="field"><label for="bs-total">Total bill (Rs)</label><input id="bs-total" type="number" inputmode="decimal" value="3000" min="0"></div>
+<div class="field"><label for="bs-tip">Tip / service (%)</label><input id="bs-tip" type="number" inputmode="decimal" value="0" min="0" max="100"></div>
+<h2>Who is paying?</h2>
+<div id="bs-people"></div>
+<p><button class="btn btn-ghost" type="button" id="bs-add">+ Add a person</button> <button class="btn btn-ghost" type="button" id="bs-equal">Split equally</button></p>
+<div class="result"><div class="big" id="bs-big">—</div><p class="sub" id="bs-sub"></p><div id="bs-rows"></div></div>
+<p><button class="btn btn-wa" type="button" id="bs-wa">Share on WhatsApp</button> <button class="btn btn-ghost" type="button" id="bs-copy">Copy share link</button></p>
+<p class="small muted" id="bs-msg">The share link carries the total and every person's share in the web address — anyone who opens it sees the same split.</p>
+</section>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span>Your ad could reach people doing real maths.</span></div>
+<section><h2>How shares work</h2><ol class="steps"><li>Each person has a share number. Equal shares means everyone has share 1.</li><li>Someone who ate twice as much gets share 2 — they pay twice as much as a share-1 person.</li><li>The tip is added to the total first, then split by shares.</li></ol></section>
+<section><h2>Similar tools — you may also like</h2><div class="rel-grid"><div class="rel-card"><a href="/tip/">Tip Calculator</a><p class="small muted">How much to tip — and how to split it.</p></div><div class="rel-card"><a href="/discount/">Discount Calculator</a><p class="small muted">Price after discount, and how much you save.</p></div><div class="rel-card"><a href="/freelancer-rate/">Freelancer Rate Calculator</a><p class="small muted">Fiverr & Upwork fees, PKR and hourly rate.</p></div><div class="rel-card"><a href="/dukaan-hisab/">Dukaan / Small Business Hisab</a><p class="small muted">Daily sales, costs, profit and monthly summary.</p></div></div></section><div class="share-row"><button class="btn btn-ghost" type="button" data-page-print>Print</button><button class="btn btn-ghost" type="button" data-page-share>Share this page</button></div>
+<div class="ad-slot" role="complementary" aria-label="Advertisement"><span><span class="lbl">Advertisement</span></span></div>
+</main>
+<footer class="site-foot"><div class="wrap"><div class="sponsor-box"><h4>Sponsors keep every calculator free</h4><p>Brands reach millions of people doing real maths here. To sponsor a placement, email <a href="mailto:malikarslan032154@gmail.com">malikarslan032154@gmail.com</a>.</p></div><div class="cols"><div><h4>FreeCalcNow</h4><ul><li><a href="/about/">About</a></li><li><a href="/methodology/">How we calculate</a></li><li><a href="/guides/">Guides</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/contact/">Contact</a></li><li><a href="/sponsors/">Sponsors</a></li></ul></div><div><h4>Categories</h4><ul><li><a href="/category/finance/">Finance</a></li><li><a href="/category/math/">Math</a></li><li><a href="/category/statistics/">Statistics</a></li><li><a href="/category/health/">Health</a></li><li><a href="/category/everyday/">Everyday life</a></li><li><a href="/category/conversion/">Conversion</a></li><li><a href="/category/physics/">Physics</a></li><li><a href="/category/chemistry/">Chemistry</a></li><li><a href="/category/biology/">Biology</a></li><li><a href="/category/construction/">Construction</a></li><li><a href="/category/food/">Food</a></li><li><a href="/category/sports/">Sports</a></li><li><a href="/category/ecology/">Ecology</a></li><li><a href="/category/other/">Other</a></li></ul></div><div><h4>Popular</h4><ul><li><a href="/games/">Games — 81 mini games</a></li><li><a href="/daily-number/">Daily Number game</a></li><li><a href="/ask/">Ask FreeCalcNow</a></li><li><a href="/tools/">A–Z index — all 15,402 tools</a></li></ul></div></div><p class="small muted" style="margin-top:18px">FreeCalcNow — 15,402 free calculators. Your numbers never leave your browser. © 2026 FreeCalcNow · v6.</p></div></footer>
+<script src="/assets/engine.js?v=6" defer></script>
+<script src="/assets/site.js?v=6" defer></script>
+<script src="/assets/assistant.js?v=6" defer></script>
+<script src="/assets/settings.js?v=6" defer></script>
+<script src="/assets/favs.js?v=6" defer></script>
+<script src="/assets/install.js?v=6" defer></script>
+<script src="/assets/i18n.js?v=6" defer></script>
+<script>
+
+(function(){
+  document.querySelectorAll('[data-page-print]').forEach(function(b){ b.addEventListener('click', function(){ window.print(); }); });
+  document.querySelectorAll('[data-page-share]').forEach(function(b){ b.addEventListener('click', function(){
+    var url=location.href, text=document.title.replace(' — FreeCalcNow','');
+    if(navigator.share){ navigator.share({title:text, url:url}).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ b.textContent='Link copied!'; setTimeout(function(){ b.textContent='Share this page'; }, 2000); }); }
+    else { prompt('Copy this link:', url); }
+  }); });
+})();
+
+(function(){
+  function rs(x){ return 'Rs '+Math.round(x).toLocaleString('en-US'); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var people=[];
+  function addPerson(name, share){
+    people.push({name:name||'', share:share||1});
+    renderPeople(); render();
+  }
+  function renderPeople(){
+    var host=document.getElementById('bs-people');
+    var html='';
+    people.forEach(function(p, i){
+      html+='<div class="row" style="margin:6px 0"><input type="text" data-pname="'+i+'" value="'+esc(p.name)+'" placeholder="Person '+(i+1)+'" style="flex:2">'
+        +'<input type="number" data-pshare="'+i+'" value="'+p.share+'" min="0" step="any" placeholder="Share" style="flex:1">'
+        +'<button type="button" class="btn btn-ghost" data-del="'+i+'" style="flex:0 0 auto">✕</button></div>';
+    });
+    host.innerHTML=html;
+    host.querySelectorAll('[data-pname]').forEach(function(inp){
+      inp.addEventListener('input', function(){ people[parseInt(inp.getAttribute('data-pname'),10)].name=inp.value; render(); });
+    });
+    host.querySelectorAll('[data-pshare]').forEach(function(inp){
+      inp.addEventListener('input', function(){ people[parseInt(inp.getAttribute('data-pshare'),10)].share=parseFloat(inp.value)||0; render(); });
+    });
+    host.querySelectorAll('[data-del]').forEach(function(b){
+      b.addEventListener('click', function(){ people.splice(parseInt(b.getAttribute('data-del'),10),1); renderPeople(); render(); });
+    });
+  }
+  function calc(){
+    var total=parseFloat(document.getElementById('bs-total').value)||0;
+    var tip=parseFloat(document.getElementById('bs-tip').value)||0;
+    var grand=total*(1+tip/100);
+    var wsum=0; people.forEach(function(p){ wsum+=Math.max(0,p.share||0); });
+    var rows=people.map(function(p, i){
+      var amt=wsum>0?grand*Math.max(0,p.share||0)/wsum:0;
+      return {name:p.name||('Person '+(i+1)), amt:amt};
+    });
+    return {total:total, tip:tip, grand:grand, rows:rows};
+  }
+  function render(){
+    var c=calc();
+    document.getElementById('bs-big').textContent='Total to split: '+rs(c.grand);
+    document.getElementById('bs-sub').textContent='Bill '+rs(c.total)+(c.tip>0?' + '+c.tip+'% tip ('+rs(c.total*c.tip/100)+')':'')+' — '+c.rows.length+' people.';
+    var html='<table><tr><th>Person</th><th>Pays</th></tr>';
+    c.rows.forEach(function(r){ html+='<tr><td>'+esc(r.name)+'</td><td>'+rs(r.amt)+'</td></tr>'; });
+    html+='</table>';
+    document.getElementById('bs-rows').innerHTML=html;
+  }
+  function shareText(){
+    var c=calc();
+    var lines=['Bill split — total '+rs(c.grand)+' ('+c.rows.length+' people):'];
+    c.rows.forEach(function(r){ lines.push(r.name+': '+rs(r.amt)); });
+    lines.push('Split on FreeCalcNow: '+shareLink());
+    return lines.join('\n');
+  }
+  function shareLink(){
+    var c=calc();
+    var parts=['t='+encodeURIComponent(document.getElementById('bs-total').value||'0')];
+    var tip=document.getElementById('bs-tip').value||'0';
+    if(parseFloat(tip)) parts.push('tip='+encodeURIComponent(tip));
+    var ps=people.map(function(p){ return encodeURIComponent(p.name||'')+':'+(p.share||1); }).join(',');
+    if(ps) parts.push('p='+encodeURIComponent(ps));
+    return location.origin+location.pathname+'?'+parts.join('&');
+  }
+  document.getElementById('bs-add').addEventListener('click', function(){ addPerson('', 1); });
+  document.getElementById('bs-equal').addEventListener('click', function(){ people.forEach(function(p){ p.share=1; }); renderPeople(); render(); });
+  document.getElementById('bs-wa').addEventListener('click', function(){
+    window.open('https://wa.me/?text='+encodeURIComponent(shareText()), '_blank', 'noopener');
+  });
+  document.getElementById('bs-copy').addEventListener('click', function(){
+    var link=shareLink(), msg=document.getElementById('bs-msg');
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(link).then(function(){ msg.textContent='Share link copied — send it to the group!'; }); }
+    else prompt('Copy this link:', link);
+  });
+  ['bs-total','bs-tip'].forEach(function(id){ document.getElementById(id).addEventListener('input', render); });
+  /* Restore from URL params: ?t=3000&tip=10&p=Alice:2,Bob:1 */
+  var q=new URLSearchParams(location.search);
+  if(q.get('t')) document.getElementById('bs-total').value=q.get('t');
+  if(q.get('tip')) document.getElementById('bs-tip').value=q.get('tip');
+  if(q.get('p')){
+    q.get('p').split(',').forEach(function(pair){
+      var kv=pair.split(':');
+      addPerson(decodeURIComponent(kv[0]||''), parseFloat(kv[1])||1);
+    });
+  } else { addPerson('Ali',1); addPerson('Bilal',1); addPerson('Sara',1); }
+  render();
+})();
+
+</script>
+<script>window.FCN_PAGE={toolId:"",toolName:"Bill Splitter",category:"FreeCalcNow",slug:"bill-splitter"};</script>
+</body>
+</html>
