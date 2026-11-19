@@ -256,9 +256,18 @@ body.fcn-custom-bg{background-size:cover;background-attachment:fixed;background-
 /* favourite heart button (also styled inline by favs.js as a fallback) */
 .fav-btn{padding:10px 14px;font-size:15px;font-weight:800;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;color:#0F172A}
 /* games hub: colourful Play Store-style cards */
-.gcard{border-radius:16px!important;overflow:hidden}
-.gcard .gicon{font-size:34px;line-height:1}
-.gcard .gname{font-size:17px;font-weight:800}
-.gcard .glevel{font-size:13px;font-weight:700;margin-top:4px}
+.gcard{border-radius:18px!important;overflow:hidden;border:1px solid rgba(15,23,42,.08)!important;box-shadow:0 2px 8px rgba(15,23,42,.10);transition:transform .15s ease,box-shadow .15s ease;position:relative}
+.gcard:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(15,23,42,.18)}
+.gcard .gpic{display:flex;align-items:center;justify-content:center;width:76px;height:76px;border-radius:20px;background:rgba(255,255,255,.8);box-shadow:0 2px 6px rgba(15,23,42,.18);margin-bottom:10px}
+.gcard .gpic .gicon{font-size:44px;line-height:1}
+.gcard .gname{font-size:18px;font-weight:800;color:#0F172A}
+.gcard .gname::after{content:"";position:absolute;inset:0}
+.gcard .pill{background:rgba(255,255,255,.88);border:1px solid rgba(15,23,42,.12);color:#0F172A}
+.gcard .rec-badge{background:#166534;color:#fff;border-color:#166534}
+.gcard .small{color:#334155}
+.gcard .glevel{font-size:13px;font-weight:700;margin-top:6px;color:#1e293b}
+.rec-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,260px);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 16px;margin:8px 0 18px}
+.rec-row .gcard{scroll-snap-align:start}
+@media (max-width:640px){.gcard .gpic{width:64px;height:64px;border-radius:16px}.gcard .gpic .gicon{font-size:36px}.rec-row{grid-auto-columns:minmax(210px,78vw)}}
 /* offline banner (site.js) */
 .offline-banner{background:#fef3c7;color:#78350f;font-weight:700;padding:10px 16px;text-align:center;border-bottom:2px solid #f59e0b}
