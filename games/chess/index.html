@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chess - FreeCalcNow Games</title><meta name="description" content="Tap one of your pieces, then tap a highlighted square to move. Checkmate the enemy king to win. Promotion is automatic to queen. Play free, endless, no sign-up."><link rel="canonical" href="https://freecalcnow.github.io/games/chess/"><meta name="theme-color" content="#166534"><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-3Y2FGRCKZZ');</script><style>*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#F8FAFC;color:#0F172A}header{background:#166534;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}header a{color:#fff;font-weight:800;text-decoration:none;font-size:18px}header span{font-size:13px;opacity:.9}main{max-width:560px;margin:0 auto;padding:14px 14px 30px}h1{font-size:24px;margin:8px 0 4px}.how{color:#475569;margin:0 0 12px}.bar{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px 12px;margin-bottom:12px;font-weight:700}.bar span{color:#166534}#game{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;min-height:180px}#msg{min-height:24px;margin:10px 0;font-weight:600;color:#166534}#q{font-size:26px;font-weight:800;text-align:center;margin:12px 0}.grid{display:grid;gap:8px}.btn{display:block;width:100%;padding:13px;font-size:17px;font-weight:700;border:0;border-radius:10px;background:#166534;color:#fff;cursor:pointer;margin:6px 0}.btn.amber{background:#F59E0B;color:#0F172A}.btn.ghost{background:#e2e8f0;color:#0F172A}.opt{padding:13px;font-size:18px;font-weight:700;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer}.opt:active{background:#dcfce7}.tile{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;min-height:48px}input[type=text],input[type=number]{width:100%;padding:12px;font-size:18px;border:2px solid #cbd5e1;border-radius:10px;margin:6px 0}.row{display:flex;gap:8px}.row>*{flex:1}.small{font-size:13px;color:#64748b}.vars{margin-top:14px;font-size:13px}.vars a{display:inline-block;background:#fff;border:1px solid #cbd5e1;border-radius:20px;padding:5px 10px;margin:3px;text-decoration:none;color:#166534;font-weight:600}footer{text-align:center;color:#64748b;font-size:13px;padding:16px}footer a{color:#166534}.more{display:block;text-align:center;margin-top:14px;font-weight:700;color:#166534}body.theme-dark{background:#0f172a;color:#e2e8f0}body.theme-dark #game,body.theme-dark .bar{background:#1e293b;border-color:#334155;color:#e2e8f0}body.theme-dark .opt,body.theme-dark .tile{background:#1e293b;color:#e2e8f0;border-color:#334155}body.theme-dark .how,body.theme-dark .small{color:#94a3b8}body.theme-dark .btn.ghost{background:#334155;color:#f1f5f9}body.theme-dark input[type=text],body.theme-dark input[type=number]{background:#0b1220;color:#e2e8f0;border-color:#334155}body.theme-dark .vars a{background:#1e293b;color:#86efac;border-color:#334155}body.theme-neon{background:#0b1020;color:#fef3c7}body.theme-neon #game,body.theme-neon .bar{background:#131a2e;border-color:#f59e0b;color:#fef3c7}body.theme-neon .opt,body.theme-neon .tile{background:#131a2e;color:#fef3c7;border-color:#f59e0b}body.theme-neon .how,body.theme-neon .small{color:#fcd34d}body.theme-neon .btn{background:#f59e0b;color:#1c1005}body.theme-neon .btn.amber{background:#22d3ee;color:#082f49}body.theme-neon .btn.ghost{background:#334155;color:#fef3c7}body.theme-neon .vars a{background:#131a2e;color:#fcd34d;border-color:#f59e0b}</style></head><body><header><a href="/">FreeCalcNow</a><span>Free Games</span></header><main><h1>Chess</h1><p class="how">Tap one of your pieces, then tap a highlighted square to move. Checkmate the enemy king to win. Promotion is automatic to queen.</p><div class="bar"><span>Score: <b id="score">0</b></span><span>Best: <b id="best">0</b></span><span style="margin-left:auto" class="small" id="cfgLabel"></span></div><div id="game"><div id="board" style="display:grid;grid-template-columns:repeat(8,1fr);gap:0;border:2px solid #0F172A;max-width:480px;margin:0 auto"></div><div class="small" style="text-align:center;margin-top:8px">Turn: <b id="turn">White</b> · <span id="state"></span></div></div><div id="msg"></div><button class="btn" id="startBtn">▶ Start / New game</button><div class="vars"><b>Try a variation:</b><br><a href="?theme=classic&amp;difficulty=easy&amp;side=white">Classic · Easy · White</a><a href="?theme=classic&amp;difficulty=easy&amp;side=black">Classic · Easy · Black</a><a href="?theme=classic&amp;difficulty=medium&amp;side=white">Classic · Medium · White</a><a href="?theme=classic&amp;difficulty=medium&amp;side=black">Classic · Medium · Black</a><a href="?theme=dark&amp;difficulty=easy&amp;side=white">Dark · Easy · White</a><a href="?theme=dark&amp;difficulty=easy&amp;side=black">Dark · Easy · Black</a></div><a class="more" href="/games/">← More games</a></main><footer><a href="/">FreeCalcNow</a> — free calculators &amp; games. No sign-up, no ads covering play.</footer><script>var score=0;var best=0;try{best=parseInt(localStorage.getItem('fcn_best_chess')||'0')||0}catch(e){}function qp(k){try{return new URLSearchParams(window.location.search).get(k)}catch(e){return null}}function setScore(n){score=n;var s=document.getElementById('score');if(s)s.textContent=n;if(n>best){best=n;try{localStorage.setItem('fcn_best_chess',String(best))}catch(e){}}var b=document.getElementById('best');if(b)b.textContent=best;}function msg(t){var m=document.getElementById('msg');if(m)m.textContent=t;}function rnd(n){return Math.floor(Math.random()*n)}function shuffle(a){for(var i=a.length-1;i>0;i--){var j=rnd(i+1);var t=a[i];a[i]=a[j];a[j]=t}return a}function mkOpts(ans,n){var s=[ans];var d=1;while(s.length<n&&d<100){if(ans+d>=0&&s.indexOf(ans+d)<0)s.push(ans+d);if(s.length>=n)break;if(ans-d>=0&&s.indexOf(ans-d)<0)s.push(ans-d);d++}return shuffle(s)}function el(id){return document.getElementById(id)}try{var _b=el('best');if(_b)_b.textContent=best}catch(e){}try{var _th=qp('theme');if(_th==='dark'||_th==='neon'){document.body.classList.add('theme-'+_th)}}catch(e){}
+
+var diff=qp('difficulty')||'medium'; var side=(qp('side')||'white').toLowerCase(); if(side!=='white'&&side!=='black')side='white';
+var human=side==='white'?'w':'b'; var ai=human==='w'?'b':'w';
+if(el('cfgLabel'))el('cfgLabel').textContent=diff+' · you play '+side;
+var VAL={P:1,N:3,B:3,R:5,Q:9,K:0};
+var GLYPH={wP:'\u2659',wN:'\u2658',wB:'\u2657',wR:'\u2656',wQ:'\u2655',wK:'\u2654',bP:'\u265F',bN:'\u265E',bB:'\u265D',bR:'\u265C',bQ:'\u265B',bK:'\u265A'};
+var board, turn, castle, ep, sel, legalCache, over, wins=0;
+function col(p){return p===p.toUpperCase()?'w':'b'}
+function typ(p){return p.toUpperCase()}
+function rc(i){return [Math.floor(i/8), i%8]}
+function idx(r,c){return r*8+c}
+function inside(r,c){return r>=0&&r<8&&c>=0&&c<8}
+function attacked(b,sq,by){var r=rc(sq)[0],c=rc(sq)[1];
+  var dir=by==='w'?1:-1;
+  [[r+dir,c-1],[r+dir,c+1]].forEach(function(p){if(inside(p[0],p[1])&&b[idx(p[0],p[1])]===(by==='w'?'P':'p'))return true});
+  // pawn check done inline below (forEach return does not exit) — recompute:
+  var pawnAt=false; [[r+dir,c-1],[r+dir,c+1]].forEach(function(p){if(inside(p[0],p[1])&&b[idx(p[0],p[1])]===(by==='w'?'P':'p'))pawnAt=true}); if(pawnAt)return true;
+  var kn=[[ -2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
+  for(var i=0;i<kn.length;i++){var rr=r+kn[i][0],cc=c+kn[i][1]; if(inside(rr,cc)&&b[idx(rr,cc)]===(by==='w'?'N':'n'))return true}
+  for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){if(!dr&&!dc)continue; var rr2=r+dr,cc2=c+dc; if(inside(rr2,cc2)&&b[idx(rr2,cc2)]===(by==='w'?'K':'k'))return true}
+  var dirs=[[ -1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
+  for(var d=0;d<dirs.length;d++){var rr3=r+dirs[d][0],cc3=c+dirs[d][1];
+    while(inside(rr3,cc3)){var p=b[idx(rr3,cc3)]; if(p){if(col(p)===by){var t=typ(p); if(d<4&&(t==='R'||t==='Q'))return true; if(d>=4&&(t==='B'||t==='Q'))return true} break} rr3+=dirs[d][0]; cc3+=dirs[d][1]}}
+  return false}
+function kingSq(b,color){for(var i=0;i<64;i++)if(b[i]===(color==='w'?'K':'k'))return i; return -1}
+function pseudo(b,color,cast,epSq){var ms=[];
+  for(var i=0;i<64;i++){var p=b[i]; if(!p||col(p)!==color)continue; var r=rc(i)[0],c=rc(i)[1]; var t=typ(p);
+    if(t==='P'){var d=color==='w'?-1:1; var start=color==='w'?6:1; var last=color==='w'?0:7;
+      var f=idx(r+d,c); if(inside(r+d,c)&&!b[f]){ms.push({from:i,to:f,promo:(r+d===last)}); var f2=idx(r+2*d,c); if(r===start&&!b[f2])ms.push({from:i,to:f2,dbl:true})}
+      [[r+d,c-1],[r+d,c+1]].forEach(function(q){if(!inside(q[0],q[1]))return; var j=idx(q[0],q[1]);
+        if(b[j]&&col(b[j])!==color)ms.push({from:i,to:j,promo:(q[0]===last)});
+        if(j===epSq)ms.push({from:i,to:j,ep:true})})}
+    else if(t==='N'||t==='K'){var off=t==='N'?[[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+      off.forEach(function(o){var rr=r+o[0],cc=c+o[1]; if(!inside(rr,cc))return; var j=idx(rr,cc); if(!b[j]||col(b[j])!==color)ms.push({from:i,to:j})})}
+    else {var dirs2=t==='B'?[[-1,-1],[-1,1],[1,-1],[1,1]]:(t==='R'?[[-1,0],[1,0],[0,-1],[0,1]]:[[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]]);
+      dirs2.forEach(function(o){var rr=r+o[0],cc=c+o[1]; while(inside(rr,cc)){var j=idx(rr,cc); if(!b[j])ms.push({from:i,to:j}); else {if(col(b[j])!==color)ms.push({from:i,to:j}); break} rr+=o[0]; cc+=o[1]}})}
+    if(t==='K'){
+      if(color==='w'&&r===7&&c===4){if(cast.K&&!b[61]&&!b[62]&&b[63]==='R'&&!attacked(b,60,'b')&&!attacked(b,61,'b')&&!attacked(b,62,'b'))ms.push({from:60,to:62,castle:'K'});
+        if(cast.Q&&!b[59]&&!b[58]&&!b[57]&&b[56]==='R'&&!attacked(b,60,'b')&&!attacked(b,59,'b')&&!attacked(b,58,'b'))ms.push({from:60,to:58,castle:'Q'})}
+      if(color==='b'&&r===0&&c===4){if(cast.k&&!b[5]&&!b[6]&&b[7]==='r'&&!attacked(b,4,'w')&&!attacked(b,5,'w')&&!attacked(b,6,'w'))ms.push({from:4,to:6,castle:'k'});
+        if(cast.q&&!b[3]&&!b[2]&&!b[1]&&b[0]==='r'&&!attacked(b,4,'w')&&!attacked(b,3,'w')&&!attacked(b,2,'w'))ms.push({from:4,to:2,castle:'q'})}}}
+  return ms}
+function applyMove(b,m,color,cast,epSq){var nb=b.slice(); var p=nb[m.from]; nb[m.from]=''; nb[m.to]=m.promo?(color==='w'?'Q':'q'):p;
+  if(m.ep){var cap=color==='w'?m.to+8:m.to-8; nb[cap]=''}
+  if(m.castle==='K'){nb[61]='R';nb[63]=''} if(m.castle==='Q'){nb[59]='R';nb[56]=''} if(m.castle==='k'){nb[5]='r';nb[7]=''} if(m.castle==='q'){nb[3]='r';nb[0]=''}
+  var nc={K:cast.K,Q:cast.Q,k:cast.k,q:cast.q};
+  if(p==='K'){nc.K=false;nc.Q=false} if(p==='k'){nc.k=false;nc.q=false}
+  if(m.from===63||m.to===63)nc.K=false; if(m.from===56||m.to===56)nc.Q=false; if(m.from===7||m.to===7)nc.k=false; if(m.from===0||m.to===0)nc.q=false;
+  var nep=m.dbl?(color==='w'?m.from-8:m.from+8):-1;
+  return {b:nb,c:nc,ep:nep}}
+function legal(b,color,cast,epSq){var out=[]; pseudo(b,color,cast,epSq).forEach(function(m){var r=applyMove(b,m,color,cast,epSq); if(!attacked(r.b,kingSq(r.b,color),color==='w'?'b':'w'))out.push(m)}); return out}
+function evaluate(b){var s=0; for(var i=0;i<64;i++){if(!b[i])continue; var v=VAL[typ(b[i])]; s+=col(b[i])==='w'?v:-v} return s}
+function aiMove(){if(over)return; var ms=legal(board,ai,castle,ep); if(!ms.length){endCheck();return}
+  var mv; if(diff==='easy'){mv=ms[rnd(ms.length)]}
+  else {var best=-1e9, cands=[]; ms.forEach(function(m){var r=applyMove(board,m,ai,castle,ep); var e=evaluate(r.b)*(ai==='w'?1:-1); if(e>best){best=e;cands=[m]} else if(e===best)cands.push(m)}); mv=cands[rnd(cands.length)]}
+  doMove(mv); }
+function doMove(m){var r=applyMove(board,m,turn,castle,ep); board=r.b; castle=r.c; ep=r.ep; turn=turn==='w'?'b':'w'; sel=null; draw(); endCheck();
+  if(!over&&turn===ai)setTimeout(aiMove,400)}
+function endCheck(){var ms=legal(board,turn,castle,ep); var inChk=attacked(board,kingSq(board,turn),turn==='w'?'b':'w');
+  el('state').textContent=inChk?'Check!':'';
+  if(!ms.length){over=true; if(inChk){var humanWon=turn!==human; msg(humanWon?'🎉 Checkmate — you win!':'Checkmate — the computer wins. Press Start to play again.'); if(humanWon){wins++; setScore(wins*10)}} else {msg('Stalemate — draw! Press Start to play again.'); setScore(wins*10+5)}}}
+function draw(){el('turn').textContent=turn==='w'?'White':'Black';
+  el('board').innerHTML='';
+  for(var i=0;i<64;i++){var r=rc(i)[0],c=rc(i)[1]; var d=document.createElement('button');
+    d.style.cssText='aspect-ratio:1;border:0;font-size:26px;cursor:pointer;min-height:44px;background:'+(((r+c)%2===0)?'#f0d9b5':'#b58863');
+    d.style.padding='0';
+    if(sel===i)d.style.background='#F59E0B';
+    if(sel!==null&&legalCache){for(var k=0;k<legalCache.length;k++){if(legalCache[k].from===sel&&legalCache[k].to===i)d.style.background='#86efac'}}
+    var p=board[i]; d.textContent=p?GLYPH[col(p)+typ(p)]:'';
+    d.style.color=col(p)==='w'?'#fff':'#0F172A'; d.style.textShadow=col(p)==='w'?'0 0 3px #000':'none';
+    (function(ii){d.onclick=function(){if(over||turn!==human)return;
+      if(sel===null){if(board[ii]&&col(board[ii])===human){sel=ii; legalCache=legal(board,human,castle,ep); draw()} return}
+      var m=null; if(legalCache)for(var k2=0;k2<legalCache.length;k2++)if(legalCache[k2].from===sel&&legalCache[k2].to===ii)m=legalCache[k2];
+      if(m){doMove(m)} else if(board[ii]&&col(board[ii])===human){sel=ii; legalCache=legal(board,human,castle,ep); draw()} else {sel=null; draw()}}})(i);
+    el('board').appendChild(d)}}
+function start(){board=['r','n','b','q','k','b','n','r','p','p','p','p','p','p','p','p'];
+  for(var e=0;e<32;e++)board.push('');
+  board=board.concat(['P','P','P','P','P','P','P','P','R','N','B','Q','K','B','N','R']);
+  turn='w'; castle={K:true,Q:true,k:true,q:true}; ep=-1; sel=null; legalCache=null; over=false; msg('Your move — tap a piece, then a highlighted square.');
+  draw(); if(turn===ai)setTimeout(aiMove,500)}
+el('startBtn').onclick=function(){start()}; start();
+</script></body></html>

@@ -6,86 +6,237 @@
   function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
   function cap(s){ s=String(s||""); return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
   /* ---------- header + home search ---------- */
-  var INDEX=null, INDEX_P=null;
-  /* Instant fallback while the full index loads: the most-used tools. */
+  /* ---------- header + home search ----------
+     FAST ON SLOW CONNECTIONS: nothing is fetched on page load — no index
+     prefetch at all. Typing shows instant results from the built-in
+     POPULAR list (zero network wait); the small per-letter shard(s) for
+     the query load in the background and the list is re-rendered with the
+     full results when they arrive. If a shard is slow or fails, the
+     POPULAR results stay on screen. */
+  var CAT_LABEL={finance:"Finance",health:"Health",math:"Math",everyday:"Everyday life",other:"Other",conversion:"Conversion",physics:"Physics",chemistry:"Chemistry",biology:"Biology",statistics:"Statistics",construction:"Construction",food:"Food",sports:"Sports",ecology:"Ecology"};
+  function catLabel(c){ return CAT_LABEL[String(c||"").toLowerCase()]||cap(c||""); }
+  /* Instant results with zero network wait: the most-used tools. Every id
+     here is a real tool page (verified against the full tool list). */
   var POPULAR=[
-    {id:"mortgage",name:"Mortgage Calculator",cat:"Finance"},
-    {id:"compound",name:"Compound Interest Calculator",cat:"Finance"},
-    {id:"loan",name:"Loan / EMI Calculator",cat:"Finance"},
-    {id:"bmi",name:"BMI Calculator",cat:"Health"},
-    {id:"sip-calculator",name:"SIP Calculator",cat:"Finance"},
-    {id:"emi-calculator",name:"EMI Calculator",cat:"Finance"},
-    {id:"percentage-calculator",name:"Percentage Calculator",cat:"Math"},
-    {id:"tip-calculator",name:"Tip Calculator",cat:"Everyday life"},
-    {id:"age-calculator",name:"Age Calculator",cat:"Everyday life"},
-    {id:"gpa-calculator",name:"GPA Calculator",cat:"Math"},
-    {id:"salary-calculator",name:"Salary Calculator",cat:"Finance"},
-    {id:"income-tax-calculator",name:"Income Tax Calculator",cat:"Finance"},
-    {id:"salary-hourly",name:"Salary ↔ Hourly Calculator",cat:"Finance"},
-    {id:"retirement",name:"Retirement Calculator",cat:"Finance"},
-    {id:"savings-goal",name:"Savings Goal Calculator",cat:"Finance"},
-    {id:"inflation",name:"Inflation Calculator",cat:"Finance"},
-    {id:"roi",name:"Investment Return (ROI) Calculator",cat:"Finance"},
-    {id:"calorie",name:"Calorie Calculator",cat:"Health"},
-    {id:"tdee",name:"TDEE Calculator",cat:"Health"},
-    {id:"discount",name:"Discount Calculator",cat:"Everyday life"},
-    {id:"password-gen",name:"Password Generator",cat:"Other"},
-    {id:"qr",name:"QR Code Generator",cat:"Other"},
-    {id:"json",name:"JSON Formatter & Validator",cat:"Other"},
-    {id:"debt-payoff",name:"Debt Payoff Calculator",cat:"Finance"}
+    {id:"mortgage",name:"Mortgage Calculator",cat:"finance"},
+    {id:"compound",name:"Compound Interest Calculator",cat:"finance"},
+    {id:"loan",name:"Loan / EMI Calculator",cat:"finance"},
+    {id:"bmi",name:"BMI Calculator",cat:"health"},
+    {id:"sip-calculator",name:"SIP Calculator",cat:"finance"},
+    {id:"percentage",name:"Percentage Calculator",cat:"everyday"},
+    {id:"tip",name:"Tip & Bill Split Calculator",cat:"everyday"},
+    {id:"age",name:"Age Calculator",cat:"everyday"},
+    {id:"gpa",name:"GPA Calculator",cat:"everyday"},
+    {id:"salary-hourly",name:"Salary ↔ Hourly Calculator",cat:"finance"},
+    {id:"income-tax",name:"Income Tax Calculator (US Federal)",cat:"finance"},
+    {id:"retirement",name:"Retirement Calculator",cat:"finance"},
+    {id:"savings-goal",name:"Savings Goal Calculator",cat:"finance"},
+    {id:"inflation",name:"Inflation Calculator",cat:"finance"},
+    {id:"roi",name:"Investment Return (ROI) Calculator",cat:"finance"},
+    {id:"calorie",name:"Calorie (TDEE) Calculator",cat:"health"},
+    {id:"discount",name:"Discount Calculator",cat:"everyday"},
+    {id:"password-gen",name:"Password Generator & Strength Checker",cat:"other"},
+    {id:"qr",name:"QR Code Generator",cat:"other"},
+    {id:"json",name:"JSON Formatter & Validator",cat:"other"},
+    {id:"debt-payoff",name:"Debt Payoff Calculator",cat:"finance"},
+    {id:"ppf",name:"PPF Calculator",cat:"finance"},
+    {id:"vat",name:"VAT / Sales Tax Calculator",cat:"finance"},
+    {id:"take-home",name:"Take-Home Pay Calculator",cat:"finance"}
   ];
-  function loadIndex(){
-    if(INDEX) return Promise.resolve(INDEX);
-    if(INDEX_P) return INDEX_P;
-    INDEX_P = fetch("/assets/tools-index.json").then(function(r){ return r.json(); }).then(function(j){ INDEX=j; return j; }).catch(function(){ INDEX=[]; return INDEX; });
-    return INDEX_P;
+  /* Searchable pool: POPULAR plus every shard loaded so far. */
+  var POOL={}, POOL_LIST=null;
+  POPULAR.forEach(function(t){ POOL[t.id]=t; });
+  function currentPool(){
+    if(POOL_LIST) return POOL_LIST;
+    POOL_LIST=Object.keys(POOL).map(function(k){ return POOL[k]; });
+    return POOL_LIST;
   }
-  /* Warm the search index shortly after the page loads, so typing is instant.
-     Skipped when the user asked the browser to save data. */
-  try{
-    var saveData = navigator.connection && navigator.connection.saveData;
-    if(!saveData) setTimeout(function(){ loadIndex(); }, 1500);
-  }catch(e){}
+  /* Shards: /assets/search/<letter>.json (plus <letter>2.json, <letter>3.json
+     for the big letters), listed in /assets/search/manifest.json. The
+     manifest is fetched only on the first search, never on page load. */
+  var SHARD_CACHE={}, SHARD_P={}, MANIFEST_P=null;
+  function shardParts(letter){
+    if(!MANIFEST_P){
+      MANIFEST_P=fetch("/assets/search/manifest.json").then(function(r){ return r.json(); }).catch(function(){ return {}; });
+    }
+    return MANIFEST_P.then(function(m){ return (m && m[letter]) || [letter]; });
+  }
+  function loadShard(letter){
+    if(SHARD_CACHE[letter]) return Promise.resolve(SHARD_CACHE[letter]);
+    if(SHARD_P[letter]) return SHARD_P[letter];
+    SHARD_P[letter]=shardParts(letter).then(function(parts){
+      return Promise.all(parts.map(function(p){
+        return fetch("/assets/search/"+p+".json").then(function(r){ return r.json(); }).catch(function(){ return []; });
+      }));
+    }).then(function(chunks){
+      var out=[], seen={}, i, j, e;
+      for(i=0;i<chunks.length;i++){
+        var arr=chunks[i]||[];
+        for(j=0;j<arr.length;j++){
+          e=arr[j];
+          if(!e || !e[0] || seen[e[0]]) continue;
+          seen[e[0]]=1;
+          out.push({id:e[0], name:e[1], cat:e[2]||""});
+        }
+      }
+      SHARD_CACHE[letter]=out;
+      return out;
+    }).catch(function(){ SHARD_CACHE[letter]=[]; return []; });
+    return SHARD_P[letter];
+  }
+  /* Synonyms: what people type -> the words tool names actually use. */
+  var SYN={
+    emi:["emi","loan"], loan:["loan","emi"],
+    home:["home","mortgage"], house:["house","mortgage","home"],
+    car:["car","auto","vehicle"], auto:["auto","car"],
+    salary:["salary","paycheck","pay"], pay:["pay","salary","paycheck"],
+    paycheck:["paycheck","salary"], income:["income","salary"],
+    weight:["weight","bmi"], bmi:["bmi","weight"],
+    age:["age","dob"], dob:["dob","age"],
+    percent:["percent","percentage"], percentage:["percentage","percent"],
+    interest:["interest","compound"],
+    tax:["tax","vat","gst"], vat:["vat","tax","gst"], gst:["gst","tax","vat"],
+    grade:["grade","gpa"], gpa:["gpa","grade","cgpa"],
+    sip:["sip"], fd:["fd","fixed"], rd:["rd","recurring"], ppf:["ppf"],
+    tip:["tip"], discount:["discount"]
+  };
+  /* Generic words: they match nearly every tool, so they never trigger a
+     shard fetch (they still count in scoring). */
+  var GENERIC={calculator:1,converter:1,generator:1,checker:1,estimator:1,planner:1,finder:1,tracker:1,counter:1,maker:1,tool:1,tools:1,free:1,online:1,the:1,and:1,or:1,for:1,of:1,vs:1,per:1,to:1,in:1,on:1,with:1,by:1,a:1,an:1};
+  function normWords(q){
+    return String(q||"").toLowerCase().replace(/%/g," percent ").replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){ return w.length>1; });
+  }
+  function shardLetters(q){
+    var words=normWords(q), letters=[], seen={}, i, j, w, alts, c, L;
+    for(i=0;i<words.length;i++){
+      w=words[i];
+      if(GENERIC[w]) continue;
+      alts=SYN[w]||[w];
+      for(j=0;j<alts.length;j++){
+        c=alts[j].charAt(0);
+        L=(c>="a"&&c<="z")?c:((c>="0"&&c<="9")?"0-9":null);
+        if(L && !seen[L]){ seen[L]=1; letters.push(L); }
+      }
+    }
+    return letters;
+  }
+  /* Levenshtein distance. Only ever called for words of 4+ letters whose
+     lengths differ by at most 1, so this stays cheap per keystroke. */
+  function lev(a, b){
+    var m=a.length, n=b.length, i, j, prev=[], cur=[], c, t;
+    if(Math.abs(m-n)>1) return 2;
+    for(j=0;j<=n;j++) prev[j]=j;
+    for(i=1;i<=m;i++){
+      cur[0]=i;
+      for(j=1;j<=n;j++){
+        c=(a.charCodeAt(i-1)===b.charCodeAt(j-1))?0:1;
+        cur[j]=Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+c);
+      }
+      t=prev; prev=cur; cur=t;
+    }
+    return prev[n];
+  }
+  /* Best match score of one query word (or synonym) against one tool.
+     5 exact word, 4 prefix, 3 substring or 1-typo, 1 category. */
+  function wordScore(alt, nameWords, catLower, idLower){
+    var best=0, i, nw;
+    for(i=0;i<nameWords.length;i++){
+      nw=nameWords[i];
+      if(nw===alt) return 5;
+      if(alt.length>=3 && nw.indexOf(alt)===0) best=Math.max(best,4);
+      else if(nw.length>=4 && alt.length>=4 && alt.indexOf(nw)===0) best=Math.max(best,4);
+      else if(alt.length>=3 && nw.indexOf(alt)>0) best=Math.max(best,3);
+    }
+    if(best>=4) return best;
+    if(idLower===alt) return 4;
+    if(best===0 && alt.length>=4){
+      for(i=0;i<nameWords.length;i++){
+        nw=nameWords[i];
+        if(nw.length>=4 && nw.charAt(0)===alt.charAt(0) && Math.abs(nw.length-alt.length)<=1 && lev(nw,alt)<=1){ best=3; break; }
+      }
+    }
+    if(best===0 && catLower && catLower.indexOf(alt)>=0) best=1;
+    return best;
+  }
   function scoreTools(q, n){
-    var words=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){ return w.length>1; });
+    var words=normWords(q);
     if(!words.length) return [];
-    var list = (INDEX && INDEX.length) ? INDEX : POPULAR;
-    return list.map(function(t){
-      var name=t.name.toLowerCase(), hay=(t.name+" "+(t.blurb||"")+" "+t.cat).toLowerCase(), s=0;
-      words.forEach(function(w){
-        if(name.indexOf(w)>=0) s+=3;
-        else if(hay.indexOf(w)>=0) s+=1;
-      });
-      return {t:t, s:s};
-    }).filter(function(x){ return x.s>0; }).sort(function(a,b){ return b.s-a.s; }).slice(0,n||6);
+    var list=currentPool(), out=[], k, i, j, t, nameLower, nameWords, catLower, idLower, s, matched, best, sc, alts;
+    for(k=0;k<list.length;k++){
+      t=list[k];
+      nameLower=t.name.toLowerCase();
+      nameWords=nameLower.replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){ return !!w; });
+      catLower=(t.cat||"").toLowerCase();
+      idLower=(t.id||"").toLowerCase();
+      s=0; matched=0;
+      for(i=0;i<words.length;i++){
+        alts=SYN[words[i]]||[words[i]];
+        best=0;
+        for(j=0;j<alts.length;j++){
+          sc=wordScore(alts[j], nameWords, catLower, idLower);
+          if(sc>best) best=sc;
+          if(best>=5) break;
+        }
+        if(best>0) matched++;
+        s+=best;
+      }
+      if(matched===0) continue;
+      if(matched===words.length) s+=6; /* every word matched: rank first */
+      /* Name starts with the query's first word (or one of its synonyms). */
+      if(nameLower.indexOf(words[0])===0) s+=2;
+      else {
+        alts=SYN[words[0]]||[words[0]];
+        for(j=0;j<alts.length;j++){
+          if(nameLower.indexOf(alts[j])===0){ s+=1; break; }
+        }
+      }
+      out.push({t:t, s:s});
+    }
+    out.sort(function(a,b){
+      if(b.s!==a.s) return b.s-a.s;
+      var al=a.t.name.length, bl=b.t.name.length;
+      if(al!==bl) return al-bl;
+      return a.t.name<b.t.name?-1:(a.t.name>b.t.name?1:0);
+    });
+    return out.slice(0, n||6);
   }
   function renderHits(box, hits){
     if(!hits.length){ box.innerHTML='<a href="/tools/">No match — browse the A–Z list</a>'; box.hidden=false; return; }
     box.innerHTML=hits.map(function(x){
       var t=x.t;
-      return '<a href="/'+t.id+'/">'+esc(t.name)+'<small>'+esc(t.blurb ? t.blurb : cap(t.cat||""))+'</small></a>';
+      return '<a href="/'+t.id+'/">'+esc(t.name)+'<small>'+esc(t.blurb ? t.blurb : catLabel(t.cat))+'</small></a>';
     }).join("");
     box.hidden=false;
   }
   /* Run a search. go=true means the user pressed Search/Enter: a single clear
-     match (or an exact name match) opens straight away. */
+     match (or an exact name match) opens straight away, using whatever
+     results are already available — it never waits on a shard. */
   function runSearch(input, box, go){
     var q=input.value.trim();
     if(q.length<2){ box.hidden=true; box.innerHTML=""; return; }
-    if(!INDEX){
-      box.innerHTML='<div class="search-loading">Searching…</div>'; box.hidden=false;
-      loadIndex().then(function(){ runSearch(input, box, go); });
-      return;
-    }
+    /* 1. Instant results from the loaded pool (POPULAR at minimum). */
     var hits=scoreTools(q, 6);
     if(go){
       var exact=null;
       hits.forEach(function(x){ if(x.t.name.toLowerCase()===q.toLowerCase()) exact=x; });
       if(exact){ location.href="/"+exact.t.id+"/"; return; }
       if(hits.length===1){ location.href="/"+hits[0].t.id+"/"; return; }
-      if(hits.length>1 && hits[0].s>=6 && hits[0].s>=hits[1].s+3){ location.href="/"+hits[0].t.id+"/"; return; }
+      if(hits.length>1 && hits[0].s>=10 && hits[0].s>=hits[1].s+3){ location.href="/"+hits[0].t.id+"/"; return; }
     }
     renderHits(box, hits);
+    /* 2. In parallel, fetch the shard(s) for the query and refine. */
+    var letters=shardLetters(q);
+    letters.forEach(function(L){
+      if(SHARD_CACHE[L]) return;
+      loadShard(L).then(function(entries){
+        var added=false, i;
+        for(i=0;i<entries.length;i++){
+          if(!POOL[entries[i].id]){ POOL[entries[i].id]=entries[i]; added=true; }
+        }
+        if(added) POOL_LIST=null;
+        if(input.value.trim()===q && !box.hidden) renderHits(box, scoreTools(q, 6));
+      });
+    });
     try{ box.scrollIntoView({block:"nearest"}); }catch(e){}
   }
   function wireSearch(input, box){
@@ -108,6 +259,7 @@
   }
   wireSearch($("#head-search"), $("#head-results"));
   wireSearch($("#home-search"), $("#home-results"));
+
 
   /* ---------- tool page ---------- */
   var T = window.TOOLDATA;
