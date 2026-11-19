@@ -25,6 +25,10 @@ p{margin:.5rem 0}
 .logo b{color:var(--amber)}
 .site-head nav{display:flex;gap:4px;flex-wrap:wrap}
 .site-head nav a{color:#e7f6ea;padding:6px 10px;border-radius:8px;font-size:.95rem}
+/* The second header row only holds the search-results box, hidden until the
+   user types. It must take no space: the shared .wrap rule gives it a 56px
+   min-height + padding, which rendered as ~70px of empty green band. */
+.site-head>.wrap+.wrap{min-height:0;padding-top:0;padding-bottom:0}
 .site-head nav a:hover{background:rgba(255,255,255,.14);text-decoration:none}
 .head-search{margin-left:auto;display:flex;gap:6px}
 .head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;width:180px}
@@ -162,14 +166,21 @@ p{margin:.5rem 0}
   .hero h1{font-size:1.6rem}
   /* Header nav must never wrap to a second line: one horizontal row that
      scrolls if the five links don't fit a narrow phone. */
-  .site-head nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}
+  .site-head .wrap{gap:8px;padding-top:4px;padding-bottom:4px}
+  .site-head nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%;gap:3px}
   .site-head nav::-webkit-scrollbar{display:none}
-  .site-head nav a{white-space:nowrap;flex:0 0 auto}
+  /* All five links must fit a 360px screen: 14px type + tight padding
+     measures ~294px total (checked), inside the 328px content width. */
+  .site-head nav a{white-space:nowrap;flex:0 0 auto;font-size:.875rem;padding:5px 7px}
   .search-big input,.head-search input{font-size:1rem}
   .head-search{width:100%;margin-left:0}
   .head-search input{flex:1;width:auto}
   .result .big{font-size:1.6rem}
-  .ask-fab{bottom:12px;right:12px}
+  /* On phones the Ask button is NOT a floating button: fixed at the
+     bottom-right it covers buttons, cards and text while scrolling. It
+     now sits in the page flow after the content (see assistant.js), so it
+     can never cover anything. */
+  .ask-fab{position:static;display:block;width:max-content;margin:20px auto 0}
 }
 @media (prefers-color-scheme:dark){
   :root{--bg:#0b1220;--surface:#111c33;--ink:#e2e8f0;--muted:#94a3b8;--line:#243449}

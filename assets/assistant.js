@@ -337,7 +337,12 @@
       +'</div>'
       +'<div class="ask-input"><button type="button" class="ask-mic" id="ask-mic" title="Ask by voice">🎤</button><input id="ask-in" type="text" placeholder="Ask a sum, a conversion, or name a tool…" autocomplete="off"><button type="button" id="ask-send">Send</button></div>'
       +'</div>');
-    document.body.appendChild(fab);
+    /* The button sits in the page flow after the content, not floating over
+       it: on phones CSS makes it static, so it can never cover a button,
+       card or text. On desktop it stays fixed (see style.css). */
+    var mainEl=document.querySelector("main");
+    if(mainEl && mainEl.parentNode){ mainEl.parentNode.insertBefore(fab, mainEl.nextSibling); }
+    else { document.body.appendChild(fab); }
     document.body.appendChild(panel);
     msgs=panel.querySelector("#ask-msgs");
     input=panel.querySelector("#ask-in");
@@ -370,6 +375,14 @@
       var hide=hero ? hero.getBoundingClientRect().bottom > window.innerHeight-120 : false;
       fab.classList.toggle("fab-hidden", hide);
     }
+    /* Hide the button while the user is typing in, or picking from, a form
+       control: a fixed button at the bottom-right would cover the control
+       and its dropdown. Shown again as soon as focus leaves the form. */
+    document.addEventListener("focusin",function(e){
+      var t=e.target;
+      if(t&&(t.tagName==="INPUT"||t.tagName==="SELECT"||t.tagName==="TEXTAREA")) fab.classList.add("fab-hidden");
+    });
+    document.addEventListener("focusout",function(){ syncFab(); });
     window.addEventListener("scroll", syncFab, {passive:true});
     window.addEventListener("resize", syncFab);
     syncFab();

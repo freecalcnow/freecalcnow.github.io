@@ -113,7 +113,7 @@ function fieldHTML(f){
   const hint=f.hint?' <span class="hint">'+esc(f.hint)+'</span>':"";
   if(f.type==="select"){
     return '<div class="field"><label for="f-'+f.id+'">'+esc(f.label)+hint+'</label><select id="f-'+f.id+'" data-fid="'+f.id+'">'
-      +f.options.map(o=>'<option value="'+esc(o.v)+'"'+(String(f.def)===String(o.v)?" selected":"")+'>'+esc(o.t)+'</option>').join("")+'</select></div>';
+      +f.options.map(function(o){var ov=Array.isArray(o)?o[0]:o.v,ot=Array.isArray(o)?o[1]:o.t;return '<option value="'+esc(ov)+'"'+(String(f.def)===String(ov)?" selected":"")+'>'+esc(ot)+'</option>';}).join("")+'</select></div>';
   }
   if(f.type==="date"){
     return '<div class="field"><label for="f-'+f.id+'">'+esc(f.label)+hint+'</label><input type="date" id="f-'+f.id+'" data-fid="'+f.id+'" value="'+esc(f.def||"")+'"></div>';
