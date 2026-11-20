@@ -42,7 +42,7 @@ function quiz4(box, q, id, title, url){
     b.onclick=function(){
       if(done) return; done=true;
       var ok = (i===q.answer);
-      b.style.background = ok ? "#166534" : "#dc2626"; b.style.color="#fff";
+      b.style.background = ok ? "#92400E" : "#dc2626"; b.style.color="#fff";
       var score = ok ? 100 : 0;
       finish(id, title, score, ok ? "Correct! "+q.why : "Not quite — "+q.why, url);
     };
@@ -282,8 +282,8 @@ GAMES["daily-spot-difference"]=function(box,id,title,url){
         c.onclick=function(){
           if(done) return;
           if(diffPos.indexOf(ix)>=0){
-            if(c.style.background==="rgb(22, 101, 52)") return;
-            c.style.background="#166534"; c.style.color="#fff"; found++;
+            if(c.style.background==="rgb(146, 64, 14)") return;
+            c.style.background="#92400E"; c.style.color="#fff"; found++;
             if(found===5){ done=true; var sc=Math.max(10, 100-wrong*5); finish(id, title, sc, "You found all 5 differences!"+(wrong?" ("+wrong+" wrong taps)":""), url); }
             else msg("Found "+found+" of 5.");
           } else {

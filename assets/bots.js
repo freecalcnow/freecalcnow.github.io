@@ -13,7 +13,7 @@
     "Emma", "Usman", "Amina", "Noah", "Ava", "Hamza", "Fatima", "Leo", "Ivy",
     "Kabir", "Anaya", "Rayan", "Meera", "Felix", "Nina", "Yusuf", "Layla",
     "Owen", "Ruby", "Imran", "Tara", "Jay", "Elena", "Ravi", "Dina"];
-  var COLORS = ["#dc2626", "#ea580c", "#d97706", "#65a30d", "#059669", "#0d9488",
+  var COLORS = ["#dc2626", "#ea580c", "#d97706", "#92400E", "#0B1F3A", "#0369A1",
     "#0891b2", "#2563eb", "#4f46e5", "#7c3aed", "#db2777", "#be185d", "#b45309", "#4338ca"];
 
   function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; } return h; }

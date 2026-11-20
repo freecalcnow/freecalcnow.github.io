@@ -205,11 +205,49 @@
     });
     return out.slice(0, n||6);
   }
-  function renderHits(box, hits){
-    if(!hits.length){ box.innerHTML='<a href="/tools/">No match — browse the A–Z list</a>'; box.hidden=false; return; }
-    box.innerHTML=hits.map(function(x){
+  /* Did-you-mean: the closest tool-name word (one typo away) when nothing
+     matched. Only the loaded pool is searched, so it works offline too. */
+  function suggestFix(q){
+    var words=normWords(q), best=null, i, j, k, t, nw, nameWords, d;
+    var list=currentPool();
+    for(i=0;i<words.length;i++){
+      var w=words[i];
+      if(w.length<4) continue;
+      for(j=0;j<list.length;j++){
+        t=list[j];
+        nameWords=t.name.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(x){ return !!x; });
+        for(k=0;k<nameWords.length;k++){
+          nw=nameWords[k];
+          if(nw.length<4 || nw.charAt(0)!==w.charAt(0) || Math.abs(nw.length-w.length)>1) continue;
+          d=lev(nw,w);
+          if(d===1 && (!best || (POPULAR_IDS[t.id] && !POPULAR_IDS[best.t.id]))){ best={t:t, word:nw}; break; }
+        }
+        if(best && POPULAR_IDS[best.t.id]) break;
+      }
+      if(best) break;
+    }
+    return best;
+  }
+  function popularLinks(n){
+    return POPULAR.slice(0, n||4).map(function(t){
+      return '<a href="/'+t.id+'/">'+esc(t.name)+'<small>'+esc(catLabel(t.cat))+'</small></a>';
+    }).join("");
+  }
+  function renderHits(box, hits, active, query){
+    var prefix=(box.id||"sr");
+    if(!hits.length){
+      var sug = query ? suggestFix(query) : null;
+      var html = '<div class="search-empty">No results for &ldquo;'+esc(query||"")+'&rdquo;.</div>';
+      if(sug) html += '<a href="/'+sug.t.id+'/" class="search-dym">Did you mean <b>'+esc(sug.t.name)+'</b>?</a>';
+      html += '<div class="search-empty">Try one of these popular tools:</div>' + popularLinks(4);
+      html += '<a href="/tools/">Browse the A–Z list</a>';
+      box.innerHTML = html;
+      box.hidden = false;
+      return;
+    }
+    box.innerHTML=hits.map(function(x, i){
       var t=x.t;
-      return '<a href="/'+t.id+'/">'+esc(t.name)+'<small>'+esc(t.blurb ? t.blurb : catLabel(t.cat))+'</small></a>';
+      return '<a href="/'+t.id+'/" role="option" id="'+prefix+'-opt-'+i+'"'+(i===active?' class="active"':'')+'>'+esc(t.name)+'<small>'+esc(t.blurb ? t.blurb : catLabel(t.cat))+'</small></a>';
     }).join("");
     box.hidden=false;
   }
@@ -232,41 +270,79 @@
     });
     return out.slice(0, n||6);
   }
+  /* Recent searches: the query text only (never a result value), on this
+     device only. Shown when the search box is focused while empty. */
+  var RECENT_KEY="fcn-recent-searches";
+  function getRecent(){
+    try{
+      if(typeof localStorage==="undefined") return [];
+      return JSON.parse(localStorage.getItem(RECENT_KEY)||"[]")||[];
+    }catch(e){ return []; }
+  }
+  function recordSearch(q){
+    try{
+      if(typeof localStorage==="undefined") return;
+      q=String(q||"").trim().toLowerCase(); if(!q) return;
+      var list=getRecent().filter(function(x){ return x!==q; });
+      list.unshift(q);
+      localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0,5)));
+    }catch(e){}
+  }
+  function renderRecent(box){
+    var rec=getRecent(), html="";
+    if(rec.length){
+      html+='<div class="search-empty">Recent searches</div>';
+      html+=rec.map(function(q){ return '<a href="#" data-q="'+esc(q)+'">'+esc(q)+'</a>'; }).join("");
+    }
+    html+='<div class="search-empty">Popular tools</div>'+popularLinks(6);
+    box.innerHTML=html; box.hidden=false;
+  }
+  function setExpanded(input, on){
+    try{ input.setAttribute("aria-expanded", on?"true":"false"); }catch(e){}
+  }
   /* Run a search. go=true means the user pressed Search/Enter: a single clear
      match (or an exact name match) opens straight away, using whatever
      results are already available — it never waits on a shard. */
   function runSearch(input, box, go){
     var q=input.value.trim();
-    if(!q.length){ box.hidden=true; box.innerHTML=""; return; }
+    var st=box._st||(box._st={active:-1,hits:[]});
+    if(!q.length){ box.hidden=true; box.innerHTML=""; setExpanded(input,false); return; }
     if(q.length===1){
       /* Single letter: show tools starting with it. Instant results from
          the loaded pool if any, otherwise a loading line — then the full
          letter shard refines the list when it arrives. */
       var L=q.toLowerCase();
-      if(!/^[a-z]$/.test(L)){ box.hidden=true; box.innerHTML=""; return; }
+      if(!/^[a-z]$/.test(L)){ box.hidden=true; box.innerHTML=""; setExpanded(input,false); return; }
       var first=prefixHits(L, 6);
-      if(first.length){ renderHits(box, first); }
+      st.hits=first; st.active=-1;
+      if(first.length){ renderHits(box, first, -1, q); }
       else { box.innerHTML='<div class="search-loading">Loading tools starting with “'+L.toUpperCase()+'”…</div>'; box.hidden=false; }
+      setExpanded(input,true);
       loadShard(L).then(function(entries){
         var added=false, i;
         for(i=0;i<entries.length;i++){
           if(!POOL[entries[i].id]){ POOL[entries[i].id]=entries[i]; added=true; }
         }
         if(added) POOL_LIST=null;
-        if(input.value.trim()===q && !box.hidden) renderHits(box, prefixHits(L, 6));
+        if(input.value.trim()===q && !box.hidden){ var h2=prefixHits(L, 6); st.hits=h2; st.active=-1; renderHits(box, h2, -1, q); }
       });
       return;
     }
     /* 1. Instant results from the loaded pool (POPULAR at minimum). */
     var hits=scoreTools(q, 6);
+    /* Enter after arrowing: keep the highlighted result for this same query. */
+    var prevActive=st.active, prevHits=st.hits, prevQuery=st.query;
+    st.hits=hits; st.active=-1; st.query=q;
     if(go){
+      if(prevActive>=0 && prevQuery===q && prevHits[prevActive]){ recordSearch(q); location.href="/"+prevHits[prevActive].t.id+"/"; return; }
       var exact=null;
       hits.forEach(function(x){ if(x.t.name.toLowerCase()===q.toLowerCase()) exact=x; });
-      if(exact){ location.href="/"+exact.t.id+"/"; return; }
-      if(hits.length===1){ location.href="/"+hits[0].t.id+"/"; return; }
-      if(hits.length>1 && hits[0].s>=10 && hits[0].s>=hits[1].s+3){ location.href="/"+hits[0].t.id+"/"; return; }
+      if(exact){ recordSearch(q); location.href="/"+exact.t.id+"/"; return; }
+      if(hits.length===1){ recordSearch(q); location.href="/"+hits[0].t.id+"/"; return; }
+      if(hits.length>1 && hits[0].s>=10 && hits[0].s>=hits[1].s+3){ recordSearch(q); location.href="/"+hits[0].t.id+"/"; return; }
     }
-    renderHits(box, hits);
+    renderHits(box, hits, -1, q);
+    setExpanded(input,true);
     /* 2. In parallel, fetch the shard(s) for the query and refine. */
     var letters=shardLetters(q);
     letters.forEach(function(L){
@@ -277,23 +353,57 @@
           if(!POOL[entries[i].id]){ POOL[entries[i].id]=entries[i]; added=true; }
         }
         if(added) POOL_LIST=null;
-        if(input.value.trim()===q && !box.hidden) renderHits(box, scoreTools(q, 6));
+        if(input.value.trim()===q && !box.hidden){ var h3=scoreTools(q, 6); st.hits=h3; st.active=-1; renderHits(box, h3, -1, q); }
       });
     });
     try{ box.scrollIntoView({block:"nearest"}); }catch(e){}
   }
+  /* v9.1 search UX: arrow-key navigation through results, Escape to close,
+     recent searches + popular tools on focus while empty, ARIA combobox
+     wiring, and click delegation for recent-search links inside the box. */
   function wireSearch(input, box){
     if(!input || !box) return;
     var timer=null;
     input.setAttribute("enterkeyhint","search");
+    input.setAttribute("role","combobox");
+    input.setAttribute("aria-autocomplete","list");
+    input.setAttribute("aria-expanded","false");
+    if(box.id) input.setAttribute("aria-controls", box.id);
     input.addEventListener("input", function(){
       clearTimeout(timer);
       var q=input.value.trim();
-      if(!q.length){ box.hidden=true; box.innerHTML=""; return; }
+      if(!q.length){ box.hidden=true; box.innerHTML=""; setExpanded(input,false); return; }
       timer=setTimeout(function(){ runSearch(input, box, false); }, 180);
     });
+    input.addEventListener("focus", function(){
+      if(!input.value.trim()) renderRecent(box);
+    });
     input.addEventListener("keydown", function(e){
+      var st=box._st||(box._st={active:-1,hits:[]});
+      if(e.key==="ArrowDown" || e.key==="ArrowUp"){
+        if(box.hidden || !st.hits.length) return;
+        e.preventDefault();
+        var n=st.hits.length;
+        st.active = e.key==="ArrowDown" ? (st.active+1)%n : (st.active-1+n)%n;
+        renderHits(box, st.hits, st.active, st.query||input.value.trim());
+        var act=document.getElementById((box.id||"sr")+"-opt-"+st.active);
+        if(act){ try{ input.setAttribute("aria-activedescendant", act.id); }catch(err){} }
+        return;
+      }
+      if(e.key==="Escape"){ box.hidden=true; box.innerHTML=""; setExpanded(input,false); try{ input.removeAttribute("aria-activedescendant"); }catch(err){} return; }
       if(e.key==="Enter"){ e.preventDefault(); runSearch(input, box, true); }
+    });
+    /* Click a recent search inside the results box: refill the input and
+       search for it. (Did-you-mean and popular links are plain links.) */
+    box.addEventListener("click", function(e){
+      var a=(e.target && e.target.closest) ? e.target.closest("a[data-q]") : null;
+      if(a){
+        e.preventDefault();
+        input.value=a.getAttribute("data-q")||"";
+        recordSearch(input.value);
+        runSearch(input, box, false);
+        try{ input.focus(); }catch(err){}
+      }
     });
     /* The visible Search button next to the input runs the search too. */
     var btn = input.parentElement ? input.parentElement.querySelector("button") : null;
@@ -730,7 +840,7 @@
    owner can see which build is live. */
 (function(){
   "use strict";
-  var VER="v9";
+  var VER="v9.1";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
   function stampVersion(){
     try{
@@ -890,4 +1000,33 @@
   }
   window.addEventListener("load",checkUpdate);
   if(document.readyState==="complete") checkUpdate();
+})();
+
+/* v9.1 mobile hamburger menu (owner report 20 Nov 2026): on phones the
+   header is one row — logo + hamburger — and scrolls away with the page
+   (NOT sticky, owner correction 20 Nov). The nav links and the
+   Download button live in the collapsible panel; tapping a link, tapping
+   outside the header, or pressing Escape closes it. No-op on desktop
+   (the button is display:none there) and on game pages (no .menu-btn). */
+(function(){
+  "use strict";
+  function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
+  ready(function(){
+    var btn=document.querySelector(".menu-btn");
+    var header=document.querySelector(".site-head");
+    if(!btn||!header) return;
+    function set(open){
+      header.classList.toggle("menu-open", open);
+      btn.setAttribute("aria-expanded", open?"true":"false");
+    }
+    btn.addEventListener("click", function(){ set(!header.classList.contains("menu-open")); });
+    document.addEventListener("click", function(e){
+      if(!header.classList.contains("menu-open")) return;
+      if(header.contains(e.target)) return;
+      set(false);
+    });
+    document.addEventListener("keydown", function(e){ if(e.key==="Escape") set(false); });
+    var links=header.querySelectorAll("#site-nav a");
+    for(var i=0;i<links.length;i++){ links[i].addEventListener("click", function(){ set(false); }); }
+  });
 })();

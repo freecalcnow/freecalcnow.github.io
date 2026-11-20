@@ -51,19 +51,28 @@
       function paint(){ var f=isFav(item.slug);
         var lab=function(k,fb){ return (window.FCN_I18N?FCN_I18N.t(k):fb); };
         btn.innerHTML=(f?'♥ ':'♡ ')+(f?lab('btn.favourited','Favourited'):lab('btn.favourite','Favourite'));
-        btn.style.borderColor=f?'#dc2626':'#e2e8f0';
-        btn.style.color=f?'#dc2626':'#0F172A';
+        if(btn.classList.contains('nav-fav')){ btn.style.borderColor='transparent'; btn.style.color=f?'#F59E0B':'#DBEAFE'; }
+        else { btn.style.borderColor=f?'#dc2626':'#e2e8f0'; btn.style.color=f?'#dc2626':'#0F172A'; }
         btn.setAttribute('aria-pressed', f?'true':'false'); }
       paint();
       btn.addEventListener('click', function(){
         var now=toggle(item); paint();
-        if(now){ var old=btn.innerHTML; btn.innerHTML='♥ Saved — see <a href="/favourites/" style="color:#dc2626">Favourites</a>';
+        var gh=document.querySelector('.game-head'); if(gh) gh.classList.remove('menu-open');
+        if(now){ var old=btn.innerHTML; var linkCol=btn.classList.contains('nav-fav')?'#F59E0B':'#dc2626'; btn.innerHTML='♥ Saved — see <a href="/favourites/" style="color:'+linkCol+'">Favourites</a>';
           setTimeout(paint, 2200); }
       });
       var sr=document.querySelector('.share-row');
       if(sr){ sr.appendChild(btn); }
-      else { var hd=document.querySelector('header');
-        if(hd){ btn.style.marginLeft='8px'; btn.style.padding='6px 10px'; btn.style.fontSize='14px'; hd.appendChild(btn); } }
+      else {
+        /* v9.1: game pages have no share-row. The button goes INSIDE the
+           hamburger menu (#site-nav) — never into the header row, where it
+           forced the page wider than the screen. On desktop it sits in the
+           nav row; on phones it appears in the open menu. */
+        var nav=document.querySelector('#site-nav');
+        if(nav){ btn.classList.add('nav-fav'); btn.style.cssText='padding:11px 12px;font-size:1rem;font-weight:700;border:0;border-radius:9px;background:transparent;cursor:pointer;color:#DBEAFE;text-align:left;width:100%'; nav.appendChild(btn); paint(); }
+        else { var hd=document.querySelector('header');
+          if(hd){ btn.style.marginLeft='8px'; btn.style.padding='6px 10px'; btn.style.fontSize='14px'; hd.appendChild(btn); } }
+      }
     }
     renderFavsPage();
   }

@@ -65,7 +65,56 @@
       }catch(e){ if(cb) cb(false); }
     }, function(){ if(cb) cb(false); });
   }
+  /* --- Bring-your-own-key: Gemini API key (v9.1) ---
+     The key lives ONLY in this browser (localStorage, separate key from the
+     theme settings) and is sent ONLY to Google's Gemini API, from the
+     browser, when the assistant answers. It is never sent anywhere else,
+     never written into the page, never logged, and never shown in full —
+     the status line shows only the last 4 characters. A key that does not
+     look like a Gemini key (must start with "AIza") is never saved.
+     Migration (no-green rule, v9.1): a saved "forest" theme or a green
+     accent from before is reset to the default, since green is gone. */
+  var KEY_STORE='fcn-gemini-key-v1';
+  function keyStatusText(){
+    try{
+      var k=localStorage.getItem(KEY_STORE)||"";
+      if(k) return "Key saved (ends with …"+k.slice(-4)+") — the assistant will answer with AI.";
+    }catch(e){}
+    return "No key saved.";
+  }
+  function wireKeyField(){
+    var input=document.getElementById('set-key');
+    var saveBtn=document.getElementById('set-key-save');
+    var removeBtn=document.getElementById('set-key-remove');
+    var status=document.getElementById('set-key-status');
+    if(!input || !saveBtn || !removeBtn) return;
+    function showStatus(t){ if(status) status.textContent=t; }
+    showStatus(keyStatusText());
+    saveBtn.addEventListener('click', function(){
+      var v=(input.value||"").trim();
+      if(!/^AIza[0-9A-Za-z_\-]{10,}$/.test(v)){ showStatus("That doesn't look like a Gemini key — it should start with “AIza”. Nothing was saved."); return; }
+      try{ localStorage.setItem(KEY_STORE, v); }catch(e){}
+      input.value="";
+      showStatus("Key saved — the assistant will now answer with AI.");
+    });
+    removeBtn.addEventListener('click', function(){
+      try{ localStorage.removeItem(KEY_STORE); }catch(e){}
+      input.value="";
+      showStatus("Key removed — the assistant is back to offline mode.");
+    });
+  }
+  function migrateNoGreen(s){
+    /* A saved forest theme or green accent predates the no-green rule:
+       reset it to the default instead of showing a theme that no longer
+       exists. */
+    if(s.theme==='forest'){ s.theme='default'; }
+    if(typeof s.accent==='string' && /^#(166534|16a34a|059669|15803d|22c55e|10b981)/i.test(s.accent.replace(/\s/g,''))){ s.accent='#0B1F3A'; }
+    return s;
+  }
   window.FCN_SETTINGS={ load:load, save:save, apply:apply, DEFAULTS:DEFAULTS,
     saveBgImage:saveBgImage, clearBgImage:clearBgImage };
   apply();
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", wireKeyField); else wireKeyField();
+  /* Migrate a saved forest/green choice once, then save the cleaned set. */
+  try{ var _s=load(); var _ot=_s.theme, _oa=_s.accent; migrateNoGreen(_s); if(_s.theme!==_ot || _s.accent!==_oa){ save(_s); apply(_s); } }catch(e){}
 })();

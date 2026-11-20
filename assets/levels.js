@@ -87,7 +87,7 @@
     var host=document.getElementById('level-bar'); if(!host) return;
     var L=LEVELS[gameId]; if(!L) return;
     var p=progress(gameId), lv=p.current, left=skips().left;
-    var accent=(opts&&opts.accent)||'#166534';
+    var accent=(opts&&opts.accent)||'#0B1F3A';
     var html='<div style="background:#fff;border:2px solid '+accent+';border-radius:14px;padding:12px 14px;margin-bottom:12px">'
       +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
       +'<span style="background:'+accent+';color:#fff;font-weight:800;border-radius:20px;padding:4px 12px;font-size:15px"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-2px"><path fill="currentColor" d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2Z"/></svg> Level '+lv+'</span>'
@@ -97,7 +97,7 @@
       +'<div style="display:flex;gap:6px;flex-wrap:wrap">';
     for(var i=1;i<=p.total;i++){
       var done=p.done.indexOf(i)>=0, un=i<=p.unlocked;
-      if(done) html+='<a href="?level='+i+'" style="min-width:30px;text-align:center;padding:4px 6px;border-radius:8px;background:#dcfce7;color:#14532d;font-weight:800;text-decoration:none;font-size:13px" title="Replay level '+i+'">✓'+i+'</a>';
+      if(done) html+='<a href="?level='+i+'" style="min-width:30px;text-align:center;padding:4px 6px;border-radius:8px;background:#FEF3C7;color:#92400E;font-weight:800;text-decoration:none;font-size:13px" title="Replay level '+i+'">✓'+i+'</a>';
       else if(un) html+='<a href="?level='+i+'" style="min-width:30px;text-align:center;padding:4px 6px;border-radius:8px;background:'+accent+';color:#fff;font-weight:800;text-decoration:none;font-size:13px">▶'+i+'</a>';
       else html+='<span style="min-width:30px;text-align:center;padding:4px 6px;border-radius:8px;background:#f1f5f9;color:#94a3b8;font-weight:700;font-size:13px"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="vertical-align:-2px"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 7V7a3 3 0 1 1 6 0v2H9Z"/></svg>'+i+'</span>';
     }

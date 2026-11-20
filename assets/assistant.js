@@ -82,7 +82,12 @@
     "inflation":["inflation"], "roi":["roi"], "return on investment":["roi"],
     "sip":["sip"], "mutual fund":["sip"], "monthly payment":["mortgage","loan"],
     "body mass":["bmi"], "interest":["compound","loan"], "savings":["compound"],
-    "invest":["compound","sip"], "retire":["retirement"], "pension":["retirement"]
+    "invest":["compound","sip"], "retire":["retirement"], "pension":["retirement"],
+    "zakat":["zakat"], "cgpa":["gpa"], "fuel":["fuel"], "area":["area"],
+    "speed":["speed"], "volume":["volume"], "average":["average"],
+    "square root":["square-root"], "cube":["cube"], "tax":["income-tax"],
+    "salary slip":["salary"], "overtime":["salary"], "rent":["rent"],
+    "mortgage payment":["mortgage"], "car payment":["loan"]
   };
   function expandWords(words){
     var out=words.slice();
@@ -160,6 +165,21 @@
     // "half of 100", "double 45", "triple 20", "quarter of 80"
     m = q.match(/(half|double|triple|quarter)\s+of\s+(-?[\d.,]+)/);
     if(m){ var n2=parseFloat(m[2].replace(/,/g,"")); if(isFinite(n2)){ var out2=m[1]==="half"?n2/2:m[1]==="double"?n2*2:m[1]==="triple"?n2*3:n2/4; return {text: m[1]+" of "+fmtN(n2)+" = "+fmtN(out2)+".", done:true}; } }
+    // v9.1: "20% off 500" — price after a discount
+    m = q.match(/(-?[\d.,]+)\s*%\s*off\s*(-?[\d.,]+)/);
+    if(m){ var pc2=parseFloat(m[1].replace(/,/g,"")), pr=parseFloat(m[2].replace(/,/g,"")); if(isFinite(pc2)&&isFinite(pr)) return {text: fmtN(pc2)+"% off "+fmtN(pr)+" = "+fmtN(pr*(1-pc2/100))+" (you save "+fmtN(pr*pc2/100)+").", done:true}; }
+    // v9.1: "average of 10 20 30" / "mean of 4, 8, 15"
+    m = q.match(/(?:average|mean)\s+of\s+([\d.,\s]+(?:and\s+[\d.,]+)?)/);
+    if(m){ var nums=m[1].match(/-?[\d.,]+/g); if(nums && nums.length>=2){ var vals=nums.map(function(x){ return parseFloat(x.replace(/,/g,"")); }).filter(isFinite); if(vals.length>=2){ var tot=vals.reduce(function(a,b){ return a+b; },0); return {text: "Average of "+vals.map(fmtN).join(", ")+" = "+fmtN(tot/vals.length)+".", done:true}; } } }
+    // v9.1: "square root of 144"
+    m = q.match(/square root of\s+(-?[\d.,]+)/);
+    if(m){ var sq=parseFloat(m[1].replace(/,/g,"")); if(isFinite(sq)){ if(sq<0) return {text:"I can't take the square root of a negative number.", done:true}; return {text: "Square root of "+fmtN(sq)+" = "+fmtN(Math.sqrt(sq))+".", done:true}; } }
+    // v9.1: "12 squared" / "2 to the power of 10" / "2^10"
+    m = q.match(/(-?[\d.,]+)\s*(?:squared|\^|to the power of)\s*(-?[\d.,]+)?/);
+    if(m){ var base=parseFloat(m[1].replace(/,/g,"")), pw=m[2]?parseFloat(m[2].replace(/,/g,"")):2; if(isFinite(base)&&isFinite(pw)){ var pv=Math.pow(base,pw); if(isFinite(pv)) return {text: fmtN(base)+" to the power of "+fmtN(pw)+" = "+fmtN(pv)+".", done:true}; } }
+    // v9.1: "120 divided by 8"
+    m = q.match(/(-?[\d.,]+)\s+divided by\s+(-?[\d.,]+)/);
+    if(m){ var dv1=parseFloat(m[1].replace(/,/g,"")), dv2=parseFloat(m[2].replace(/,/g,"")); if(isFinite(dv1)&&isFinite(dv2)){ if(dv2===0) return {text:"I can't divide by zero.", done:true}; return {text: fmtN(dv1)+" divided by "+fmtN(dv2)+" = "+fmtN(dv1/dv2)+".", done:true}; } }
     // "simple interest on 1000 at 5% for 2 years"
     m = q.match(/simple interest.*?(-?[\d.,]+).*?(-?[\d.,]+)\s*%.*?(-?[\d.,]+)\s*years?/);
     if(m){ var P=parseFloat(m[1].replace(/,/g,"")), R=parseFloat(m[2].replace(/,/g,"")), T=parseFloat(m[3].replace(/,/g,"")); if(isFinite(P)&&isFinite(R)&&isFinite(T)){ var I=P*R*T/100; return {text: "Simple interest on "+fmtN(P)+" at "+fmtN(R)+"% for "+fmtN(T)+" years = "+fmtN(I)+" (total "+fmtN(P+I)+").", done:true}; } }
@@ -170,18 +190,41 @@
     return Number(x).toLocaleString("en-US",{maximumFractionDigits:4});
   }
   /* ---------- conversions ---------- */
-  var ALIASES = {mile:["mile","miles","mi"], kilometre:["kilometre","kilometer","kilometres","kilometers","km"], centimetre:["centimetre","centimeter","centimetres","centimeters","cm"], inch:["inch","inches","in"], kilogram:["kilogram","kilograms","kg","kilo","kilos"], pound:["pound","pounds","lb","lbs"], gram:["gram","grams","g"], litre:["litre","liter","litres","liters","l"], gallon:["gallon","gallons","gal"], metre:["metre","meter","metres","meters","m"], foot:["foot","feet","ft"], yard:["yard","yards","yd"], ounce:["ounce","ounces","oz"], celsius:["celsius","c","°c"], fahrenheit:["fahrenheit","f","°f"], hour:["hour","hours","hr","hrs"], minute:["minute","minutes","min"], second:["second","seconds","sec","s"], day:["day","days"], week:["week","weeks"], month:["month","months"], year:["year","years"], dollar:["dollar","dollars","usd","$"], euro:["euro","euros","eur","€"], poundsterling:["pound sterling","gbp","£"]};
+  var ALIASES = {mile:["mile","miles","mi"], kilometre:["kilometre","kilometer","kilometres","kilometers","km"], centimetre:["centimetre","centimeter","centimetres","centimeters","cm"], inch:["inch","inches","in"], kilogram:["kilogram","kilograms","kg","kilo","kilos"], pound:["pound","pounds","lb","lbs"], gram:["gram","grams","g"], litre:["litre","liter","litres","liters","l"], gallon:["gallon","gallons","gal"], millilitre:["millilitre","milliliter","millilitres","milliliters","ml"], metre:["metre","meter","metres","meters","m"], foot:["foot","feet","ft"], yard:["yard","yards","yd"], ounce:["ounce","ounces","oz"], celsius:["celsius","c","°c"], fahrenheit:["fahrenheit","f","°f"], hour:["hour","hours","hr","hrs"], minute:["minute","minutes","min"], second:["second","seconds","sec","s"], day:["day","days"], week:["week","weeks"], month:["month","months"], year:["year","years"], dollar:["dollar","dollars","usd","$"], euro:["euro","euros","eur","€"], poundsterling:["pound sterling","gbp","£"], rupee:["rupee","rupees","inr","pkr","rs"], kmh:["km/h","kmh","kph"], mph:["mph","mi/h"]};
   function unitName(word){
     word=(word||"").toLowerCase();
     for(var k in ALIASES){ if(ALIASES[k].indexOf(word)>=0) return k; }
     return word;
+  }
+  /* v9.1: offline conversion table, used when the page engine (engine.js)
+     is not loaded — game pages have no engine, but the assistant still has
+     to convert. Temperatures are formulas; the rest are to-base factors. */
+  var CONV_BASE={length:{metre:1,kilometre:1000,centimetre:0.01,inch:0.0254,foot:0.3048,yard:0.9144,mile:1609.344},mass:{kilogram:1,gram:0.001,pound:0.45359237,ounce:0.028349523125},volume:{litre:1,gallon:3.785411784,millilitre:0.001},time:{second:1,minute:60,hour:3600,day:86400,week:604800},speed:{kmh:1,mph:1.60934}};
+  var CURRENCY={dollar:1,euro:1,poundsterling:1,rupee:1};
+  function tryConvertLocal(val,from,to){
+    if(from==="celsius"||from==="fahrenheit"||to==="celsius"||to==="fahrenheit"){
+      var c = from==="celsius"?val : from==="fahrenheit"?(val-32)*5/9 : null;
+      if(c===null) return null;
+      if(to==="celsius") return c;
+      if(to==="fahrenheit") return c*9/5+32;
+      return null;
+    }
+    for(var fam in CONV_BASE){ var t=CONV_BASE[fam]; if(t[from]!==undefined && t[to]!==undefined) return val*t[from]/t[to]; }
+    return null;
   }
   function tryConvert(q){
     var m = q.match(/(-?[\d.,]+)\s*([a-z°%$€£]+)\s*(?:to|in|as|=)\s*([a-z°%$€£]+)/);
     if(!m) return null;
     var val=parseFloat(m[1].replace(/,/g,"")), from=unitName(m[2]), to=unitName(m[3]);
     if(!isFinite(val)) return null;
-    if(typeof resolveConv!=="function") return {text:"Conversions load with the page engine — please try again in a moment.", done:true};
+    /* Money has no fixed rate — never invent one. */
+    if(CURRENCY[from]||CURRENCY[to]) return {text:"I don't know today's rate — money rates move every minute and I have no live data. The currency converter on this site uses live rates when you are online.", done:true, link:{id:"currency-converter", name:"Currency Converter — Live Exchange Rates"}};
+    if(from===to) return {text: fmtN(val)+" "+from+" is "+fmtN(val)+" "+to+".", done:true};
+    if(typeof resolveConv!=="function"){
+      var lc=tryConvertLocal(val,from,to);
+      if(lc!==null && isFinite(lc)) return {text: fmtN(val)+" "+from+" = "+fmtN(lc)+" "+to+".", done:true};
+      return {text:"I couldn't convert "+from+" to "+to+" here. Try naming the units differently, or open the Conversion category.", done:true};
+    }
     // find converter tool by unit names
     var tools = INDEX || [];
     var cand = tools.filter(function(t){ return t.id.indexOf("conv-")===0; });
@@ -259,7 +302,7 @@
     return null;
   }
   function tryConcept(ql){
-    if(!/what is|what'?s|what does|mean|explain|tell me about|^about |^define /.test(ql)) return null;
+    if(!/what is|what'?s|what does|mean|explain|tell me about|^about |^define |kya hai|kya hota|kaise|matlab|batao|samjhao/.test(ql)) return null;
     for(var i=0;i<CONCEPTS.length;i++){
       if(CONCEPTS[i].re.test(ql)){
         return {text: CONCEPTS[i].text + "\n\nWant the number? Open the tool and type your own figures.", done:true, link: CONCEPTS[i].link};
@@ -364,10 +407,59 @@
   }
   /* Test hook (also handy for the /ask/ page): window.FCN_ask("hi") */
   window.FCN_ask = answer;
+  /* ---------- bring-your-own-key: Gemini AI (v9.1) ----------
+     The user can paste their own Gemini API key in Settings. It lives ONLY
+     in their own browser (localStorage, key below) and is sent ONLY to
+     Google's Gemini API, from their browser — never to us, never to any
+     other server, never in page source, logs or analytics, and never
+     hard-coded here. The key value is never printed, logged or returned
+     by any function (only "a key is stored" true/false is exposed).
+     SITE_KEY is the site-wide default key. It is EMPTY until the owner
+     supplies his own restricted key (Generative Language API only +
+     HTTP referrer freecalcnow.github.io only). It stays "" until then —
+     never invent or hard-code a key. */
+  var KEY_STORE="fcn-gemini-key-v1";
+  var SITE_KEY="";
+  function getGeminiKey(){
+    try{ var k=localStorage.getItem(KEY_STORE)||""; if(k) return k; }catch(e){}
+    return SITE_KEY||"";
+  }
+  /* Test hook only: true/false, never the key value. */
+  window.FCN_hasGeminiKey = function(){ return !!getGeminiKey(); };
+  function geminiErrText(err){
+    var m=String((err && err.message) || err || "");
+    if(/400/.test(m)) return "the key looks wrong";
+    if(/401|403/.test(m)) return "the key was rejected";
+    if(/404/.test(m)) return "that AI model is not available";
+    if(/429/.test(m)) return "the free limit was reached";
+    return "I couldn't reach Google";
+  }
+  function askGemini(q, key){
+    var prompt="You are Ask FreeCalcNow, the helper on the free calculator site FreeCalcNow (15,402 free calculators, no sign-up, everything runs in the user's browser). Answer briefly, in simple words, in the same language as the question (English or Roman Urdu). If the question is a sum or a unit conversion, give the answer and show the working. If you don't know something (live prices, weather, news, people's net worth), say so honestly and never guess. Never invent a tool, a price or a link. The user asks: "+q+(PAGE.toolName ? "\nThe user is on the "+PAGE.toolName+" page." : "");
+    return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+encodeURIComponent(key), {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})})
+      .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+      .then(function(d){
+        var t=d && d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts && d.candidates[0].content.parts[0] && d.candidates[0].content.parts[0].text;
+        if(!t) throw new Error("empty");
+        return {text:String(t).trim(), done:true};
+      })
+      .catch(function(err){
+        /* Graceful failure: plain language + the offline answer, so the
+           user is never left with nothing. */
+        var off=answer(q);
+        function withNote(r){ return {text:"The AI key didn't work ("+geminiErrText(err)+"), so here is the offline answer instead:\n\n"+r.text, done:true, links:r.links || (r.link?[r.link]:null)}; }
+        if(off && typeof off.then==="function") return off.then(withNote);
+        return withNote(off);
+      });
+  }
   /* ---------- UI ---------- */
   /* No emoji anywhere: the microphone and stop icons are inline SVG. */
   var MIC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 15a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v5a4 4 0 0 0 4 4Zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.94V22h2v-3.06A8 8 0 0 0 20 11h-2Z"/></svg>';
   var STOP_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>';
+  /* v9.1: the floating button is a small round chat bubble (custom SVG, no
+     emoji, no text) on every page. aria-label only — never data-i18n, because
+     i18n would replace the SVG with text. */
+  var CHAT_SVG='<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M12 3C6.5 3 2 6.9 2 11.7c0 2.7 1.4 5.1 3.7 6.7L5 21.5c.1.3.4.4.7.3l3.4-1.7c.6.1 1.2.2 1.9.2h.9c5.5 0 10-3.9 10-8.7S17.5 3 12 3Zm-4.2 8.2c-.8 0-1.4-.6-1.4-1.4s.6-1.4 1.4-1.4 1.4.6 1.4 1.4-.6 1.4-1.4 1.4Zm4.2 0c-.8 0-1.4-.6-1.4-1.4s.6-1.4 1.4-1.4 1.4.6 1.4 1.4-.6 1.4-1.4 1.4Zm4.2 0c-.8 0-1.4-.6-1.4-1.4s.6-1.4 1.4-1.4 1.4.6 1.4 1.4-.6 1.4-1.4 1.4Z"/></svg>';
   var panel=null, rec=null, listening=false, micCtx=null;
   function greetHello(){
     var g=greetText();
@@ -397,6 +489,10 @@
     q=(q||"").trim(); if(!q) return;
     addMsg(q,"user",null,ctx);
     ctx.input.value="";
+    /* v9.1 BYOK: with a Gemini key stored, ask the AI; without one, the
+       offline rule-based engine answers exactly as before. */
+    var key=getGeminiKey();
+    if(key){ askGemini(q, key).then(function(r){ addMsg(r.text,"bot", r.links || (r.link?[r.link]:null), ctx); }); return; }
     var res=answer(q);
     if(res && typeof res.then==="function"){ res.then(function(r){ addMsg(r.text,"bot", r.links || (r.link?[r.link]:null), ctx); }); }
     else if(res){ addMsg(res.text,"bot", res.links || (res.link?[res.link]:null), ctx); }
@@ -423,13 +519,19 @@
      the inline chat on /ask/ (always visible, in the page flow, so the
      keyboard can never push it off screen). */
   function makeChat(hostEl, inline){
+    /* v9.1: chips depend on the page. Tool pages keep the 3 tool chips;
+       every other page (home, games, settings) gets Daily Number +
+       "What can you do?" instead — "Explain this result" makes no sense
+       where there is no result to explain. */
+    var chipsHtml = PAGE.toolId
+      ? '<button type="button" data-q="Explain this result" data-i18n="ask.chip.explain">Explain this result</button>'
+        +'<button type="button" data-q="How do I use this tool?" data-i18n="ask.chip.how">How do I use this?</button>'
+        +'<button type="button" data-q="Daily Number game" data-i18n="ask.chip.daily">Play Daily Number</button>'
+      : '<button type="button" data-q="Daily Number game" data-i18n="ask.chip.daily">Play Daily Number</button>'
+        +'<button type="button" data-q="What can you do?" data-i18n="ask.chip.help">What can you do?</button>';
     var wrap=el('<div class="'+(inline?'ask-inline':'')+'">'
       +'<div class="ask-msgs"></div>'
-      +'<div class="ask-chips">'
-      +'<button type="button" data-q="Explain this result" data-i18n="ask.chip.explain">Explain this result</button>'
-      +'<button type="button" data-q="How do I use this tool?" data-i18n="ask.chip.how">How do I use this?</button>'
-      +'<button type="button" data-q="Daily Number game" data-i18n="ask.chip.daily">Play Daily Number</button>'
-      +'</div>'
+      +'<div class="ask-chips">'+chipsHtml+'</div>'
       +'<div class="ask-input"><button type="button" class="ask-mic" title="Ask by voice" data-i18n-aria="ask.voice">'+MIC_SVG+'</button><input type="text" placeholder="Ask a sum, a conversion, or name a tool…" autocomplete="off" data-i18n-ph="ask.placeholder"><button type="button" class="ask-send" data-i18n="ask.send">Send</button></div>'
       +'</div>');
     hostEl.appendChild(wrap);
@@ -452,7 +554,7 @@
       return;
     }
     if(document.querySelector(".ask-fab")) return;
-    var fab=el('<button class="ask-fab" type="button" data-i18n="ask.title">Ask FreeCalcNow</button>');
+    var fab=el('<button class="ask-fab" type="button" aria-label="Ask FreeCalcNow" title="Ask FreeCalcNow" data-i18n-aria="ask.title">'+CHAT_SVG+'</button>');
     panel=el('<div class="ask-panel" hidden>'
       +'<div class="ask-head"><span data-i18n="ask.title">Ask FreeCalcNow</span><button type="button" id="ask-close" aria-label="Close">✕</button></div>'
       +'</div>');

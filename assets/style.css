@@ -18,22 +18,30 @@ h2{font-size:1.25rem;margin:2rem 0 .6rem}
 h3{font-size:1.05rem;margin:1.4rem 0 .4rem}
 p{margin:.5rem 0}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 16px}
-/* header */
-.site-head{background:var(--green);color:#fff;position:sticky;top:0;z-index:50}
-.site-head .wrap{display:flex;align-items:center;gap:12px;min-height:56px;flex-wrap:wrap;padding-top:6px;padding-bottom:6px}
+/* header — NOT sticky (owner correction 20 Nov 2026): the header scrolls
+   away with the page like a normal page header; it must never stay on
+   screen while scrolling. position:relative only so the mobile menu panel
+   can anchor to it. One row (logo + hamburger on phones); the nav lives
+   in a collapsible menu; the search bar sits in its own row under it. */
+.site-head{background:var(--green);background-color:var(--green);color:#fff;position:relative}
+.site-head .wrap{display:flex;align-items:center;gap:12px;min-height:56px;flex-wrap:nowrap;padding-top:6px;padding-bottom:6px}
 .logo{font-weight:800;font-size:1.25rem;color:#fff;letter-spacing:.2px;white-space:nowrap}
 .logo b{color:var(--amber)}
 .logo img{width:36px;height:36px;border-radius:9px;vertical-align:-10px}
 .site-head nav{display:flex;gap:4px;flex-wrap:wrap}
 .site-head nav a{color:#DBEAFE;padding:6px 10px;border-radius:8px;font-size:.95rem}
-/* The second header row only holds the search-results box, hidden until the
-   user types. It must take no space: the shared .wrap rule gives it a 56px
-   min-height + padding, which rendered as ~70px of empty green band. */
-.site-head>.wrap+.wrap{min-height:0;padding-top:0;padding-bottom:0}
 .site-head nav a:hover{background:rgba(255,255,255,.14);text-decoration:none}
-.head-search{margin-left:auto;display:flex;gap:6px}
-.head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;width:180px}
+/* Hamburger button: hidden on desktop, the only header control on phones. */
+.menu-btn{display:none}
+.nav-dl{display:none}
+.head-search{margin-left:0;display:flex;gap:6px;width:100%;max-width:640px}
+.head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;flex:1;width:auto}
 .head-search button{border:0;border-radius:9px;background:var(--amber);color:#1c1005;font-weight:700;padding:8px 12px;cursor:pointer}
+/* Search strip: its own row UNDER the header, so it scrolls away with the
+   page instead of eating header space on a phone. */
+.head-search-row{background:var(--surface);border-bottom:1px solid var(--line)}
+.head-search-row .wrap{padding-top:8px;padding-bottom:8px}
+.head-search-row .search-results{margin-top:8px}
 /* hero */
 .hero{background:linear-gradient(180deg,#0B1F3A,#081426);background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;padding:28px 0 24px}
 .hero h1{color:#fff;font-size:2rem;margin:0 0 8px}
@@ -122,8 +130,13 @@ p{margin:.5rem 0}
 .feedback .stars button{color:#cbd5e1}.feedback .stars button.on{color:#F59E0B;filter:drop-shadow(0 0 2px var(--amber))}
 .feedback textarea{width:100%;min-height:64px;border:1.5px solid #cbd5e1;border-radius:10px;padding:10px;font-size:1rem;font-family:inherit}
 .feedback .thanks{color:var(--green);font-weight:700}
-/* assistant */
-.ask-fab{position:fixed;right:16px;bottom:16px;z-index:60;border:0;border-radius:999px;background:var(--green);color:#fff;font-weight:700;padding:13px 18px;box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer;font-size:1rem;transition:opacity .2s ease,transform .2s ease}
+/* assistant — floating bubble (v9.1): a small round gold chat button, bottom-right
+   on every page, desktop and phone. It auto-hides while the hero is on screen
+   and while the user is typing in a form control (see assistant.js), so it can
+   never cover a result, an input or a button. Tapping it opens the chat panel;
+   the panel's × closes it back to just the bubble. */
+.ask-fab{position:fixed;right:16px;bottom:16px;z-index:60;border:0;border-radius:50%;background:var(--amber);color:#1c1005;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.30);cursor:pointer;transition:opacity .2s ease,transform .2s ease}
+.ask-fab svg{display:block}
 /* Hidden while the hero is still on screen, so the button never covers
    hero text on first paint (toggled by JS in assistant.js). */
 .ask-fab.fab-hidden{opacity:0;pointer-events:none;transform:translateY(8px)}
@@ -179,21 +192,28 @@ p{margin:.5rem 0}
 @media (max-width:640px){
   h1{font-size:1.45rem}
   .hero h1{font-size:1.6rem}
-  /* v7.3: the header nav must fit the screen with NO sideways scrolling.
-     On a narrow phone the seven links take a full-width row of their own
-     and wrap into two neat rows — every link visible, clean readable type. */
-  .site-head .wrap{gap:8px;padding-top:4px;padding-bottom:4px}
-  .site-head nav{flex:1 1 100%;flex-wrap:wrap;max-width:100%;gap:3px}
-  .site-head nav a{white-space:nowrap;font-size:.9rem;padding:6px 9px}
+  /* v9.1 mobile header fix (owner report 20 Nov): the header is ONE row —
+     logo + hamburger only, and it scrolls away with the page (NOT sticky).
+     The nav and the Download button live inside the collapsible menu; the
+     search bar sits in its own row below the header and scrolls away, so
+     the header can never cover ~40% of the screen or let content bleed
+     through it. */
+  .site-head .wrap{gap:8px;padding-top:4px;padding-bottom:4px;min-height:52px}
+  .menu-btn{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;flex:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:transparent;color:#fff;cursor:pointer}
+  .menu-btn:focus-visible{outline:3px solid #FDE68A;outline-offset:2px}
+  .site-head #site-nav{display:none}
+  .site-head.menu-open #site-nav{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:2px;background:var(--green);background-color:var(--green);padding:8px 16px 14px;box-shadow:0 14px 28px rgba(2,6,23,.35);z-index:60}
+  .site-head.menu-open #site-nav a{display:block;padding:11px 12px;font-size:1rem;border-radius:9px}
+  .site-head.menu-open #site-nav a.nav-dl{display:block;background:var(--amber);color:#1c1005;font-weight:800;text-align:center;margin-top:6px}
+  .site-head .wrap .dl-btn{display:none}
+  .head-search-row .wrap{padding-top:6px;padding-bottom:6px}
   .search-big input,.head-search input{font-size:1rem}
-  .head-search{width:100%;margin-left:0}
-  .head-search input{flex:1;width:auto}
   .result .big{font-size:1.6rem}
-  /* On phones the Ask button is NOT a floating button: fixed at the
-     bottom-right it covers buttons, cards and text while scrolling. It
-     now sits in the page flow after the content (see assistant.js), so it
-     can never cover anything. */
-  .ask-fab{position:static;display:block;width:max-content;margin:20px auto 0}
+  /* v9.1: the assistant bubble stays a small fixed circle on phones too
+     (bottom-right, above the gesture bar) — it auto-hides while the hero is
+     on screen and while a form control is focused, so it never covers
+     content. It is never an in-flow button. */
+  .ask-fab{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:52px;height:52px}
 }
 @media (prefers-color-scheme:dark){
   :root{--bg:#0b1220;--surface:#111c33;--ink:#e2e8f0;--muted:#94a3b8;--line:#243449}
@@ -219,8 +239,8 @@ p{margin:.5rem 0}
 }
 
 /* --- Round 6: daily hero, streak, WhatsApp share --- */
-.btn-wa{background:#25D366;color:#fff}
-.btn-wa:hover{background:#1da851}
+.btn-wa{background:#0B1F3A;color:#fff} /* v9.1 no-green rule: was WhatsApp brand green #25D366; the label still says WhatsApp and it still opens wa.me */
+.btn-wa:hover{background:#1E3A5F}
 .daily-hero{background:linear-gradient(135deg,#0B1F3A,#081426);background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0}
 .daily-hero h2{color:#fff;margin-top:0}
 .daily-hero a{color:#fde68a}
@@ -244,7 +264,6 @@ p{margin:.5rem 0}
 /* --- Round 6 (v6): settings — themes, light/dark, font size, backgrounds --- */
 html[data-fcn-theme="ocean"]{--bg:#eff6ff;--surface:#ffffff;--ink:#0c2d4d;--muted:#475569;--line:#bfdbfe;--accent:#0369a1;--green:#0369a1;--green-d:#075985;--green-l:#e0f2fe}
 html[data-fcn-theme="sunset"]{--bg:#fff7ed;--surface:#ffffff;--ink:#431407;--muted:#57534e;--line:#fed7aa;--accent:#ea580c;--green:#ea580c;--green-d:#9a3412;--green-l:#ffedd5}
-html[data-fcn-theme="forest"]{--bg:#f0fdf4;--surface:#ffffff;--ink:#052e16;--muted:#475569;--line:#bbf7d0;--accent:#15803d;--green:#15803d;--green-d:#14532d;--green-l:#dcfce7}
 html[data-fcn-theme="grape"]{--bg:#faf5ff;--surface:#ffffff;--ink:#3b0764;--muted:#57534e;--line:#e9d5ff;--accent:#7e22ce;--green:#7e22ce;--green-d:#581c87;--green-l:#f3e8ff}
 html[data-fcn-theme="midnight"]{--bg:#0b1220;--surface:#111c33;--ink:#e2e8f0;--muted:#94a3b8;--line:#243449;--accent:#38bdf8;--green:#38bdf8;--green-d:#0284c7;--green-l:#0c4a6e}
 html[data-fcn-mode="dark"]{--bg:#0b1220;--surface:#111c33;--ink:#e2e8f0;--muted:#94a3b8;--line:#243449}
