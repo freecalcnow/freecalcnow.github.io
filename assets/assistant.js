@@ -6,6 +6,11 @@
   "use strict";
   var PAGE = window.FCN_PAGE || {toolId:null, toolName:null, category:null, slug:""};
   var INDEX = null, INDEX_LOADING = null;
+  /* v7.4: counts come from the real tool index when it has loaded, so the
+     assistant never quotes a stale number. Fallbacks are the verified
+     live counts (tools-index.json: 15,402 tools; games.json: 101 games). */
+  function toolCount(){ return (INDEX && INDEX.length) ? INDEX.length.toLocaleString("en-US") : "15,402"; }
+  var GAME_COUNT = "101";
   function el(html){ var d=document.createElement("div"); d.innerHTML=html.trim(); return d.firstChild; }
   function esc(s){ return String(s==null?"":s).replace(/[&<>\"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
   /* ---------- name memory ---------- */
@@ -211,7 +216,7 @@
     if(/^(hi+|hello|hey|hii+|salam|aoa|salaam|assalamu alaikum|good morning|good afternoon|good evening)\b/.test(ql) || nameGiven){
       var hello = greetWord() + (USER_NAME ? ", " + USER_NAME : "") + "! ";
       if(nameGiven) hello = "Hi " + USER_NAME + "! Great to meet you. ";
-      hello += "I can solve sums, convert units, find any of the 15,390 calculators, or explain a result. Try “15% of 240”, “10 miles to km”, or “mortgage”.";
+      hello += "I can solve sums, convert units, find any of the " + toolCount() + " calculators, or explain a result. Try “15% of 240”, “10 miles to km”, or “mortgage”.";
       return {text: hello, done:true, links: suggestLinks()};
     }
     /* small talk */
@@ -219,7 +224,7 @@
       return {text:"I'm doing great — ready to calculate! What shall we work out" + (USER_NAME ? ", " + USER_NAME : "") + "? A sum, a conversion, or a tool like “mortgage” or “BMI”?", done:true, links: suggestLinks()};
     }
     if(/who are you|your name|what are you/.test(ql)){
-      return {text:"I'm Ask FreeCalcNow — the helper built into this site. I know all 15,390 calculators, I solve sums and conversions, and I explain results. Everything runs in your browser, free, no sign-up.", done:true};
+      return {text:"I'm Ask FreeCalcNow — the helper built into this site. I know all " + toolCount() + " calculators, I solve sums and conversions, and I explain results. Everything runs in your browser, free, no sign-up.", done:true};
     }
     if(/\bhelp\b|what can you do/.test(ql)){
       return {text:"Here's what I can do:\n• Solve a sum — “15% of 240”, “120 + 35”\n• Convert units — “10 miles to km”, “5 kg to lb”\n• Find a tool — “mortgage”, “BMI”, “tip”\n• Explain things — “what is a mortgage?”\n• Explain the calculator you are using — “explain this result”\n\nJust type or tap the microphone and ask by voice.", done:true, links: suggestLinks()};
@@ -260,15 +265,15 @@
     }
     // site map / categories
     if(/site map|sitemap|what.*on this site|all (tools|calculators)|categories/.test(ql)){
-      return {text:"FreeCalcNow has 15,390 free calculators in 14 categories: Finance, Math, Statistics, Health, Everyday life, Conversion, Physics, Chemistry, Biology, Construction, Food, Sports, Ecology and Other — plus the Daily Number game and 78 mini games.\n\nUse the search box at the top, or browse the A–Z list on the home page.", done:true, link:{id:"tools", name:"Browse all tools"}};
+      return {text:"FreeCalcNow has " + toolCount() + " free calculators in 14 categories: Finance, Math, Statistics, Health, Everyday life, Conversion, Physics, Chemistry, Biology, Construction, Food, Sports, Ecology and Other — plus the Daily Number game and " + GAME_COUNT + " mini games.\n\nUse the search box at the top, or browse by category from the home page.", done:true, link:{id:"tools", name:"Browse all tools"}};
     }
     // games
     if(/game|play|daily number/.test(ql)){
-      return {text:"Play the Daily Number game — guess today's 4-digit number in 6 tries — or try any of the 78 mini games. No sign-up, free forever.", done:true, link:{id:"games/daily-number", name:"Play Daily Number"}};
+      return {text:"Play the Daily Number game — guess today's 4-digit number in 6 tries — or try any of the " + GAME_COUNT + " mini games. No sign-up, free forever.", done:true, link:{id:"games/daily-number", name:"Play Daily Number"}};
     }
     // how many tools / what's new
     if(/how many|what.*new|newest/.test(ql)){
-      return {text:"There are 15,390 free calculators on FreeCalcNow right now, plus the Daily Number game and 78 mini games. Every tool shows its working, and your numbers never leave your browser.", done:true};
+      return {text:"There are " + toolCount() + " free calculators on FreeCalcNow right now, plus the Daily Number game and " + GAME_COUNT + " mini games. Every tool shows its working, and your numbers never leave your browser.", done:true};
     }
     // find a tool by keywords — never a dead end
     return loadIndex().then(function(){
@@ -350,7 +355,7 @@
     var open=function(){
       panel.hidden=false; fab.style.display="none"; loadIndex();
       if(!msgs.children.length){
-        var hello="Hi" + (USER_NAME ? " " + USER_NAME : "") + "! I know all 15,390 FreeCalcNow calculators";
+        var hello="Hi" + (USER_NAME ? " " + USER_NAME : "") + "! I know all " + toolCount() + " FreeCalcNow calculators";
         if(PAGE.toolName) hello+=" — and you are on the "+PAGE.toolName+" page right now, so I can explain its result too";
         hello+=".\n\nAsk a sum (“15% of 240”), a conversion (“10 miles to km”), or name a tool (“mortgage”). You can also tap the microphone and ask by voice.";
         addMsg(hello,"bot");

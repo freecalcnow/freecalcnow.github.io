@@ -334,14 +334,14 @@
     document.querySelectorAll("[data-share-home]").forEach(function(b){
       b.addEventListener("click", function(){
         var url = "https://freecalcnow.github.io/";
-        var text = "FreeCalcNow — 15,394 free calculators, 78 games and a new puzzle every day. " + url;
+        var text = "FreeCalcNow — 15,402 free calculators, 101 games and a new puzzle every day. " + url;
         if(navigator.share){ navigator.share({title: document.title, text: text, url: url}).catch(function(){}); }
         else if(navigator.clipboard){ navigator.clipboard.writeText(text).then(function(){ b.textContent = "Link copied!"; setTimeout(function(){ b.textContent = "Share FreeCalcNow"; }, 2000); }); }
       });
     });
     document.querySelectorAll("[data-share-home-wa]").forEach(function(b){
       b.addEventListener("click", function(){
-        var text = encodeURIComponent("FreeCalcNow — 15,394 free calculators, 78 games and a new puzzle every day. https://freecalcnow.github.io/");
+        var text = encodeURIComponent("FreeCalcNow — 15,402 free calculators, 101 games and a new puzzle every day. https://freecalcnow.github.io/");
         window.open("https://wa.me/?text=" + text, "_blank", "noopener");
       });
     });

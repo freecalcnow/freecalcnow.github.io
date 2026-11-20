@@ -300,3 +300,26 @@ html.fcn-standalone .dl-btn{display:none !important}
 .fcn-update-banner button{border:0;border-radius:9px;padding:8px 12px;font-weight:800;cursor:pointer}
 #fcn-update-btn{background:#F59E0B;color:#1c1005}
 #fcn-update-x{background:rgba(255,255,255,.16);color:#fff}
+
+/* v7.4: custom background picture — keep text readable over any picture.
+   A light wash over the picture, plus near-solid backings on the panels
+   (cards, lists, panels, form controls) while a custom bg is active. */
+body.fcn-custom-bg::before{content:"";position:fixed;inset:0;background:rgba(248,250,252,.78);z-index:-1;pointer-events:none}
+body.fcn-custom-bg .tool-card,body.fcn-custom-bg .cat-tile,body.fcn-custom-bg .rel-card,body.fcn-custom-bg .game-box,body.fcn-custom-bg .feedback,body.fcn-custom-bg .tool-list li,body.fcn-custom-bg .ad-slot,body.fcn-custom-bg .teaser,body.fcn-custom-bg .search-results,body.fcn-custom-bg .sponsor-box,body.fcn-custom-bg .ask-panel{background:rgba(255,255,255,.94)}
+body.fcn-custom-bg .tool-card .formula{background:#DBEAFE}
+body.fcn-custom-bg .ask-msg{background:#f1f5f9}
+body.fcn-custom-bg .ask-msg.user{background:#DBEAFE}
+body.fcn-custom-bg .game-tile{background:#fff}
+body.fcn-custom-bg #set-lang{background:#fff}
+@media (prefers-color-scheme:dark){
+body.fcn-custom-bg::before{background:rgba(11,18,32,.80)}
+body.fcn-custom-bg .tool-card,body.fcn-custom-bg .cat-tile,body.fcn-custom-bg .rel-card,body.fcn-custom-bg .game-box,body.fcn-custom-bg .feedback,body.fcn-custom-bg .tool-list li,body.fcn-custom-bg .ad-slot,body.fcn-custom-bg .teaser,body.fcn-custom-bg .search-results,body.fcn-custom-bg .sponsor-box,body.fcn-custom-bg .ask-panel{background:rgba(17,28,51,.94)}
+body.fcn-custom-bg .tool-card .formula{background:#1e3a5f}
+body.fcn-custom-bg .ask-msg{background:#1e293b}
+body.fcn-custom-bg .ask-msg.user{background:#1e3a5f}
+body.fcn-custom-bg .game-tile{background:#0b1220}
+body.fcn-custom-bg #set-lang{background:#0b1220;color:#e2e8f0}
+}
+html[data-fcn-mode="dark"] body.fcn-custom-bg::before{background:rgba(11,18,32,.80)}
+html[data-fcn-mode="dark"] body.fcn-custom-bg .tool-card,html[data-fcn-mode="dark"] body.fcn-custom-bg .cat-tile,html[data-fcn-mode="dark"] body.fcn-custom-bg .rel-card,html[data-fcn-mode="dark"] body.fcn-custom-bg .game-box,html[data-fcn-mode="dark"] body.fcn-custom-bg .feedback,html[data-fcn-mode="dark"] body.fcn-custom-bg .tool-list li,html[data-fcn-mode="dark"] body.fcn-custom-bg .ad-slot,html[data-fcn-mode="dark"] body.fcn-custom-bg .teaser,html[data-fcn-mode="dark"] body.fcn-custom-bg .search-results,html[data-fcn-mode="dark"] body.fcn-custom-bg .sponsor-box,html[data-fcn-mode="dark"] body.fcn-custom-bg .ask-panel{background:rgba(17,28,51,.94)}
+html[data-fcn-mode="dark"] body.fcn-custom-bg #set-lang{background:#0b1220;color:#e2e8f0}

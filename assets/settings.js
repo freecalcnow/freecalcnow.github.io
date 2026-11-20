@@ -4,7 +4,7 @@
    no sign-up, nothing is uploaded anywhere. */
 (function(){
   var KEY='fcn-settings-v1';
-  var DEFAULTS={ theme:'default', accent:'#166534', mode:'auto', font:'medium', bg:'none' };
+  var DEFAULTS={ theme:'default', accent:'#0B1F3A', mode:'auto', font:'medium', bg:'none' };
   function load(){ try{ var s=JSON.parse(localStorage.getItem(KEY)||'{}')||{};
       var out={}; for(var k in DEFAULTS) out[k]=(s[k]!==undefined&&s[k]!==null)?s[k]:DEFAULTS[k]; return out; }
     catch(e){ var o={}; for(var k2 in DEFAULTS) o[k2]=DEFAULTS[k2]; return o; } }
@@ -16,9 +16,9 @@
     h.setAttribute('data-fcn-mode', s.mode||'auto');
     h.setAttribute('data-fcn-font', s.font||'medium');
     h.setAttribute('data-fcn-bg', s.bg||'none');
-    try{ h.style.setProperty('--accent', s.accent||'#166534'); }catch(e){}
+    try{ h.style.setProperty('--accent', s.accent||'#0B1F3A'); }catch(e){}
     var tc=document.querySelector('meta[name="theme-color"]');
-    if(tc) tc.setAttribute('content', s.accent||'#166534');
+    if(tc) tc.setAttribute('content', s.accent||'#0B1F3A');
     loadBgImage();
   }
   /* --- Custom background picture in IndexedDB (data URL, downscaled) --- */
