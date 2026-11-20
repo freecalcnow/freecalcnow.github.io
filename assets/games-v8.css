@@ -90,6 +90,9 @@ body.theme-dark .fcn-pl-note,body.theme-dark .fcn-pl-foot{color:#94a3b8}
 .game-head #site-nav a:hover{background:rgba(255,255,255,.14);text-decoration:none}
 .game-head .menu-btn{display:none}
 .game-head .nav-dl{display:none}
+/* v9.2 full-screen menu: panel-only items stay hidden on desktop; they
+   appear only inside the open mobile menu (see the 640px block). */
+.game-head #site-nav .menu-top,.game-head #site-nav .menu-browse,.game-head #site-nav .menu-share{display:none}
 .game-head .dl-btn{display:inline-flex;align-items:center;gap:6px;background:#F59E0B;color:#1c1005;font-weight:800;font-size:.95rem;padding:8px 14px;border-radius:10px;text-decoration:none;white-space:nowrap;margin-left:auto}
 .game-head .dl-btn svg{vertical-align:-3px}
 .game-head #site-nav .nav-fav{color:#DBEAFE;background:transparent;border:0;text-align:left}
@@ -98,10 +101,20 @@ body.theme-dark .fcn-pl-note,body.theme-dark .fcn-pl-foot{color:#94a3b8}
   .game-head .menu-btn{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;flex:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:transparent;color:#fff;cursor:pointer}
   .game-head .menu-btn:focus-visible{outline:3px solid #FDE68A;outline-offset:2px}
   .game-head #site-nav{display:none}
-  .game-head.menu-open #site-nav{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:2px;background:#0B1F3A;background-color:#0B1F3A;padding:8px 16px 14px;box-shadow:0 14px 28px rgba(2,6,23,.35);z-index:60}
+  /* v9.2 full-screen menu (owner decision 20 Nov): when open, the menu is a
+     full-screen panel — every item visible, the panel itself scrolls if the
+     content is taller than the screen, and the page behind cannot scroll. */
+  body.menu-open{overflow:hidden}
+  .game-head.menu-open #site-nav{display:flex;position:fixed;top:0;left:0;right:0;bottom:0;flex-direction:column;align-items:stretch;gap:2px;background:#0B1F3A;background-color:#0B1F3A;padding:10px 16px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200}
   .game-head.menu-open #site-nav a{display:block;padding:11px 12px;font-size:1rem;border-radius:9px}
   .game-head.menu-open #site-nav a.nav-dl{display:block;background:#F59E0B;color:#1c1005;font-weight:800;text-align:center;margin-top:6px;margin-left:0}
   .game-head.menu-open #site-nav .nav-fav{display:block;padding:11px 12px;font-size:1rem}
+  .game-head.menu-open #site-nav .menu-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px}
+  .game-head.menu-open #site-nav .menu-top .logo{padding:0}
+  .game-head.menu-open #site-nav .menu-close{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:transparent;color:#fff;cursor:pointer}
+  .game-head.menu-open #site-nav .menu-browse{display:block;color:#DBEAFE;font-size:.95rem;padding:12px 12px 0}
+  .game-head.menu-open #site-nav .menu-browse a{display:inline;padding:0;color:#fff;font-weight:700}
+  .game-head.menu-open #site-nav .menu-share{display:block;width:100%;margin-top:12px;padding:13px;font-size:1rem;font-weight:700;border:1px solid rgba(255,255,255,.5);border-radius:10px;background:transparent;color:#fff;cursor:pointer;text-align:center}
   .game-head .gh-row .dl-btn{display:none}
 }
 

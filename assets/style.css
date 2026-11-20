@@ -34,6 +34,9 @@ p{margin:.5rem 0}
 /* Hamburger button: hidden on desktop, the only header control on phones. */
 .menu-btn{display:none}
 .nav-dl{display:none}
+/* v9.2 full-screen menu: these panel-only items stay hidden on desktop;
+   they appear only inside the open mobile menu (see the 640px block). */
+.site-head #site-nav .menu-top,.site-head #site-nav .menu-browse,.site-head #site-nav .menu-share{display:none}
 .head-search{margin-left:0;display:flex;gap:6px;width:100%;max-width:640px}
 .head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;flex:1;width:auto}
 .head-search button{border:0;border-radius:9px;background:var(--amber);color:#1c1005;font-weight:700;padding:8px 12px;cursor:pointer}
@@ -202,9 +205,19 @@ p{margin:.5rem 0}
   .menu-btn{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;flex:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:transparent;color:#fff;cursor:pointer}
   .menu-btn:focus-visible{outline:3px solid #FDE68A;outline-offset:2px}
   .site-head #site-nav{display:none}
-  .site-head.menu-open #site-nav{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:2px;background:var(--green);background-color:var(--green);padding:8px 16px 14px;box-shadow:0 14px 28px rgba(2,6,23,.35);z-index:60}
+  /* v9.2 full-screen menu (owner decision 20 Nov): when open, the menu is a
+     full-screen panel — every item visible, the panel itself scrolls if the
+     content is taller than the screen, and the page behind cannot scroll. */
+  body.menu-open{overflow:hidden}
+  .site-head.menu-open #site-nav{display:flex;position:fixed;top:0;left:0;right:0;bottom:0;flex-direction:column;align-items:stretch;gap:2px;background:var(--green);background-color:var(--green);padding:10px 16px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200}
   .site-head.menu-open #site-nav a{display:block;padding:11px 12px;font-size:1rem;border-radius:9px}
   .site-head.menu-open #site-nav a.nav-dl{display:block;background:var(--amber);color:#1c1005;font-weight:800;text-align:center;margin-top:6px}
+  .site-head.menu-open #site-nav .menu-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px}
+  .site-head.menu-open #site-nav .menu-top .logo{padding:0}
+  .site-head.menu-open #site-nav .menu-close{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:transparent;color:#fff;cursor:pointer}
+  .site-head.menu-open #site-nav .menu-browse{display:block;color:#DBEAFE;font-size:.95rem;padding:12px 12px 0}
+  .site-head.menu-open #site-nav .menu-browse a{display:inline;padding:0;color:#fff;font-weight:700}
+  .site-head.menu-open #site-nav .menu-share{display:block;width:100%;margin-top:12px;padding:13px;font-size:1rem;font-weight:700;border:1px solid rgba(255,255,255,.5);border-radius:10px;background:transparent;color:#fff;cursor:pointer;text-align:center}
   .site-head .wrap .dl-btn{display:none}
   .head-search-row .wrap{padding-top:6px;padding-bottom:6px}
   .search-big input,.head-search input{font-size:1rem}

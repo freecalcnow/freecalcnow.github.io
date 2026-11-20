@@ -1,7 +1,7 @@
 {
-  "version": "v9.1",
+  "version": "v9.2",
   "generated": "2026-11-20",
-  "toolsTotal": 15402,
+  "toolsTotal": 15376,
   "gamesTotal": 101,
   "categories": [
     {
@@ -22,7 +22,7 @@
     {
       "id": "conversion",
       "name": "Conversion",
-      "count": 13811
+      "count": 13789
     },
     {
       "id": "ecology",
@@ -32,12 +32,12 @@
     {
       "id": "everyday",
       "name": "Everyday life",
-      "count": 150
+      "count": 149
     },
     {
       "id": "finance",
       "name": "Finance",
-      "count": 335
+      "count": 332
     },
     {
       "id": "food",

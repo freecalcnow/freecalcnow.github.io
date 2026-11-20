@@ -444,14 +444,14 @@
     document.querySelectorAll("[data-share-home]").forEach(function(b){
       b.addEventListener("click", function(){
         var url = "https://freecalcnow.github.io/";
-        var text = "FreeCalcNow — 15,402 free calculators, 101 games and a new puzzle every day. " + url;
+        var text = "FreeCalcNow — 15,376 free calculators, 101 games and a new puzzle every day. " + url;
         if(navigator.share){ navigator.share({title: document.title, text: text, url: url}).catch(function(){}); }
         else if(navigator.clipboard){ navigator.clipboard.writeText(text).then(function(){ b.textContent = "Link copied!"; setTimeout(function(){ b.textContent = "Share FreeCalcNow"; }, 2000); }); }
       });
     });
     document.querySelectorAll("[data-share-home-wa]").forEach(function(b){
       b.addEventListener("click", function(){
-        var text = encodeURIComponent("FreeCalcNow — 15,402 free calculators, 101 games and a new puzzle every day. https://freecalcnow.github.io/");
+        var text = encodeURIComponent("FreeCalcNow — 15,376 free calculators, 101 games and a new puzzle every day. https://freecalcnow.github.io/");
         window.open("https://wa.me/?text=" + text, "_blank", "noopener");
       });
     });
@@ -840,7 +840,7 @@
    owner can see which build is live. */
 (function(){
   "use strict";
-  var VER="v9.1";
+  var VER="v9.2";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
   function stampVersion(){
     try{
@@ -1002,12 +1002,12 @@
   if(document.readyState==="complete") checkUpdate();
 })();
 
-/* v9.1 mobile hamburger menu (owner report 20 Nov 2026): on phones the
-   header is one row — logo + hamburger — and scrolls away with the page
-   (NOT sticky, owner correction 20 Nov). The nav links and the
-   Download button live in the collapsible panel; tapping a link, tapping
-   outside the header, or pressing Escape closes it. No-op on desktop
-   (the button is display:none there) and on game pages (no .menu-btn). */
+/* v9.2 full-screen menu (owner decision 20 Nov 2026): on phones the menu
+   opens as a full-screen panel (see style.css) — every item visible, the
+   panel itself scrolls, the page behind cannot scroll. The panel has its
+   own close button; tapping a link, the close button, the Share button,
+   outside the header, or Escape closes it. No-op on desktop (the button
+   is display:none there) and on game pages (no .menu-btn). */
 (function(){
   "use strict";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
@@ -1017,9 +1017,14 @@
     if(!btn||!header) return;
     function set(open){
       header.classList.toggle("menu-open", open);
+      document.body.classList.toggle("menu-open", open);
       btn.setAttribute("aria-expanded", open?"true":"false");
     }
     btn.addEventListener("click", function(){ set(!header.classList.contains("menu-open")); });
+    var closeBtn=header.querySelector(".menu-close");
+    if(closeBtn) closeBtn.addEventListener("click", function(){ set(false); });
+    var shareBtn=header.querySelector("[data-share-home]");
+    if(shareBtn) shareBtn.addEventListener("click", function(){ set(false); });
     document.addEventListener("click", function(e){
       if(!header.classList.contains("menu-open")) return;
       if(header.contains(e.target)) return;
