@@ -1,7 +1,7 @@
 /* FreeCalcNow — shared site stylesheet. Mobile-first, clean calculator look.
-   Palette: forest green #166534, off-white #F8FAFC, ink #0F172A, amber #F59E0B. */
+   Palette: deep navy #0B1F3A, gold #F59E0B, off-white #F8FAFC, ink #0F172A. (The --green variables are the old name for the primary brand colour - now navy.) */
 :root{
-  --accent:#166534; --green:var(--accent,#166534); --green-d:#14532d; --green-l:#dcfce7;
+  --accent:#0B1F3A; --green:#0B1F3A; --green-d:#081426; --green-l:#DBEAFE;
   --bg:#F8FAFC; --surface:#ffffff; --ink:#0F172A; --muted:#475569;
   --line:#e2e8f0; --amber:#F59E0B; --amber-l:#fef3c7;
   --radius:14px; --max:1060px;
@@ -24,7 +24,7 @@ p{margin:.5rem 0}
 .logo{font-weight:800;font-size:1.25rem;color:#fff;letter-spacing:.2px;white-space:nowrap}
 .logo b{color:var(--amber)}
 .site-head nav{display:flex;gap:4px;flex-wrap:wrap}
-.site-head nav a{color:#e7f6ea;padding:6px 10px;border-radius:8px;font-size:.95rem}
+.site-head nav a{color:#DBEAFE;padding:6px 10px;border-radius:8px;font-size:.95rem}
 /* The second header row only holds the search-results box, hidden until the
    user types. It must take no space: the shared .wrap rule gives it a 56px
    min-height + padding, which rendered as ~70px of empty green band. */
@@ -34,9 +34,9 @@ p{margin:.5rem 0}
 .head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;width:180px}
 .head-search button{border:0;border-radius:9px;background:var(--amber);color:#1c1005;font-weight:700;padding:8px 12px;cursor:pointer}
 /* hero */
-.hero{background:linear-gradient(180deg,#166534,#15803d);background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;padding:28px 0 24px}
+.hero{background:linear-gradient(180deg,#0B1F3A,#081426);background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;padding:28px 0 24px}
 .hero h1{color:#fff;font-size:2rem;margin:0 0 8px}
-.hero p{color:#dcfce7;margin:0 0 14px}
+.hero p{color:#DBEAFE;margin:0 0 14px}
 .hero .count-pill{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:4px 12px;font-size:.9rem;margin-bottom:12px}
 .search-big{display:flex;gap:8px;max-width:640px}
 .search-big input{flex:1;border:0;border-radius:12px;padding:13px 14px;font-size:1.05rem;min-width:0}
@@ -50,11 +50,11 @@ p{margin:.5rem 0}
 .search-hint a{color:#fde68a;font-weight:700}
 /* category tiles */
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:16px 0}
-.cat-tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+.cat-tile{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--cat-c,#0B1F3A);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
 .cat-tile h3{margin:0 0 4px}
 .cat-tile h3 a{color:var(--ink)}
 .cat-tile p{margin:0;color:var(--muted);font-size:.92rem}
-.cat-tile .n{font-weight:700;color:var(--green)}
+.cat-tile .n{font-weight:700;color:var(--cat-c,var(--green))}
 /* whole-card tap targets: the title link covers the full card, so tapping
    anywhere on a card opens it (mobile-first). */
 .rel-card,.cat-tile,.tool-list li{position:relative;cursor:pointer}
@@ -75,7 +75,7 @@ p{margin:.5rem 0}
 .field label{display:block;font-weight:600;margin-bottom:5px}
 .field .hint{font-weight:400;color:var(--muted);font-size:.88rem}
 .field input,.field select,.field textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:10px;padding:12px;font-size:1.05rem;background:#fff;color:var(--ink)}
-.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid #bbf7d0;border-color:var(--green)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid #FDE68A;border-color:var(--green)}
 .btn{display:inline-block;border:0;border-radius:11px;padding:12px 20px;font-size:1.05rem;font-weight:700;cursor:pointer}
 .btn-go{background:var(--green);color:#fff}
 .btn-go:hover{background:var(--green-d)}
@@ -93,7 +93,7 @@ p{margin:.5rem 0}
 .bar-labels{display:flex;gap:4px;margin-top:6px}
 .bar-labels span{flex:1;text-align:center;font-size:.8rem;color:var(--muted)}
 .bar-wrap .bar{flex:1;background:var(--green);border-radius:4px 4px 0 0;min-height:3px}
-.bar-wrap .bar:nth-child(even){background:#22c55e}
+.bar-wrap .bar:nth-child(even){background:#F59E0B}
 .bar-cap{font-size:.85rem;color:var(--muted);margin-top:8px}
 .chart-cap{font-size:.88rem;color:var(--muted);margin-top:6px}
 .steps{counter-reset:s;list-style:none;padding:0}
@@ -111,7 +111,7 @@ p{margin:.5rem 0}
 .teaser{border:1.5px solid var(--amber);background:var(--amber-l);border-radius:var(--radius);padding:12px 14px;margin:18px 0}
 .teaser,.teaser summary,.teaser p{color:#292524}
 .teaser .muted{color:#57534e}
-.teaser a{color:#14532d}
+.teaser a{color:#0B1F3A}
 .teaser summary{cursor:pointer;font-weight:700;list-style:none}
 .teaser summary::-webkit-details-marker{display:none}
 .teaser .play{margin-top:10px}
@@ -186,9 +186,9 @@ p{margin:.5rem 0}
 }
 @media (prefers-color-scheme:dark){
   :root{--bg:#0b1220;--surface:#111c33;--ink:#e2e8f0;--muted:#94a3b8;--line:#243449}
-  a{color:#4ade80}
-  .feedback .thanks,.cat-tile .n{color:#4ade80}
-  .ask-msg a{color:#4ade80}
+  a{color:#FBBF24}
+  .feedback .thanks,.cat-tile .n{color:var(--cat-c,#FBBF24)}
+  .ask-msg a{color:#FBBF24}
   .ask-msg.user a{color:var(--accent)}
   .head-search input,.search-big input,.ask-input input,.feedback textarea{background:#0b1220;color:var(--ink);border-color:#334155}
   .search-results,.search-results a{color:var(--ink)}
@@ -210,7 +210,7 @@ p{margin:.5rem 0}
 /* --- Round 6: daily hero, streak, WhatsApp share --- */
 .btn-wa{background:#25D366;color:#fff}
 .btn-wa:hover{background:#1da851}
-.daily-hero{background:linear-gradient(135deg,#166534,#15803d);background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0}
+.daily-hero{background:linear-gradient(135deg,#0B1F3A,#081426);background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0}
 .daily-hero h2{color:#fff;margin-top:0}
 .daily-hero a{color:#fde68a}
 .daily-hero .streak-pill{display:inline-block;background:#f59e0b;color:#1c1005;font-weight:800;border-radius:999px;padding:4px 12px;margin:4px 0}
@@ -223,8 +223,8 @@ p{margin:.5rem 0}
 .sci-out{font-size:32px;font-weight:800;word-break:break-all}
 .sci-keys{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .sci-key{padding:14px 4px;font-size:17px;font-weight:700;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer}
-.sci-key:active{background:#dcfce7}
-.sci-key.fn{background:#dcfce7;border-color:#86efac;color:#14532d}
+.sci-key:active{background:#DBEAFE}
+.sci-key.fn{background:#DBEAFE;border-color:#93C5FD;color:#0B1F3A}
 .sci-key.op{background:#fef3c7;border-color:#fcd34d}
 .sci-key.util{background:#e2e8f0}
 .sci-key.eq{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -265,7 +265,7 @@ body.fcn-custom-bg{background-size:cover;background-attachment:fixed;background-
 .gcard .gname{font-size:18px;font-weight:800;color:#0F172A}
 .gcard .gname::after{content:"";position:absolute;inset:0}
 .gcard .pill{background:rgba(255,255,255,.88);border:1px solid rgba(15,23,42,.12);color:#0F172A}
-.gcard .rec-badge{background:#166534;color:#fff;border-color:#166534}
+.gcard .rec-badge{background:#0B1F3A;color:#fff;border-color:#0B1F3A}
 .gcard .small{color:#334155}
 .gcard .glevel{font-size:13px;font-weight:700;margin-top:6px;color:#1e293b}
 .rec-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,260px);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 16px;margin:8px 0 18px}
@@ -288,3 +288,15 @@ body.fcn-custom-bg{background-size:cover;background-attachment:fixed;background-
 .fcn-modal .fcn-dl-install{margin:2px 0}
 .fcn-modal .dl-note{margin:.35rem 0 .9rem}
 body.fcn-modal-open{overflow:hidden}
+
+/* v7.4: hide the Download button inside the installed app (standalone
+   display-mode) - it must only show in a regular browser tab. The
+   html.fcn-standalone rule is the JS fallback (iOS navigator.standalone). */
+@media (display-mode: standalone){ .dl-btn{display:none !important} }
+html.fcn-standalone .dl-btn{display:none !important}
+/* v7.4: update-available banner (shown by site.js when a new service
+   worker is waiting). Tap to refresh loads the new version. */
+.fcn-update-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:300;background:#0B1F3A;color:#fff;border:1px solid #F59E0B;border-radius:12px;padding:10px 12px;box-shadow:0 8px 30px rgba(2,6,23,.45);display:flex;gap:10px;align-items:center;font-weight:600;max-width:calc(100vw - 24px)}
+.fcn-update-banner button{border:0;border-radius:9px;padding:8px 12px;font-weight:800;cursor:pointer}
+#fcn-update-btn{background:#F59E0B;color:#1c1005}
+#fcn-update-x{background:rgba(255,255,255,.16);color:#fff}

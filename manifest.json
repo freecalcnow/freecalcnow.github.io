@@ -1,1 +1,31 @@
-{"background_color":"#166534","description":"15,402 free calculators — money, health, maths, converters — plus 81 games and a new puzzle every day. Free, instant, no sign-up.","display":"standalone","icons":[{"purpose":"any","sizes":"192x192","src":"/icon-192.png","type":"image/png"},{"purpose":"any","sizes":"512x512","src":"/icon-512.png","type":"image/png"},{"purpose":"maskable","sizes":"512x512","src":"/icon-512.png","type":"image/png"}],"name":"FreeCalcNow — Free Online Calculators","orientation":"portrait-primary","scope":"/","short_name":"FreeCalcNow","start_url":"/","theme_color":"#166534"}
+{
+  "background_color": "#0B1F3A",
+  "description": "15,402 free calculators \u2014 money, health, maths, converters \u2014 plus 101 games and a new puzzle every day. Free, instant, no sign-up.",
+  "display": "standalone",
+  "icons": [
+    {
+      "purpose": "any",
+      "sizes": "192x192",
+      "src": "/icon-192.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "512x512",
+      "src": "/icon-512.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "/icon-512.png",
+      "type": "image/png"
+    }
+  ],
+  "name": "FreeCalcNow \u2014 Free Online Calculators",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "short_name": "FreeCalcNow",
+  "start_url": "/",
+  "theme_color": "#0B1F3A"
+}

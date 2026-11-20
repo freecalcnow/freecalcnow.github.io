@@ -2,7 +2,7 @@
    Caches the homepage shell + shared assets on first visit; tool and game
    pages are cached as they are visited (network-first, so answers are never
    stale). No push, no background sync, no tracking. */
-var VERSION = "fcn-v7.3";
+var VERSION = "fcn-v7.4";
 var SHELL = [
   "/",
   "/assets/style.css",
@@ -12,9 +12,16 @@ var SHELL = [
   "/assets/daily.js",
   "/icon-192.png",
   "/icon-512.png",
+  "/apple-touch-icon.png",
+  "/favicon.ico",
   "/og-image.png",
   "/manifest.json"
 ];
+/* v7.4: let the page ask a waiting worker to take over immediately, so
+   "Tap to refresh" switches to the new version without delay. */
+self.addEventListener("message", function(e){
+  if(e.data && e.data.type === "SKIP_WAITING") self.skipWaiting();
+});
 self.addEventListener("install", function(e){
   e.waitUntil(
     caches.open(VERSION).then(function(c){ return c.addAll(SHELL); }).catch(function(){})

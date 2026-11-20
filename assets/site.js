@@ -707,7 +707,7 @@
    owner can see which build is live. */
 (function(){
   "use strict";
-  var VER="v7.3";
+  var VER="v7.4";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
   function stampVersion(){
     try{
@@ -797,4 +797,70 @@
     document.querySelectorAll(".fcn-dl-install").forEach(armInstall);
   }
   ready(init);
+})();
+
+/* ---------- v7.4: hide Download button when installed + auto-update ----------
+   (1) Installed-app detection: when the site runs as the installed PWA
+   (display-mode: standalone, or iOS navigator.standalone), the header
+   "Download app" button is hidden — it must only show in a regular
+   browser tab. CSS hides it too (@media display-mode: standalone);
+   this JS covers iOS and any browser without that media query.
+   (2) Auto-update: on every launch the page asks the service worker to
+   check for a new version (reg.update()). When a new worker finishes
+   installing, a small banner offers "Update available — tap to refresh".
+   The tap tells the waiting worker to take over (SKIP_WAITING) and
+   reloads, so the new version appears. User data is NEVER touched here:
+   favourites, game progress and settings live in localStorage
+   (fcn-favs-v1, fcn-levels-v1, fcn-daily-scores-v1, fcn-settings-v1)
+   and IndexedDB — this code reads no storage at all, and the service
+   worker's activate step only deletes old Cache Storage entries. */
+(function(){
+  "use strict";
+  function isStandalone(){
+    try{ if(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true; }catch(e){}
+    return window.navigator.standalone===true;
+  }
+  function hideDownload(){
+    try{
+      document.documentElement.classList.add("fcn-standalone");
+      var btns=document.querySelectorAll(".dl-btn");
+      for(var i=0;i<btns.length;i++){ btns[i].style.display="none"; }
+    }catch(e){}
+  }
+  function ready74(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
+  ready74(function(){ if(isStandalone()) hideDownload(); });
+  window.addEventListener("load",function(){ if(isStandalone()) hideDownload(); });
+  function showUpdateBanner(reg){
+    if(document.getElementById("fcn-update-banner")) return;
+    var b=document.createElement("div");
+    b.className="fcn-update-banner"; b.id="fcn-update-banner";
+    b.innerHTML='<span>Update available — new calculators &amp; fixes.</span>'
+      +'<button type="button" id="fcn-update-btn">Tap to refresh</button>'
+      +'<button type="button" id="fcn-update-x" aria-label="Dismiss">✕</button>';
+    document.body.appendChild(b);
+    document.getElementById("fcn-update-btn").addEventListener("click",function(){
+      try{ if(reg && reg.waiting) reg.waiting.postMessage({type:"SKIP_WAITING"}); }catch(e){}
+      setTimeout(function(){ window.location.reload(); },300);
+    });
+    document.getElementById("fcn-update-x").addEventListener("click",function(){ b.remove(); });
+  }
+  function checkUpdate(){
+    if(!("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.getRegistration().then(function(reg){
+      if(!reg) return;
+      if(reg.waiting) ready74(function(){ showUpdateBanner(reg); });
+      try{ reg.update(); }catch(e){}
+      reg.addEventListener("updatefound",function(){
+        var w=reg.installing;
+        if(!w) return;
+        w.addEventListener("statechange",function(){
+          if(w.state==="installed" && navigator.serviceWorker.controller){
+            ready74(function(){ showUpdateBanner(reg); });
+          }
+        });
+      });
+    }).catch(function(){});
+  }
+  window.addEventListener("load",checkUpdate);
+  if(document.readyState==="complete") checkUpdate();
 })();
