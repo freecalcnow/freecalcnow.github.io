@@ -61,7 +61,7 @@ body.fcn-custom-bg .ghub-intro{background:rgba(15,23,42,.94);color:#f1f5f9}
 .snake-hud .hud-chip{background:rgba(255,255,255,.94);border-radius:12px;padding:8px 12px;font-weight:800;color:#0F172A;display:flex;gap:6px;align-items:center}
 .snake-hud .hud-chip small{font-weight:600;color:#64748b}
 .snake-hud .hud-chip.trophy{background:#F59E0B;color:#0F172A}
-#snake-canvas{display:block;width:100%;max-width:480px;height:auto;margin:0 auto;border-radius:12px;touch-action:none;background:#7cc242}
+#snake-canvas{display:block;width:100%;max-width:100%;height:auto;margin:0 auto;border-radius:12px;touch-action:none;background:#7cc242}
 .snake-ctl{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center;margin:12px auto 4px}
 .snake-ctl button{width:64px;height:52px;font-size:22px;font-weight:800;border:0;border-radius:12px;background:rgba(255,255,255,.94);color:#0F172A;cursor:pointer}
 .snake-ctl button:active{background:#F59E0B}
@@ -71,11 +71,15 @@ body.fcn-custom-bg .ghub-intro{background:rgba(15,23,42,.94);color:#f1f5f9}
 .snake-over h2{color:#fff;margin:0 0 6px;font-size:26px}
 .snake-over p{color:#e2e8f0;margin:4px 0 14px}
 .snake-stage{position:relative;max-width:480px;margin:0 auto}
-body.theme-dark .fcn-players,body.theme-dark .fcn-howto{background:#1e293b;border-color:#334155;color:#e2e8f0}
-body.theme-dark .fcn-howto p,body.theme-dark .fcn-howto ol{color:#cbd5e1}
-body.theme-dark .fcn-howto-btn{background:#1e293b;color:#f1f5f9;border-color:#334155}
-body.theme-dark .fcn-pl-row{border-color:#1e293b}
-body.theme-dark .fcn-pl-note,body.theme-dark .fcn-pl-foot{color:#94a3b8}
+/* v9.3 dark mode: game pages follow the site theme. The site theme lives on
+   <html data-fcn-mode="dark"> (Settings) or the OS preference (class
+   fcn-os-dark, set by the head script); ?theme=dark still works via
+   body.theme-dark. The snake board/canvas art keeps its own colours. */
+html[data-fcn-mode="dark"] body .fcn-players,html[data-fcn-mode="dark"] body .fcn-howto,html.fcn-os-dark body .fcn-players,html.fcn-os-dark body .fcn-howto,body.theme-dark .fcn-players,body.theme-dark .fcn-howto{background:#1e293b;border-color:#334155;color:#e2e8f0}
+html[data-fcn-mode="dark"] body .fcn-howto p,html[data-fcn-mode="dark"] body .fcn-howto ol,html.fcn-os-dark body .fcn-howto p,html.fcn-os-dark body .fcn-howto ol,body.theme-dark .fcn-howto p,body.theme-dark .fcn-howto ol{color:#cbd5e1}
+html[data-fcn-mode="dark"] body .fcn-howto-btn,html.fcn-os-dark body .fcn-howto-btn,body.theme-dark .fcn-howto-btn{background:#1e293b;color:#f1f5f9;border-color:#334155}
+html[data-fcn-mode="dark"] body .fcn-pl-row,html.fcn-os-dark body .fcn-pl-row,body.theme-dark .fcn-pl-row{border-color:#1e293b}
+html[data-fcn-mode="dark"] body .fcn-pl-note,html[data-fcn-mode="dark"] body .fcn-pl-foot,html.fcn-os-dark body .fcn-pl-note,html.fcn-os-dark body .fcn-pl-foot,body.theme-dark .fcn-pl-note,body.theme-dark .fcn-pl-foot{color:#94a3b8}
 
 /* --- v9.1 game header (owner report 20 Nov 2026): navy/gold chrome, ONE row,
    scrolls away with the page (NOT sticky). Logo + hamburger on phones; the nav
@@ -144,3 +148,13 @@ body.theme-dark .fcn-pl-note,body.theme-dark .fcn-pl-foot{color:#94a3b8}
   .ask-fab{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:52px;height:52px}
   .ask-panel{right:0;left:0;bottom:0;width:100%;max-height:78vh;border-radius:16px 16px 0 0}
 }
+
+/* v9.3 — assistant panel follows dark mode on game pages (it stays white
+   in dark mode without these; game pages don't load style.css). */
+html[data-fcn-mode="dark"] body .ask-panel,html.fcn-os-dark body .ask-panel,body.theme-dark .ask-panel{background:#111c33;border-color:#243449}
+html[data-fcn-mode="dark"] body .ask-msg,html.fcn-os-dark body .ask-msg,body.theme-dark .ask-msg{background:#1e293b;color:#e2e8f0}
+html[data-fcn-mode="dark"] body .ask-msg.user,html.fcn-os-dark body .ask-msg.user,body.theme-dark .ask-msg.user{background:#1e3a5f;color:#e2e8f0}
+html[data-fcn-mode="dark"] body .ask-msg a,html.fcn-os-dark body .ask-msg a,body.theme-dark .ask-msg a{color:#FBBF24}
+html[data-fcn-mode="dark"] body .ask-chips button,html.fcn-os-dark body .ask-chips button,body.theme-dark .ask-chips button{background:#111c33;color:#e2e8f0;border-color:#334155}
+html[data-fcn-mode="dark"] body .ask-input,html.fcn-os-dark body .ask-input,body.theme-dark .ask-input{border-top-color:#243449}
+html[data-fcn-mode="dark"] body .ask-input input,html.fcn-os-dark body .ask-input input,body.theme-dark .ask-input input{background:#0b1220;color:#e2e8f0;border-color:#334155}

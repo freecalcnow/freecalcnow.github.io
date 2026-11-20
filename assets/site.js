@@ -730,6 +730,38 @@
     sr.appendChild(btn);
   })();
 
+  /* ---------- v9.3 Tier 1: share-card privacy note + compare mode ----------
+     The share row already defaults to a clean link (resultUrl(false)); the
+     note makes that promise visible on the card. Compare saves up to 3
+     scenarios (tool + inputs + big result) on this device only; they are
+     shown side by side on /compare/. Nothing leaves the device. */
+  (function(){
+    var sr2=document.querySelector(".share-row");
+    if(!sr2) return;
+    var note=document.createElement("p");
+    note.className="share-note";
+    note.textContent="Shared links are clean \u2014 your numbers are never included unless you choose \u201CCopy result link\u201D.";
+    sr2.appendChild(note);
+    if(!window.FCN_PAGE || !FCN_PAGE.toolId) return;
+    var cb=document.createElement("button");
+    cb.type="button"; cb.className="btn btn-ghost"; cb.textContent="Save scenario to compare";
+    cb.addEventListener("click", function(){
+      try{
+        var key="fcn-compare-v1";
+        var items=JSON.parse(localStorage.getItem(key)||"[]")||[];
+        var inputs={};
+        document.querySelectorAll("#tool-form input, #tool-form select").forEach(function(el){ if(el.name||el.id) inputs[el.name||el.id]=el.value; });
+        var url=resultUrl(true);
+        items=items.filter(function(it){ return it.url!==url; });
+        items.unshift({tool:FCN_PAGE.toolId, name:FCN_PAGE.toolName, inputs:inputs, result:bigResultText(), url:url, ts:Date.now()});
+        localStorage.setItem(key, JSON.stringify(items.slice(0,3)));
+        cb.textContent="\u2713 Saved \u2014 open /compare/";
+        setTimeout(function(){ cb.textContent="Save scenario to compare"; }, 2500);
+      }catch(e){ cb.textContent="Could not save on this device"; }
+    });
+    sr2.appendChild(cb);
+  })();
+
   /* ---------- share row: sit directly under the result (v7.1) ----------
      The share block is baked at the bottom of every tool page (after the
      feedback section), so on a phone it sat far below the answer. Move it
@@ -840,7 +872,7 @@
    owner can see which build is live. */
 (function(){
   "use strict";
-  var VER="v9.2";
+  var VER="v9.3";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
   function stampVersion(){
     try{

@@ -366,3 +366,18 @@ html[data-fcn-mode="dark"] body.fcn-custom-bg #set-lang{background:#0b1220;color
 .sh.green{background:#22c55e}.sh.yellow{background:#eab308}.sh.grey{background:#94a3b8}
 .rel-ico{width:28px;height:28px;vertical-align:-7px;margin-right:2px}
 .word-tile{display:inline-block;width:22px;height:22px;border-radius:5px;background:#22c55e;vertical-align:-5px;margin-right:2px}
+
+/* v9.3 — homepage quick-nav row: the hamburger menu links, visible directly
+   on the home page (owner 20 Nov 2026). Wraps on phones, follows the theme
+   via var(--surface)/var(--line)/var(--ink). No green. */
+.home-nav{background:var(--surface);border-bottom:1px solid var(--line);padding:10px 0}
+.home-nav .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.home-nav a{display:inline-flex;align-items:center;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font-weight:700;text-decoration:none;font-size:.95rem}
+.home-nav a:hover{border-color:#F59E0B;text-decoration:none}
+.home-nav a:focus-visible{outline:3px solid #FDE68A;outline-offset:2px}
+.home-nav a.home-nav-dl{background:#F59E0B;border-color:#F59E0B;color:#1c1005;font-weight:800}
+/* v9.3 Tier 1 — share-card privacy note under the share row (site.js adds it). */
+.share-note{font-size:.85rem;color:var(--muted);margin:10px 0 0}
+/* v9.3 Tier 1 — formula/source line under a tool's formula (golden-tested tools only). */
+.formula-src{font-size:.9rem;color:var(--muted);margin:6px 0 0}
+.formula-src b{color:var(--ink)}
