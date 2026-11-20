@@ -61,16 +61,16 @@ body.fcn-custom-bg .ghub-intro{background:rgba(15,23,42,.94);color:#f1f5f9}
 .snake-hud .hud-chip{background:rgba(255,255,255,.94);border-radius:12px;padding:8px 12px;font-weight:800;color:#0F172A;display:flex;gap:6px;align-items:center}
 .snake-hud .hud-chip small{font-weight:600;color:#64748b}
 .snake-hud .hud-chip.trophy{background:#F59E0B;color:#0F172A}
-#snake-canvas{display:block;width:100%;max-width:480px;height:auto;margin:0 auto;border-radius:12px;touch-action:none;background:#7cc242}
-.snake-ctl{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center;margin:12px auto 4px}
-.snake-ctl button{width:64px;height:52px;font-size:22px;font-weight:800;border:0;border-radius:12px;background:rgba(255,255,255,.94);color:#0F172A;cursor:pointer}
+#snake-canvas{display:block;width:100%;max-width:640px;height:auto;margin:0 auto;border-radius:12px;touch-action:none;background:#7cc242}
+.snake-ctl{display:grid;grid-template-columns:repeat(3,76px);gap:10px;justify-content:center;margin:14px auto 4px}
+.snake-ctl button{width:76px;height:64px;font-size:28px;font-weight:800;border:0;border-radius:14px;background:rgba(255,255,255,.94);color:#0F172A;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .snake-ctl button:active{background:#F59E0B}
 .snake-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .snake-actions .btn{flex:1;min-width:120px;text-align:center}
 .snake-over{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(11,31,58,.78);color:#fff;border-radius:12px;text-align:center;padding:20px}
 .snake-over h2{color:#fff;margin:0 0 6px;font-size:26px}
 .snake-over p{color:#e2e8f0;margin:4px 0 14px}
-.snake-stage{position:relative;max-width:480px;margin:0 auto}
+.snake-stage{position:relative;max-width:640px;margin:0 auto}
 body.theme-dark .fcn-players,body.theme-dark .fcn-howto{background:#1e293b;border-color:#334155;color:#e2e8f0}
 body.theme-dark .fcn-howto p,body.theme-dark .fcn-howto ol{color:#cbd5e1}
 body.theme-dark .fcn-howto-btn{background:#1e293b;color:#f1f5f9;border-color:#334155}

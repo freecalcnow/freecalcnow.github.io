@@ -2,19 +2,24 @@
    Caches the homepage shell + shared assets on first visit; tool and game
    pages are cached as they are visited (network-first, so answers are never
    stale). No push, no background sync, no tracking. */
-var VERSION = "fcn-v8";
+var VERSION = "fcn-v8.1";
 var SHELL = [
   "/",
   "/assets/style.css",
   "/assets/engine.js",
   "/assets/site.js",
   "/assets/assistant.js",
+  "/assets/i18n.js",
   "/assets/bots.js",
   "/assets/games-v8.css",
   "/assets/daily.js",
+  "/assets/logo-144.png",
+  "/icon-192-v8.1.png",
   "/icon-192.png",
+  "/icon-512-v8.1.png",
   "/icon-512.png",
-  "/apple-touch-icon.png",
+  "/apple-touch-icon-v8.1.png",
+  "/favicon-v8.1.ico",
   "/favicon.ico",
   "/og-image.png",
   "/manifest.json"
@@ -62,4 +67,13 @@ self.addEventListener("fetch", function(e){
       }).catch(function(){ return caches.match(e.request); })
     );
   }
+});
+
+self.addEventListener("notificationclick", function(e){
+  e.notification.close();
+  var url = (e.notification.data && e.notification.data.url) || "/games/daily-number/";
+  e.waitUntil(clients.matchAll({type:"window", includeUncontrolled:true}).then(function(list){
+    for(var i=0;i<list.length;i++){ if("focus" in list[i]) return list[i].focus(); }
+    if(clients.openWindow) return clients.openWindow(url);
+  }));
 });

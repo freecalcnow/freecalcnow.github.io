@@ -30,6 +30,22 @@
     if(h<17) return "Good afternoon";
     return "Good evening";
   }
+  /* Roman Urdu: the owner chats in Roman Urdu, so greetings and the honest
+     "I can't answer that" reply come back in simple Roman Urdu too. */
+  var RU_WORDS=/\b(kya|hai|hain|kitna|kitne|kitni|kaise|batao|mera|meri|mujhe|karo|chahiye|kon|kab|kahan|aaj|kal|paisa|hisab|aur|nahi|kyun|kaisa|bhai|acha|theek|salam|salaam|assalam|aoa)\b/;
+  function isRU(ql){ return RU_WORDS.test(ql); }
+  var RU_HELLO="Salam! Main FreeCalcNow ka helper hoon. Main hisaab kar sakta hoon, units badal sakta hoon, aur koi bhi calculator dhoond sakta hoon. Koshish karo: “15% of 240”, “10 miles to km”, ya “mortgage”.";
+  var RU_NOANSWER="Ye main nahi bata sakta — mujhe live cheezein (jaise net worth, mausam ya news) nahi pata, mere paas internet nahi hai. Lekin main hisaab, conversion aur calculator dhoond sakta hoon. Koshish karo: “mortgage”, “BMI”, “15% of 240” ya “10 miles to km”.";
+  /* Greeting in the user's chosen app language when i18n has it. */
+  function greetText(){
+    try{
+      if(window.FCN_I18N && FCN_I18N.t){
+        var g=FCN_I18N.t("ask.greet");
+        if(g && g!=="ask.greet") return g.replace("{n}", toolCount());
+      }
+    }catch(e){}
+    return null;
+  }
   /* ---------- index + search ---------- */
   var POPULAR=[
     {id:"mortgage",name:"Mortgage Calculator",cat:"Finance"},
@@ -90,18 +106,21 @@
   }
   function searchTools(q, n){
     n = n || 3;
-    var raw = q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){ return w.length>2; });
+    /* Words of 2+ letters; matching is on whole words of the tool name
+       (never a bare substring), so "elon" can never match "Elo". A hit
+       needs a real word match in the name (score >= 3 AND strong). */
+    var raw = q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){ return w.length>=2; });
     if(!raw.length) return [];
     var words = expandWords(raw);
     var list = (INDEX && INDEX.length) ? INDEX : POPULAR;
     var scored = list.map(function(t){
-      var name=t.name.toLowerCase(), hay=(name+" "+(t.blurb||"")+" "+t.cat).toLowerCase(), s=0;
+      var name=t.name.toLowerCase(), nameWords=name.split(/[^a-z0-9]+/).filter(Boolean),
+          hay=(name+" "+(t.blurb||"")+" "+t.cat).toLowerCase(), s=0, strong=false;
       words.forEach(function(w){
-        if(name.indexOf(w)>=0) s+=3;
+        if(nameWords.indexOf(w)>=0){ s+=3; strong=true; }
         else if(hay.indexOf(w)>=0) s+=1;
         else {
-          /* prefix or one-letter typo, e.g. "mortage", "bmii", "lon" */
-          var nameWords=name.split(/[^a-z]+/);
+          /* prefix or one-letter typo on a name word — weak only */
           for(var i=0;i<nameWords.length;i++){
             var nw=nameWords[i];
             if(nw.length<3 || w.length<3) continue;
@@ -110,8 +129,8 @@
           }
         }
       });
-      return {t:t, s:s};
-    }).filter(function(x){ return x.s>0; }).sort(function(a,b){ return b.s-a.s; });
+      return {t:t, s:s, strong:strong};
+    }).filter(function(x){ return x.s>=3 && x.strong; }).sort(function(a,b){ return b.s-a.s; });
     return scored.slice(0,n).map(function(x){ return x.t; });
   }
   /* ---------- sums ---------- */
@@ -130,6 +149,20 @@
         if(r===null) return {text:"I can't divide by zero.", done:true};
       }
     }
+    // "what percent is 30 of 240" / "30 is what percent of 240"
+    m = q.match(/(-?[\d.,]+)\s*(?:is\s+)?what\s*(?:percent|%)\s*of\s*(-?[\d.,]+)/);
+    if(m){ var x=parseFloat(m[1].replace(/,/g,"")), y=parseFloat(m[2].replace(/,/g,"")); if(isFinite(x)&&isFinite(y)&&y!==0) return {text: fmtN(x)+" is "+fmtN(x/y*100)+"% of "+fmtN(y)+".", done:true}; }
+    m = q.match(/what\s*(?:percent|%)\s*is\s+(-?[\d.,]+)\s+of\s+(-?[\d.,]+)/);
+    if(m){ var x2=parseFloat(m[1].replace(/,/g,"")), y2=parseFloat(m[2].replace(/,/g,"")); if(isFinite(x2)&&isFinite(y2)&&y2!==0) return {text: fmtN(x2)+" is "+fmtN(x2/y2*100)+"% of "+fmtN(y2)+".", done:true}; }
+    // "increase 200 by 10%" / "decrease 200 by 10%"
+    m = q.match(/(increase|decrease|raise|reduce)\s+(-?[\d.,]+)\s+by\s+(-?[\d.,]+)\s*%/);
+    if(m){ var v=parseFloat(m[2].replace(/,/g,"")), pc=parseFloat(m[3].replace(/,/g,"")); if(isFinite(v)&&isFinite(pc)){ var nv=(m[1]==="increase"||m[1]==="raise")?v*(1+pc/100):v*(1-pc/100); return {text: fmtN(v)+" "+(m[1]==="increase"||m[1]==="raise"?"increased":"decreased")+" by "+fmtN(pc)+"% = "+fmtN(nv)+".", done:true}; } }
+    // "half of 100", "double 45", "triple 20", "quarter of 80"
+    m = q.match(/(half|double|triple|quarter)\s+of\s+(-?[\d.,]+)/);
+    if(m){ var n2=parseFloat(m[2].replace(/,/g,"")); if(isFinite(n2)){ var out2=m[1]==="half"?n2/2:m[1]==="double"?n2*2:m[1]==="triple"?n2*3:n2/4; return {text: m[1]+" of "+fmtN(n2)+" = "+fmtN(out2)+".", done:true}; } }
+    // "simple interest on 1000 at 5% for 2 years"
+    m = q.match(/simple interest.*?(-?[\d.,]+).*?(-?[\d.,]+)\s*%.*?(-?[\d.,]+)\s*years?/);
+    if(m){ var P=parseFloat(m[1].replace(/,/g,"")), R=parseFloat(m[2].replace(/,/g,"")), T=parseFloat(m[3].replace(/,/g,"")); if(isFinite(P)&&isFinite(R)&&isFinite(T)){ var I=P*R*T/100; return {text: "Simple interest on "+fmtN(P)+" at "+fmtN(R)+"% for "+fmtN(T)+" years = "+fmtN(I)+" (total "+fmtN(P+I)+").", done:true}; } }
     return null;
   }
   function fmtN(x){
@@ -191,8 +224,40 @@
     {re:/percentage|percent/, text:"A percentage is a part out of 100. 25% of 200 is 50. The calculator works out percentages, percentage change, and “what percent is X of Y”.", link:{id:"percentage", name:"Percentage Calculator"}},
     {re:/discount/, text:"A discount is money taken off a price. A 20% discount on $50 means you pay $40. The calculator shows the discount and the price you actually pay.", link:{id:"discount", name:"Discount Calculator"}},
     {re:/\bage\b|how old/, text:"Your age is the time from your date of birth until today — in years, months and days. The calculator works it out exactly, including leap years.", link:{id:"age", name:"Age Calculator"}},
-    {re:/retire|pension/, text:"Retirement saving means putting money aside now so you have it when you stop working. Small monthly savings, grown over many years with interest, can become a large amount.", link:{id:"retirement", name:"Retirement Calculator"}}
+    {re:/retire|pension/, text:"Retirement saving means putting money aside now so you have it when you stop working. Small monthly savings, grown over many years with interest, can become a large amount.", link:{id:"retirement", name:"Retirement Calculator"}},
+    {re:/interest rate/, text:"An interest rate is the price of borrowing money — or the reward for saving it. A 5% yearly rate means you pay (or earn) $5 a year for every $100. Lower is better when you borrow; higher is better when you save.", link:{id:"simple-interest", name:"Simple Interest Calculator"}},
+    {re:/\bapr\b/, text:"APR (Annual Percentage Rate) is the true yearly cost of a loan — the interest plus the fees, all in one number. Two loans with the same interest can have different APRs, so APR is the fair way to compare them.", link:{id:"apr", name:"True APR Calculator (with fees)"}},
+    {re:/simple interest/, text:"Simple interest is interest only on the money you first put in — it never earns interest on itself. $1,000 at 5% simple interest for 2 years earns $100. Compound interest earns more, because it also pays interest on the interest.", link:{id:"simple-interest", name:"Simple Interest Calculator"}},
+    {re:/savings account|savings/, text:"A savings account is a bank account that pays you interest on the money you keep in it. The interest is usually small, but your money is safe and you can take it out any time.", link:{id:"compound", name:"Compound Interest Calculator"}},
+    {re:/credit score/, text:"A credit score is a number (often 300–850) that shows how safely you have borrowed and repaid money in the past. A higher score means banks trust you more, so you get better loan rates. Paying bills on time raises it.", link:{id:"loan", name:"Loan / EMI Calculator"}},
+    {re:/\bbmr\b|basal metabolic/, text:"BMR (Basal Metabolic Rate) is the calories your body burns just to stay alive — breathing, heartbeat, keeping warm — even if you lie in bed all day. Moving and exercise burn extra on top of it.", link:{id:"bmr", name:"BMR Calculator"}},
+    {re:/exchange rate/, text:"An exchange rate is how much of one currency you get for another — for example how many euros $100 buys. Rates move every minute with the markets, so I can't quote today's rate, but the converter below uses live rates when you are online.", link:{id:"currency-converter", name:"Currency Converter — Live Exchange Rates"}},
+    {re:/deflation/, text:"Deflation is the opposite of inflation — prices fall over time, so the same money buys more later. It sounds good, but it can hurt the economy because people stop spending, waiting for prices to drop further.", link:{id:"inflation", name:"Inflation Calculator"}},
+    {re:/percentage change|percent change/, text:"Percentage change shows how much something grew or shrank, compared with where it started. If a price goes from $50 to $60, that is a 20% increase — (60 − 50) ÷ 50 × 100.", link:{id:"percentage", name:"Percentage Calculator"}},
+    {re:/tip percent|how much tip/, text:"A normal tip is 10% for okay service, 15% for good service, and 20% or more for great service. On a $40 bill, 15% is $6. The calculator splits the bill and the tip between everyone at the table.", link:{id:"tip", name:"Tip & Bill Split Calculator"}},
+    {re:/gpa scale|gpa mean/, text:"The GPA scale runs from 0 to 4. A = 4 points, B = 3, C = 2, D = 1, F = 0. Your GPA is the average of all your courses, weighted by how many credits each course is worth. Above 3.5 is usually excellent.", link:{id:"gpa", name:"GPA Calculator"}},
+    {re:/password strength|strong password/, text:"A strong password is long (12+ characters) and random — a mix of upper and lower letters, numbers and symbols, different for every site. Never reuse one password everywhere: if one site leaks, all your accounts fall.", link:{id:"password-gen", name:"Password Generator & Strength Checker"}},
+    {re:/qr code vs barcode|barcode/, text:"A QR code holds far more than a barcode — a barcode holds a short number, a QR code can hold a whole link or message, and a phone camera reads it from any angle. The generator below makes one for free.", link:{id:"qr", name:"QR Code Generator"}},
+    {re:/retirement age|retire at/, text:"There is no single retirement age — it depends on your country and your savings. The key number is how much you need each year after you stop working, and how much you must save monthly to reach it.", link:{id:"retirement", name:"Retirement Calculator"}},
+    {re:/bmi categor|bmi range|healthy bmi/, text:"BMI categories: below 18.5 is underweight, 18.5–24.9 is healthy, 25–29.9 is overweight, and 30 or above is obese. BMI is a rough guide — athletes with lots of muscle can score high and still be healthy.", link:{id:"bmi", name:"BMI Calculator"}},
+    {re:/calories in a pound|pound of fat/, text:"One pound of body fat holds about 3,500 calories. So to lose one pound a week, you need to eat about 500 fewer calories a day than you burn — food, movement, or both.", link:{id:"calorie", name:"Calorie (TDEE) Calculator"}}
   ];
+  /* ---------- honest limits: no live data, no people/news/weather ---------- */
+  function tryCant(ql){
+    if(/net worth/.test(ql)){
+      return {text:"I don't know anyone's net worth — figures like Elon Musk's change every day, and I have no live data or internet. But you can work out your own: add up everything you own, take away everything you owe, and the difference is your net worth.", done:true, link:{id:"net-worth", name:"Net Worth Calculator"}};
+    }
+    if(/exchange rate|dollar rate|euro rate|pound rate|bitcoin price|crypto price|stock price/.test(ql)){
+      return {text:"I don't know today's live rate or price — rates and prices move every minute, and I have no live data. The currency converter on this site uses live rates when you are online.", done:true, link:{id:"currency-converter", name:"Currency Converter — Live Exchange Rates"}};
+    }
+    if(/weather|forecast|will it rain|rain today|temperature outside/.test(ql)){
+      return {text:"I can't tell you the weather — I have no live data or internet. I can solve sums, convert units, find calculators and explain results. Try “15% of 240” or “mortgage”.", done:true};
+    }
+    if(/news|headline|what happened|latest/.test(ql) || /^(who is|who was|who won)\b/.test(ql) || /\b(elon musk|musk|celebrity|president|prime minister|taylor swift)\b/.test(ql)){
+      return {text:"I don't know that — I can't look up people, news or anything that changes, because I have no internet. I only know calculators, sums and conversions. Try “mortgage”, “BMI”, “15% of 240” or “10 miles to km”.", done:true};
+    }
+    return null;
+  }
   function tryConcept(ql){
     if(!/what is|what'?s|what does|mean|explain|tell me about|^about |^define /.test(ql)) return null;
     for(var i=0;i<CONCEPTS.length;i++){
@@ -214,9 +279,17 @@
     var nameGiven = nm ? setName(nm[1]) : false;
     /* greetings */
     if(/^(hi+|hello|hey|hii+|salam|aoa|salaam|assalamu alaikum|good morning|good afternoon|good evening)\b/.test(ql) || nameGiven){
-      var hello = greetWord() + (USER_NAME ? ", " + USER_NAME : "") + "! ";
-      if(nameGiven) hello = "Hi " + USER_NAME + "! Great to meet you. ";
-      hello += "I can solve sums, convert units, find any of the " + toolCount() + " calculators, or explain a result. Try “15% of 240”, “10 miles to km”, or “mortgage”.";
+      var hello;
+      if(isRU(ql) && !nameGiven) hello = RU_HELLO;
+      else {
+        var g = greetText();
+        if(g && !nameGiven) hello = g;
+        else {
+          hello = greetWord() + (USER_NAME ? ", " + USER_NAME : "") + "! ";
+          if(nameGiven) hello = "Hi " + USER_NAME + "! Great to meet you. ";
+          hello += "I can solve sums, convert units, find any of the " + toolCount() + " calculators, or explain a result. Try “15% of 240”, “10 miles to km”, or “mortgage”.";
+        }
+      }
       return {text: hello, done:true, links: suggestLinks()};
     }
     /* small talk */
@@ -245,6 +318,9 @@
     /* concept answers ("what is a mortgage?") */
     var concept = tryConcept(ql);
     if(concept) return concept;
+    /* honest limits: live facts, people, news, weather — never guess a tool */
+    var cant = tryCant(ql);
+    if(cant) return cant;
     // explain current result
     if(/explain|what does this mean|what is this result|my result/.test(ql) && PAGE.toolId){
       var big=document.querySelector("#result-big"), sub=document.querySelector("#result-sub"), formula=document.querySelector(".formula");
@@ -275,21 +351,33 @@
     if(/how many|what.*new|newest/.test(ql)){
       return {text:"There are " + toolCount() + " free calculators on FreeCalcNow right now, plus the Daily Number game and " + GAME_COUNT + " mini games. Every tool shows its working, and your numbers never leave your browser.", done:true};
     }
-    // find a tool by keywords — never a dead end
+    // find a tool by keywords — a weak match is NOT an answer: say so honestly
     return loadIndex().then(function(){
       var hits=searchTools(ql,3);
       if(hits.length){
         return {text:"Here is what I found for you:", done:true, links:hits};
       }
       var ctx = PAGE.toolId ? " You are on the "+PAGE.toolName+" page right now — I can explain its result, or find another tool for you." : "";
-      return {text:"I don't have an exact match for that yet."+ctx+"\n\nHere are three tools people use most — or tell me what you want to work out, for example “mortgage”, “BMI”, a sum like “15% of 240”, or a conversion like “10 miles to km”.", done:true, links: suggestLinks()};
+      var noAns = isRU(ql) ? RU_NOANSWER : "I can't answer that one — I don't know live facts like net worth, weather or news, and I have no internet. But I can solve sums, convert units, find any calculator, and explain results."+ctx+"\n\nHere are three tools people use most — or tell me what you want to work out, for example “mortgage”, “BMI”, a sum like “15% of 240”, or a conversion like “10 miles to km”.";
+      return {text:noAns, done:true, links: suggestLinks()};
     });
   }
   /* Test hook (also handy for the /ask/ page): window.FCN_ask("hi") */
   window.FCN_ask = answer;
   /* ---------- UI ---------- */
-  var panel, msgs, input, micBtn, rec=null, listening=false;
-  function addMsg(text, who, links){
+  /* No emoji anywhere: the microphone and stop icons are inline SVG. */
+  var MIC_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 15a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v5a4 4 0 0 0 4 4Zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.94V22h2v-3.06A8 8 0 0 0 20 11h-2Z"/></svg>';
+  var STOP_SVG='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>';
+  var panel=null, rec=null, listening=false, micCtx=null;
+  function greetHello(){
+    var g=greetText();
+    var hello = g ? g : ("Hi" + (USER_NAME ? " " + USER_NAME : "") + "! I know all " + toolCount() + " FreeCalcNow calculators");
+    if(PAGE.toolName) hello+=" — and you are on the "+PAGE.toolName+" page right now, so I can explain its result too";
+    hello+=".\n\nAsk a sum (“15% of 240”), a conversion (“10 miles to km”), or name a tool (“mortgage”). You can also tap the microphone and ask by voice.";
+    return hello;
+  }
+  function addMsg(text, who, links, ctx){
+    var box=ctx.msgs;
     var d=document.createElement("div");
     d.className="ask-msg"+(who==="user"?" user":"");
     d.textContent=text;
@@ -302,45 +390,71 @@
         d.appendChild(a);
       });
     }
-    msgs.appendChild(d);
-    msgs.scrollTop=msgs.scrollHeight;
+    box.appendChild(d);
+    box.scrollTop=box.scrollHeight;
   }
-  function send(q){
+  function send(q, ctx){
     q=(q||"").trim(); if(!q) return;
-    addMsg(q,"user");
-    input.value="";
+    addMsg(q,"user",null,ctx);
+    ctx.input.value="";
     var res=answer(q);
-    if(res && typeof res.then==="function"){ res.then(function(r){ addMsg(r.text,"bot", r.links || (r.link?[r.link]:null)); }); }
-    else if(res){ addMsg(res.text,"bot", res.links || (res.link?[res.link]:null)); }
+    if(res && typeof res.then==="function"){ res.then(function(r){ addMsg(r.text,"bot", r.links || (r.link?[r.link]:null), ctx); }); }
+    else if(res){ addMsg(res.text,"bot", res.links || (res.link?[res.link]:null), ctx); }
   }
-  function toggleMic(){
+  function toggleMic(ctx){
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if(!SR){
-      addMsg("Voice input isn't supported in this browser — please type your question instead. (Chrome and Edge on Android/desktop support voice.)","bot");
+      addMsg("Voice input isn't supported in this browser — please type your question instead. (Chrome and Edge on Android/desktop support voice.)","bot",null,ctx);
       return;
     }
     if(listening){ try{ rec.stop(); }catch(e){} return; }
+    micCtx=ctx;
     rec=new SR(); rec.lang="en-US"; rec.interimResults=false; rec.maxAlternatives=1;
     rec.onresult=function(e){
       var txt=e.results[0][0].transcript;
-      input.value=txt; send(txt);
+      ctx.input.value=txt; send(txt, ctx);
     };
-    rec.onend=function(){ listening=false; micBtn.classList.remove("on"); micBtn.textContent="🎤"; };
-    rec.onerror=function(){ listening=false; micBtn.classList.remove("on"); micBtn.textContent="🎤"; addMsg("I couldn't hear that — please try again or type instead.","bot"); };
-    try{ rec.start(); listening=true; micBtn.classList.add("on"); micBtn.textContent="●"; }catch(e){ addMsg("Voice input couldn't start — please type instead.","bot"); }
+    function micOff(){ listening=false; if(ctx.micBtn){ ctx.micBtn.classList.remove("on"); ctx.micBtn.innerHTML=MIC_SVG; } }
+    rec.onend=function(){ micOff(); };
+    rec.onerror=function(){ micOff(); addMsg("I couldn't hear that — please try again or type instead.","bot",null,ctx); };
+    try{ rec.start(); listening=true; ctx.micBtn.classList.add("on"); ctx.micBtn.innerHTML=STOP_SVG; }catch(e){ addMsg("Voice input couldn't start — please type instead.","bot",null,ctx); }
+  }
+  /* One chat builder for both places: the floating panel (every page) and
+     the inline chat on /ask/ (always visible, in the page flow, so the
+     keyboard can never push it off screen). */
+  function makeChat(hostEl, inline){
+    var wrap=el('<div class="'+(inline?'ask-inline':'')+'">'
+      +'<div class="ask-msgs"></div>'
+      +'<div class="ask-chips">'
+      +'<button type="button" data-q="Explain this result" data-i18n="ask.chip.explain">Explain this result</button>'
+      +'<button type="button" data-q="How do I use this tool?" data-i18n="ask.chip.how">How do I use this?</button>'
+      +'<button type="button" data-q="Daily Number game" data-i18n="ask.chip.daily">Play Daily Number</button>'
+      +'</div>'
+      +'<div class="ask-input"><button type="button" class="ask-mic" title="Ask by voice" data-i18n-aria="ask.voice">'+MIC_SVG+'</button><input type="text" placeholder="Ask a sum, a conversion, or name a tool…" autocomplete="off" data-i18n-ph="ask.placeholder"><button type="button" class="ask-send" data-i18n="ask.send">Send</button></div>'
+      +'</div>');
+    hostEl.appendChild(wrap);
+    var ctx={msgs:wrap.querySelector(".ask-msgs"), input:wrap.querySelector("input"), micBtn:wrap.querySelector(".ask-mic")};
+    wrap.querySelector(".ask-send").addEventListener("click",function(){ send(ctx.input.value, ctx); });
+    ctx.input.addEventListener("keydown",function(e){ if(e.key==="Enter") send(ctx.input.value, ctx); });
+    ctx.micBtn.addEventListener("click",function(){ toggleMic(ctx); });
+    wrap.querySelectorAll(".ask-chips button").forEach(function(b){
+      b.addEventListener("click",function(){ send(b.getAttribute("data-q"), ctx); });
+    });
+    return ctx;
   }
   function build(){
+    /* /ask/ page: the chat lives IN the page, always visible. */
+    var inlineHost=document.getElementById("ask-inline");
+    if(inlineHost){
+      var ictx=makeChat(inlineHost, true);
+      loadIndex();
+      addMsg(greetHello(),"bot",null,ictx);
+      return;
+    }
     if(document.querySelector(".ask-fab")) return;
-    var fab=el('<button class="ask-fab" type="button">Ask FreeCalcNow</button>');
+    var fab=el('<button class="ask-fab" type="button" data-i18n="ask.title">Ask FreeCalcNow</button>');
     panel=el('<div class="ask-panel" hidden>'
-      +'<div class="ask-head"><span>Ask FreeCalcNow</span><button type="button" id="ask-close" aria-label="Close">✕</button></div>'
-      +'<div class="ask-msgs" id="ask-msgs"></div>'
-      +'<div class="ask-chips">'
-      +'<button type="button" data-q="Explain this result">Explain this result</button>'
-      +'<button type="button" data-q="How do I use this tool?">How do I use this?</button>'
-      +'<button type="button" data-q="Daily Number game">Play Daily Number</button>'
-      +'</div>'
-      +'<div class="ask-input"><button type="button" class="ask-mic" id="ask-mic" title="Ask by voice">🎤</button><input id="ask-in" type="text" placeholder="Ask a sum, a conversion, or name a tool…" autocomplete="off"><button type="button" id="ask-send">Send</button></div>'
+      +'<div class="ask-head"><span data-i18n="ask.title">Ask FreeCalcNow</span><button type="button" id="ask-close" aria-label="Close">✕</button></div>'
       +'</div>');
     /* The button sits in the page flow after the content, not floating over
        it: on phones CSS makes it static, so it can never cover a button,
@@ -349,27 +463,14 @@
     if(mainEl && mainEl.parentNode){ mainEl.parentNode.insertBefore(fab, mainEl.nextSibling); }
     else { document.body.appendChild(fab); }
     document.body.appendChild(panel);
-    msgs=panel.querySelector("#ask-msgs");
-    input=panel.querySelector("#ask-in");
-    micBtn=panel.querySelector("#ask-mic");
+    var pctx=makeChat(panel, false);
     var open=function(){
       panel.hidden=false; fab.style.display="none"; loadIndex();
-      if(!msgs.children.length){
-        var hello="Hi" + (USER_NAME ? " " + USER_NAME : "") + "! I know all " + toolCount() + " FreeCalcNow calculators";
-        if(PAGE.toolName) hello+=" — and you are on the "+PAGE.toolName+" page right now, so I can explain its result too";
-        hello+=".\n\nAsk a sum (“15% of 240”), a conversion (“10 miles to km”), or name a tool (“mortgage”). You can also tap the microphone and ask by voice.";
-        addMsg(hello,"bot");
-      }
-      input.focus();
+      if(!pctx.msgs.children.length) addMsg(greetHello(),"bot",null,pctx);
+      pctx.input.focus();
     };
     fab.addEventListener("click",function(){ if(panel.hidden){ open(); } else { panel.hidden=true; fab.style.display=""; syncFab(); } });
     panel.querySelector("#ask-close").addEventListener("click",function(){ panel.hidden=true; fab.style.display=""; syncFab(); });
-    panel.querySelector("#ask-send").addEventListener("click",function(){ send(input.value); });
-    input.addEventListener("keydown",function(e){ if(e.key==="Enter") send(input.value); });
-    micBtn.addEventListener("click",toggleMic);
-    panel.querySelectorAll(".ask-chips button").forEach(function(b){
-      b.addEventListener("click",function(){ send(b.getAttribute("data-q")); });
-    });
     /* Keep the floating button off the hero: while the hero's bottom edge
        is still on screen the button would cover the hero text, so hide it
        until the user scrolls past the hero. Pages without a hero (tool

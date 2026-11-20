@@ -317,7 +317,7 @@
           n = (old && old.n) || 0;
         }
       }catch(e){}
-      streakEl.textContent = n > 0 ? ("🔥 " + n + "-day streak — keep it alive!") : "No streak yet — play today to start one!";
+            streakEl.innerHTML = n > 0 ? ('<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-3px"><path fill="currentColor" d="M13.5 2s.8 2.6.8 4.6c0 2-1.5 3.6-3.5 3.6S7.3 8.6 7.3 6.6c0-.8.3-1.6.8-2.3C6.2 6 5 8.6 5 11.3c0 4 3 7.2 7 7.2s7-3.2 7-7.2c0-3.4-2.4-6.6-5.5-9.3Z"/></svg> ' + n + "-day streak — keep it alive!") : "No streak yet — play today to start one!";
     }
     var recentBox = document.getElementById("recent-list");
     var recentSec = document.getElementById("recent-sec");
@@ -538,7 +538,7 @@
     var saved=null;
     try{ saved=JSON.parse(localStorage.getItem(key)||"null"); }catch(e){}
     var stars=box.querySelectorAll(".stars button"), picked=saved?saved.stars:0;
-    function paint(n){ stars.forEach(function(b,i){ b.classList.toggle("on", i<n); b.textContent = i<n ? "★" : "☆"; }); }
+    function paint(n){ stars.forEach(function(b,i){ b.classList.toggle("on", i<n); }); }
     stars.forEach(function(b,i){
       b.addEventListener("click", function(){ picked=i+1; paint(picked); });
     });
@@ -685,13 +685,19 @@
       if(localStorage.getItem("fcn-remind-shown")===t) return;
       localStorage.setItem("fcn-remind-shown", t);
       var title="FreeCalcNow — your daily puzzles are waiting";
-      var opts={body:"Daily Number, Word Guess and Sudoku are ready. Keep your streak alive!", tag:"fcn-daily"};
+      var opts={body:"Daily Number, Word Guess and Sudoku are ready. Keep your streak alive!", tag:"fcn-daily", icon:"/icon-512-v8.1.png", badge:"/icon-192-v8.1.png", data:{url:"/games/daily-number/"}};
+      function showFallback(){
+        try{
+          var n=new Notification(title, opts);
+          n.onclick=function(){ try{ window.focus(); location.href="/games/daily-number/"; }catch(e){} };
+        }catch(e){}
+      }
       if(navigator.serviceWorker && navigator.serviceWorker.getRegistration){
         navigator.serviceWorker.getRegistration().then(function(reg){
           if(reg && reg.showNotification) reg.showNotification(title, opts);
-          else new Notification(title, opts);
-        }).catch(function(){ try{ new Notification(title, opts); }catch(e){} });
-      } else new Notification(title, opts);
+          else showFallback();
+        }).catch(showFallback);
+      } else showFallback();
     }catch(e){}
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", fire);
@@ -707,7 +713,7 @@
    owner can see which build is live. */
 (function(){
   "use strict";
-  var VER="v8";
+  var VER="v8.1";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
   function stampVersion(){
     try{
@@ -735,13 +741,13 @@
       '<button type="button" class="fcn-modal-close" id="fcn-dl-close" aria-label="Close">✕</button>'+
       '<h2 id="fcn-dl-title">Download FreeCalcNow — install the app</h2>'+
       '<p class="small">Free, no account, no app-store download. It opens fast and works offline for pages you have already opened.</p>'+
-      '<h3>🤖 Android (phone or tablet)</h3>'+
-      '<p><button class="btn btn-go fcn-dl-install" type="button" data-fcn-dl="android">⬇ Install FreeCalcNow</button></p>'+
+      '<h3><img src="/assets/icons/android.svg" width="26" height="26" alt="" style="vertical-align:-6px"> Android (phone or tablet)</h3>'+
+      '<p><button class="btn btn-go fcn-dl-install" type="button" data-fcn-dl="android"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-3px"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></g></svg> Install FreeCalcNow</button></p>'+
       '<p class="small dl-note" id="fcn-dl-msg-android">One tap installs the app from your browser. If the button shows a message instead, use Chrome → ⋮ menu → <b>Install app</b> (or “Add to Home screen”).</p>'+
-      '<h3>🍎 iPhone &amp; iPad (iOS)</h3>'+
+      '<h3><img src="/assets/icons/apple.svg" width="26" height="26" alt="" style="vertical-align:-6px"> iPhone &amp; iPad (iOS)</h3>'+
       '<p class="small">Apple does not allow a one-tap install button — it takes 10 seconds: open this site in <b>Safari</b> → tap <b>Share</b> → <b>Add to Home Screen</b> → <b>Add</b>.</p>'+
-      '<h3>🪟 Windows &amp; 🍏 Mac</h3>'+
-      '<p><button class="btn btn-go fcn-dl-install" type="button" data-fcn-dl="desktop">⬇ Install on Windows / Mac</button></p>'+
+      '<h3><img src="/assets/icons/windows.svg" width="26" height="26" alt="" style="vertical-align:-6px"> Windows &amp; <img src="/assets/icons/apple.svg" width="26" height="26" alt="" style="vertical-align:-6px"> Mac</h3>'+
+      '<p><button class="btn btn-go fcn-dl-install" type="button" data-fcn-dl="desktop"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-3px"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></g></svg> Install on Windows / Mac</button></p>'+
       '<p class="small dl-note" id="fcn-dl-msg-desktop">There is no .exe or .dmg file — the honest way is the browser install. In <b>Chrome or Edge</b>: ⋮ menu → <b>Install FreeCalcNow</b>. In Safari on Mac: <b>File</b> → <b>Add to Dock</b>.</p>'+
       '<p class="small"><a href="/download/">Open the full download page →</a></p>'+
       '</div>';

@@ -90,7 +90,7 @@
     var accent=(opts&&opts.accent)||'#166534';
     var html='<div style="background:#fff;border:2px solid '+accent+';border-radius:14px;padding:12px 14px;margin-bottom:12px">'
       +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
-      +'<span style="background:'+accent+';color:#fff;font-weight:800;border-radius:20px;padding:4px 12px;font-size:15px">⭐ Level '+lv+'</span>'
+      +'<span style="background:'+accent+';color:#fff;font-weight:800;border-radius:20px;padding:4px 12px;font-size:15px"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-2px"><path fill="currentColor" d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2Z"/></svg> Level '+lv+'</span>'
       +'<span style="font-weight:700">'+L.label(lv)+'</span>'
       +'<span style="margin-left:auto;font-size:13px;color:#475569">'+p.done+' of '+p.total+' levels done</span></div>'
       +'<div style="height:10px;background:#e2e8f0;border-radius:6px;margin:10px 0 8px;overflow:hidden"><div style="height:100%;width:'+Math.round(p.done/p.total*100)+'%;background:linear-gradient(90deg,'+accent+',#F59E0B);border-radius:6px"></div></div>'
@@ -99,15 +99,15 @@
       var done=p.done.indexOf(i)>=0, un=i<=p.unlocked;
       if(done) html+='<a href="?level='+i+'" style="min-width:30px;text-align:center;padding:4px 6px;border-radius:8px;background:#dcfce7;color:#14532d;font-weight:800;text-decoration:none;font-size:13px" title="Replay level '+i+'">✓'+i+'</a>';
       else if(un) html+='<a href="?level='+i+'" style="min-width:30px;text-align:center;padding:4px 6px;border-radius:8px;background:'+accent+';color:#fff;font-weight:800;text-decoration:none;font-size:13px">▶'+i+'</a>';
-      else html+='<span style="min-width:30px;text-align:center;padding:4px 6px;border-radius:8px;background:#f1f5f9;color:#94a3b8;font-weight:700;font-size:13px">🔒'+i+'</span>';
+      else html+='<span style="min-width:30px;text-align:center;padding:4px 6px;border-radius:8px;background:#f1f5f9;color:#94a3b8;font-weight:700;font-size:13px"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="vertical-align:-2px"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 7V7a3 3 0 1 1 6 0v2H9Z"/></svg>'+i+'</span>';
     }
     html+='</div>';
     if(lv<p.total){
       html+='<div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
-        +'<button type="button" id="lvl-skip" style="padding:8px 14px;border-radius:10px;border:0;background:#F59E0B;color:#0F172A;font-weight:800;cursor:pointer" '+(left<=0?'disabled style="padding:8px 14px;border-radius:10px;border:0;background:#e2e8f0;color:#94a3b8;font-weight:800"':'')+'>⏭ Skip this level ('+left+' left today)</button>'
+        +'<button type="button" id="lvl-skip" style="padding:8px 14px;border-radius:10px;border:0;background:#F59E0B;color:#0F172A;font-weight:800;cursor:pointer" '+(left<=0?'disabled style="padding:8px 14px;border-radius:10px;border:0;background:#e2e8f0;color:#94a3b8;font-weight:800"':'')+'>Skip this level ('+left+' left today)</button>'
         +'<span style="font-size:13px;color:#475569">You get 2 free level-skips every day — they reset at midnight.</span></div>';
     } else {
-      html+='<div style="margin-top:10px;font-weight:700;color:'+accent+'">🏆 All '+p.total+' levels done — replay any level above!</div>';
+      html+='<div style="margin-top:10px;font-weight:700;color:'+accent+'"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-2px"><path fill="currentColor" d="M6 2h12v2h3v3a5 5 0 0 1-5 5h-.4A6 6 0 0 1 13 16.9V19h3v2H8v-2h3v-2.1A6 6 0 0 1 8.4 12H8a5 5 0 0 1-5-5V4h3V2ZM5 6v1a3 3 0 0 0 3 3V6H5Zm14 0h-3v4a3 3 0 0 0 3-3V6Z"/></svg> All '+p.total+' levels done — replay any level above!</div>';
     }
     html+='</div>';
     host.innerHTML=html;

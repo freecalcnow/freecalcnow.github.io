@@ -297,7 +297,7 @@ function renderGame(){
   $("#game-stats").innerHTML=
     '<div class="stat"><b class="num">'+st.played+'</b><span>Played</span></div>'
    +'<div class="stat"><b class="num">'+(st.played?Math.round(st.wins/st.played*100):0)+'%</b><span>Win rate</span></div>'
-   +'<div class="stat"><b class="num">🔥 '+st.streak+'</b><span>Win streak</span></div>'
+   +'<div class="stat"><b class="num"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="vertical-align:-3px"><path fill="currentColor" d="M13.5 2s.8 2.6.8 4.6c0 2-1.5 3.6-3.5 3.6S7.3 8.6 7.3 6.6c0-.8.3-1.6.8-2.3C6.2 6 5 8.6 5 11.3c0 4 3 7.2 7 7.2s7-3.2 7-7.2c0-3.4-2.4-6.6-5.5-9.3Z"/></svg> '+st.streak+'</b><span>Win streak</span></div>'
    +'<div class="stat"><b class="num">'+st.best+'</b><span>Best streak</span></div>'
    +'<div class="stat"><b class="num">'+G.freezes+'</b><span>Freezes banked</span></div>';
   let board="";
@@ -335,7 +335,7 @@ function gameKey(k){
       G.status="won"; G.stats.played++; G.stats.wins++; G.stats.streak++; G.stats.best=Math.max(G.stats.best,G.stats.streak);
       G.stats.dist[G.guesses.length-1]++;
       if(G.stats.streak>0&&G.stats.streak%7===0&&G.freezes<1) G.freezes=1;
-      $("#game-msg").textContent="🎉 Solved in "+G.guesses.length+(G.guesses.length===1?" try!":" tries!");
+      $("#game-msg").textContent="Solved in "+G.guesses.length+(G.guesses.length===1?" try!":" tries!");
     } else if(G.guesses.length>=6){
       G.status="lost"; G.stats.played++; G.stats.streak=0;
       $("#game-msg").textContent="Out of tries — today’s number was "+G.answer+". A new puzzle lands at 00:00 UTC.";
@@ -344,15 +344,15 @@ function gameKey(k){
   }
 }
 function shareText(){
-  const emoji={green:"🟩",yellow:"🟨",grey:"⬛"};
-  const grid=G.scores.map(row=>row.map(s=>emoji[s]).join("")).join("\n");
+  const sq={green:"G",yellow:"Y",grey:"."};
+  const grid=G.scores.map(row=>row.map(s=>sq[s]).join("")).join("\n");
   const score=G.status==="won"?G.guesses.length+"/6":"X/6";
-  return "Daily Number #"+G.num+" — "+score+" 🔢\n"+grid+"\n🔥 "+G.stats.streak+"-day streak · Play free on FreeCalcNow";
+  return "Daily Number #"+G.num+" — "+score+"\n"+grid+"\n"+G.stats.streak+"-day streak · Play free on FreeCalcNow";
 }
 function showGameDone(){
   const won=G.status==="won";
-  $("#game-done-title").textContent=won?"Solved in "+G.guesses.length+(G.guesses.length===1?" try 🎉":" tries 🎉"):"So close — it was "+G.answer;
-  $("#share-grid").textContent=G.scores.map(row=>row.map(s=>({green:"🟩",yellow:"🟨",grey:"⬛"}[s])).join("")).join("\n");
+  $("#game-done-title").textContent=won?"Solved in "+G.guesses.length+(G.guesses.length===1?" try":" tries"):"So close — it was "+G.answer;
+  $("#share-grid").innerHTML=G.scores.map(row=>row.map(s=>'<span class="sh '+s+'"></span>').join("")).join("<br>");
   const txt=encodeURIComponent(shareText());
   $("#share-wa").href="https://wa.me/?text="+txt;
   $("#share-x").href="https://x.com/intent/post?text="+txt;

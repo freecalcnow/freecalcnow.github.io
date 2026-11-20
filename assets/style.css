@@ -23,6 +23,7 @@ p{margin:.5rem 0}
 .site-head .wrap{display:flex;align-items:center;gap:12px;min-height:56px;flex-wrap:wrap;padding-top:6px;padding-bottom:6px}
 .logo{font-weight:800;font-size:1.25rem;color:#fff;letter-spacing:.2px;white-space:nowrap}
 .logo b{color:var(--amber)}
+.logo img{width:36px;height:36px;border-radius:9px;vertical-align:-10px}
 .site-head nav{display:flex;gap:4px;flex-wrap:wrap}
 .site-head nav a{color:#DBEAFE;padding:6px 10px;border-radius:8px;font-size:.95rem}
 /* The second header row only holds the search-results box, hidden until the
@@ -118,7 +119,7 @@ p{margin:.5rem 0}
 .feedback{border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);padding:16px;margin:18px 0}
 .feedback .stars{display:flex;gap:6px;margin:8px 0}
 .feedback .stars button{font-size:1.6rem;background:none;border:0;cursor:pointer;padding:2px 4px;line-height:1}
-.feedback .stars button.on{filter:drop-shadow(0 0 2px var(--amber))}
+.feedback .stars button{color:#cbd5e1}.feedback .stars button.on{color:#F59E0B;filter:drop-shadow(0 0 2px var(--amber))}
 .feedback textarea{width:100%;min-height:64px;border:1.5px solid #cbd5e1;border-radius:10px;padding:10px;font-size:1rem;font-family:inherit}
 .feedback .thanks{color:var(--green);font-weight:700}
 /* assistant */
@@ -142,6 +143,16 @@ p{margin:.5rem 0}
 .ask-input button{border:0;border-radius:10px;background:var(--green);color:#fff;font-weight:700;padding:10px 13px;cursor:pointer}
 .ask-mic{background:#e2e8f0 !important;color:#0F172A !important}
 .ask-mic.on{background:var(--amber) !important}
+.ask-mic svg{display:block}
+/* v8.1: the /ask/ page chat lives IN the page flow (always visible, never
+   pushed off screen by the keyboard). The floating panel on small screens
+   is a bottom sheet so it can never be clipped. */
+.ask-inline{border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden;margin:14px 0;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.ask-inline .ask-msgs{min-height:220px;max-height:60vh}
+.ask-inline .ask-input{border-top:1px solid var(--line)}
+@media (max-width:640px){
+  .ask-panel{right:0;left:0;bottom:0;width:100%;max-height:78vh;border-radius:16px 16px 0 0}
+}
 /* game pages */
 .game-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin:14px 0;text-align:center}
 .game-box .score{font-size:1.1rem;font-weight:700;margin:8px 0}
@@ -317,3 +328,9 @@ body.fcn-custom-bg #set-lang{background:#0b1220;color:#e2e8f0}
 html[data-fcn-mode="dark"] body.fcn-custom-bg::before{background:rgba(11,18,32,.80)}
 html[data-fcn-mode="dark"] body.fcn-custom-bg .tool-card,html[data-fcn-mode="dark"] body.fcn-custom-bg .cat-tile,html[data-fcn-mode="dark"] body.fcn-custom-bg .rel-card,html[data-fcn-mode="dark"] body.fcn-custom-bg .game-box,html[data-fcn-mode="dark"] body.fcn-custom-bg .feedback,html[data-fcn-mode="dark"] body.fcn-custom-bg .tool-list li,html[data-fcn-mode="dark"] body.fcn-custom-bg .ad-slot,html[data-fcn-mode="dark"] body.fcn-custom-bg .teaser,html[data-fcn-mode="dark"] body.fcn-custom-bg .search-results,html[data-fcn-mode="dark"] body.fcn-custom-bg .sponsor-box,html[data-fcn-mode="dark"] body.fcn-custom-bg .ask-panel{background:rgba(17,28,51,.94)}
 html[data-fcn-mode="dark"] body.fcn-custom-bg #set-lang{background:#0b1220;color:#e2e8f0}
+
+/* v8.1 — de-emoji: share-grid squares, card icons, word tile */
+.sh{display:inline-block;width:14px;height:14px;border-radius:3px;margin:1px;vertical-align:middle}
+.sh.green{background:#22c55e}.sh.yellow{background:#eab308}.sh.grey{background:#94a3b8}
+.rel-ico{width:28px;height:28px;vertical-align:-7px;margin-right:2px}
+.word-tile{display:inline-block;width:22px;height:22px;border-radius:5px;background:#22c55e;vertical-align:-5px;margin-right:2px}

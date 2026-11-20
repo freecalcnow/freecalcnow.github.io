@@ -20,7 +20,7 @@ function finish(id, title, score, resultLine, url){
   var stk=0, first=!wasPlayed(id);
   try{ if(window.FCN_DAILY&&first){ stk=FCN_DAILY.record(id, score); } else if(window.FCN_DAILY){ stk=FCN_DAILY.get().n; } }catch(e){}
   markPlayed(id); setScore(score); showStreak();
-  var line = resultLine + (stk? " 🔥 "+stk+"-day streak!" : "");
+  var line = resultLine + (stk? " "+stk+"-day streak!" : "");
   msg(line);
   var sb=$("shareBtn");
   if(sb){
@@ -44,7 +44,7 @@ function quiz4(box, q, id, title, url){
       var ok = (i===q.answer);
       b.style.background = ok ? "#166534" : "#dc2626"; b.style.color="#fff";
       var score = ok ? 100 : 0;
-      finish(id, title, score, ok ? "✅ Correct! "+q.why : "❌ Not quite — "+q.why, url);
+      finish(id, title, score, ok ? "Correct! "+q.why : "Not quite — "+q.why, url);
     };
   });
 }
@@ -65,7 +65,7 @@ function numGame(box, spec, id, title, url, tries){
     if(Math.abs(g-spec.answer)<0.0001){
       done=true;
       var score=Math.max(10, 100-(used-1)*30);
-      finish(id, title, score, "✅ Correct in "+used+" "+(used===1?"try":"tries")+"! Answer: "+spec.answer+(spec.unit?" "+spec.unit:"")+".", url);
+      finish(id, title, score, "Correct in "+used+" "+(used===1?"try":"tries")+"! Answer: "+spec.answer+(spec.unit?" "+spec.unit:"")+".", url);
     } else if(used>=tries){
       done=true;
       var s2=spec.scoreFn ? spec.scoreFn(g, spec.answer) : 0;
@@ -227,7 +227,7 @@ GAMES["daily-logic-grid"]=function(box,id,title,url){
     var ok=true;
     people.forEach(function(p){ if(sels[p].value!==assign[p]) ok=false; });
     if(ok){
-      finish(id, title, 100, "✅ Correct! Ava owns the "+assign["Ava"]+", Ben owns the "+assign["Ben"]+", Cara owns the "+assign["Cara"]+".", url);
+      finish(id, title, 100, "Correct! Ava owns the "+assign["Ava"]+", Ben owns the "+assign["Ben"]+", Cara owns the "+assign["Cara"]+".", url);
     } else {
       msg("Not yet — read the clues again and try once more.");
     }
@@ -236,7 +236,7 @@ GAMES["daily-logic-grid"]=function(box,id,title,url){
 /* #7 Daily Memory Match — 8 cards, 4 pairs, one layout per day. */
 GAMES["daily-memory-match"]=function(box,id,title,url){
   var r=rng();
-  var syms=["💵","💰","🪙","💳"];
+  var syms=["$","€","£","¥"];
   var deck=FCN_SEED.shuffle(r, syms.concat(syms));
   var grid=el("div","", "grid"); grid.style.gridTemplateColumns="repeat(4, 1fr)"; box.appendChild(grid);
   var open=[], matched=0, moves=0, lock=false, done=false;
@@ -254,7 +254,7 @@ GAMES["daily-memory-match"]=function(box,id,title,url){
           if(matched===8){
             done=true;
             var score=Math.max(10, 100-(moves-4)*5);
-            finish(id, title, score, "🎉 All matched in "+moves+" moves!", url);
+            finish(id, title, score, "All matched in "+moves+" moves!", url);
           }
         } else {
           setTimeout(function(){ a.c.textContent="?"; b.c.textContent="?"; lock=false; },700);
@@ -284,7 +284,7 @@ GAMES["daily-spot-difference"]=function(box,id,title,url){
           if(diffPos.indexOf(ix)>=0){
             if(c.style.background==="rgb(22, 101, 52)") return;
             c.style.background="#166534"; c.style.color="#fff"; found++;
-            if(found===5){ done=true; var sc=Math.max(10, 100-wrong*5); finish(id, title, sc, "🎉 You found all 5 differences!"+(wrong?" ("+wrong+" wrong taps)":""), url); }
+            if(found===5){ done=true; var sc=Math.max(10, 100-wrong*5); finish(id, title, sc, "You found all 5 differences!"+(wrong?" ("+wrong+" wrong taps)":""), url); }
             else msg("Found "+found+" of 5.");
           } else {
             wrong++; c.style.background="#fecaca";
@@ -332,7 +332,7 @@ GAMES["daily-word-ladder"]=function(box,id,title,url){
       done=true;
       var extra=Math.max(0, steps-(lad.length-1));
       var score=Math.max(10, 100-extra*10);
-      finish(id, title, score, "🎉 You reached "+target+" in "+steps+" steps! (Shortest path: "+(lad.length-1)+" steps.)", url);
+      finish(id, title, score, "You reached "+target+" in "+steps+" steps! (Shortest path: "+(lad.length-1)+" steps.)", url);
     } else msg("Good — keep going!");
   }
   btn.onclick=go;
@@ -359,7 +359,7 @@ GAMES["daily-anagram"]=function(box,id,title,url){
     if(g===word){
       done=true;
       var score=tries===3?100:(tries===2?70:40);
-      finish(id, title, score, "✅ Correct! The word was "+word+".", url);
+      finish(id, title, score, "Correct! The word was "+word+".", url);
     } else {
       tries--;
       if(tries<=0){ done=true; finish(id, title, 0, "Out of tries — the word was "+word+". Come back tomorrow!", url); }
@@ -401,7 +401,7 @@ GAMES["daily-coin-flip"]=function(box,id,title,url){
   var row=el("div","", "row"); box.appendChild(row);
   var hBtn=el("button","Heads","btn"); hBtn.style.flex="1"; row.appendChild(hBtn);
   var tBtn=el("button","Tails","btn amber"); tBtn.style.flex="1"; row.appendChild(tBtn);
-  var flipBtn=el("button","🪙 Flip the coins","btn"); flipBtn.style.display="none"; box.appendChild(flipBtn);
+  var flipBtn=el("button","Flip the coins","btn"); flipBtn.style.display="none"; box.appendChild(flipBtn);
   var resEl=el("div","", "q"); box.appendChild(resEl);
   function draw(){ slots.textContent=pred.concat(["_","_","_","_","_"]).slice(0,5).join(" "); }
   hBtn.onclick=function(){ if(done||pred.length>=5) return; pred.push("H"); draw(); if(pred.length===5){ flipBtn.style.display="block"; } };
@@ -423,7 +423,7 @@ GAMES["daily-dice-guess"]=function(box,id,title,url){
   box.appendChild(el("div","Two dice are about to roll. Guess their total (2–12).", "q"));
   var row=el("div","", "row"); box.appendChild(row);
   var inp=document.createElement("input"); inp.type="number"; inp.min="2"; inp.max="12"; inp.placeholder="2–12"; row.appendChild(inp);
-  var btn=el("button","🎲 Roll","btn"); btn.style.flex="0 0 110px"; row.appendChild(btn);
+  var btn=el("button","Roll the dice","btn"); btn.style.flex="0 0 110px"; row.appendChild(btn);
   var resEl=el("div","", "q"); box.appendChild(resEl);
   btn.onclick=function(){
     if(done) return;
@@ -433,7 +433,7 @@ GAMES["daily-dice-guess"]=function(box,id,title,url){
     resEl.textContent=faces[d1-1]+" "+faces[d2-1]+"  =  "+total;
     var diff=Math.abs(g-total);
     var score= diff===0?100 : diff===1?70 : diff===2?40 : 10;
-    finish(id, title, score, diff===0 ? "🎉 Exact! The total was "+total+"." : "The total was "+total+" — you were "+diff+" away.", url);
+    finish(id, title, score, diff===0 ? "Exact! The total was "+total+"." : "The total was "+total+" — you were "+diff+" away.", url);
   };
 };
 /* #14 Daily Budget Puzzle — spend as much as you can without going over budget. */
@@ -473,7 +473,7 @@ GAMES["daily-budget-puzzle"]=function(box,id,title,url){
     if(t>budget){ msg("Over budget by $"+(t-budget)+" — remove something."); return; }
     if(t<0.9*budget){ msg("You spent $"+t+" — that is under 90% of $"+budget+". Add more items!"); return; }
     var score=Math.round(t/budget*100);
-    finish(id, title, score, "🎉 You spent $"+t+" of $"+budget+" — "+score+"% of your budget, without going over!", url);
+    finish(id, title, score, "You spent $"+t+" of $"+budget+" — "+score+"% of your budget, without going over!", url);
   };
 };
 /* #15 Daily Price Guess — guess one everyday price (typical prices = estimates). */
@@ -562,7 +562,7 @@ GAMES["daily-money-myth"]=function(box,id,title,url){
   function pick(v){
     if(done) return; done=true;
     var ok=(v===m.t);
-    finish(id, title, ok?100:0, (ok?"✅ Correct! ":"❌ Not quite — ")+m.why, url);
+    finish(id, title, ok?100:0, (ok?"Correct! ":"Not quite — ")+m.why, url);
   }
   var tb=el("button","TRUE","btn"); tb.style.flex="1"; row.appendChild(tb);
   var fb=el("button","FALSE","btn amber"); fb.style.flex="1"; row.appendChild(fb);
@@ -582,7 +582,7 @@ GAMES["daily-savings-task"]=function(box,id,title,url){
   function total(){ try{ return parseFloat(localStorage.getItem("fcn-savings-total")||"0")||0; }catch(e){ return 0; } }
   box.appendChild(el("div","Today's tiny saving: "+t[0]+" — saves about $"+t[1]+".", "q"));
   var totEl=el("div","Total saved so far (on this device): $"+total(),"q"); box.appendChild(totEl);
-  var btn=el("button","✅ I did it today","btn"); box.appendChild(btn);
+  var btn=el("button","I did it today","btn"); box.appendChild(btn);
   var done=false;
   btn.onclick=function(){
     if(done) return; done=true;

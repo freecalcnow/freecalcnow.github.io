@@ -31,7 +31,7 @@
     var html='';
     l.forEach(function(f){
       html+='<div class="rel-card" style="display:flex;gap:10px;align-items:center">'
-        +'<span style="font-size:22px">'+(f.type==='game'?'🎮':'🧮')+'</span>'
+        +'<img src="/assets/icons/'+(f.type==='game'?'gamepad':'calculator')+'.svg" width="26" height="26" alt="" style="flex:0 0 auto">'
         +'<div style="flex:1;min-width:0"><a href="'+f.url+'" style="font-weight:800">'+escapeHtml(f.name)+'</a>'
         +'<p class="small muted" style="margin:2px 0 0">'+(f.type==='game'?'Game':'Calculator')+' · '+escapeHtml(f.url)+'</p></div>'
         +'<button type="button" class="btn btn-ghost fav-remove" data-slug="'+escapeHtml(f.slug)+'">Remove</button></div>';
