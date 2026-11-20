@@ -2,13 +2,15 @@
    Caches the homepage shell + shared assets on first visit; tool and game
    pages are cached as they are visited (network-first, so answers are never
    stale). No push, no background sync, no tracking. */
-var VERSION = "fcn-v7.4";
+var VERSION = "fcn-v8";
 var SHELL = [
   "/",
   "/assets/style.css",
   "/assets/engine.js",
   "/assets/site.js",
   "/assets/assistant.js",
+  "/assets/bots.js",
+  "/assets/games-v8.css",
   "/assets/daily.js",
   "/icon-192.png",
   "/icon-512.png",
@@ -17,11 +19,10 @@ var SHELL = [
   "/og-image.png",
   "/manifest.json"
 ];
-/* v7.4: let the page ask a waiting worker to take over immediately, so
-   "Tap to refresh" switches to the new version without delay. */
-self.addEventListener("message", function(e){
-  if(e.data && e.data.type === "SKIP_WAITING") self.skipWaiting();
-});
+/* v8: fully automatic updates (owner correction 20 Nov 2026) — NO banner,
+   NO tap, NO reload. skipWaiting() in install + clients.claim() on activate
+   make the new version take over on the next launch/navigation, without ever
+   interrupting the open page mid-game or mid-calculation. */
 self.addEventListener("install", function(e){
   e.waitUntil(
     caches.open(VERSION).then(function(c){ return c.addAll(SHELL); }).catch(function(){})

@@ -1,0 +1,78 @@
+/* FreeCalcNow games v8 — hub art tiles, featured top 2, players, how-to, snake. */
+
+/* --- hub: real art tiles replace emoji icons --- */
+.gcard .gpic{padding:0!important;overflow:hidden;background:transparent!important;box-shadow:0 2px 6px rgba(15,23,42,.18)}
+.gcard .gpic img.gart{width:100%;height:100%;object-fit:cover;display:block}
+.gcard .gpic .gicon{display:none}
+
+/* --- hub intro text must stay readable over a custom background picture --- */
+body.fcn-custom-bg .ghub-intro{background:rgba(255,255,255,.94);border-radius:12px;padding:10px 14px}
+body.fcn-custom-bg[data-fcn-mode="dark"] .ghub-intro,
+body.fcn-custom-bg .ghub-intro{background:rgba(15,23,42,.94);color:#f1f5f9}
+@media (prefers-color-scheme:dark){
+  body.fcn-custom-bg .ghub-intro{background:rgba(15,23,42,.94);color:#f1f5f9}
+}
+
+/* --- Top 2 featured games --- */
+.top2-sec{margin:6px 0 20px}
+.top2-sec h2{margin:4px 0 4px}
+.top2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
+.feat-card{position:relative;border-radius:20px;overflow:hidden;min-height:250px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;box-shadow:0 6px 20px rgba(15,23,42,.22);border:1px solid rgba(15,23,42,.10)}
+.feat-card img.feat-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.feat-card .feat-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,31,58,0) 30%,rgba(11,31,58,.82) 78%)}
+.feat-card .feat-body{position:relative;padding:16px}
+.feat-card .feat-badge{display:inline-block;background:#F59E0B;color:#0F172A;font-weight:800;font-size:12px;letter-spacing:.06em;border-radius:20px;padding:4px 10px;margin-bottom:8px}
+.feat-card h3{margin:0 0 4px;font-size:24px;color:#fff}
+.feat-card p{margin:0 0 10px;color:#e2e8f0;font-size:14px}
+.feat-card .feat-play{display:inline-block;background:#fff;color:#0B1F3A;font-weight:800;border-radius:12px;padding:10px 18px;text-decoration:none}
+.feat-card .fcn-tp-strip{margin-top:10px;font-size:13px;color:#e2e8f0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.feat-card .fcn-tp-strip .fcn-tp-label{font-weight:700;color:#fbbf24}
+@media (max-width:640px){.top2{grid-template-columns:1fr}.feat-card{min-height:220px}}
+
+/* --- players / leaderboard --- */
+.fcn-av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:800;font-size:12px;flex:none;vertical-align:middle}
+.fcn-players{margin-top:18px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px}
+.fcn-pl-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.fcn-pl-head b{font-size:16px}
+.fcn-pl-note{font-size:12px;color:#64748b}
+.fcn-pl-list{list-style:none;margin:10px 0 0;padding:0}
+.fcn-pl-row{display:flex;align-items:center;gap:10px;padding:7px 4px;border-top:1px solid #f1f5f9}
+.fcn-pl-row:first-child{border-top:0}
+.fcn-pl-rank{width:20px;text-align:center;font-weight:800;color:#64748b}
+.fcn-pl-name{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fcn-pl-games{font-size:12px;color:#64748b}
+.fcn-pl-score{font-size:16px}
+.fcn-pl-row.fcn-you{background:#fffbeb;border-radius:8px}
+.fcn-pl-foot{font-size:12px;color:#64748b;margin:8px 0 0}
+.fcn-tp{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.16);border-radius:20px;padding:3px 9px 3px 4px}
+
+/* --- how to play (first visit only; small button afterwards) --- */
+.fcn-howto[hidden],.fcn-howto-btn[hidden],.snake-over[hidden]{display:none!important}
+.fcn-howto{margin-top:18px;background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:14px}
+.fcn-howto h2,.fcn-howto h3{margin:0 0 6px;font-size:17px}
+.fcn-howto p{margin:6px 0;color:#334155}
+.fcn-howto ol{margin:6px 0 0;padding-left:20px;color:#334155}
+.fcn-howto ol li{margin:4px 0}
+.fcn-howto-btn{display:inline-block;margin-top:14px;padding:9px 14px;font-size:14px;font-weight:700;border:2px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer;color:#0F172A}
+
+/* --- snake 3D canvas game --- */
+.snake-wrap{background:linear-gradient(160deg,#166534,#14532d);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(15,23,42,.25)}
+.snake-hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.snake-hud .hud-chip{background:rgba(255,255,255,.94);border-radius:12px;padding:8px 12px;font-weight:800;color:#0F172A;display:flex;gap:6px;align-items:center}
+.snake-hud .hud-chip small{font-weight:600;color:#64748b}
+.snake-hud .hud-chip.trophy{background:#F59E0B;color:#0F172A}
+#snake-canvas{display:block;width:100%;max-width:480px;height:auto;margin:0 auto;border-radius:12px;touch-action:none;background:#7cc242}
+.snake-ctl{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center;margin:12px auto 4px}
+.snake-ctl button{width:64px;height:52px;font-size:22px;font-weight:800;border:0;border-radius:12px;background:rgba(255,255,255,.94);color:#0F172A;cursor:pointer}
+.snake-ctl button:active{background:#F59E0B}
+.snake-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.snake-actions .btn{flex:1;min-width:120px;text-align:center}
+.snake-over{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(11,31,58,.78);color:#fff;border-radius:12px;text-align:center;padding:20px}
+.snake-over h2{color:#fff;margin:0 0 6px;font-size:26px}
+.snake-over p{color:#e2e8f0;margin:4px 0 14px}
+.snake-stage{position:relative;max-width:480px;margin:0 auto}
+body.theme-dark .fcn-players,body.theme-dark .fcn-howto{background:#1e293b;border-color:#334155;color:#e2e8f0}
+body.theme-dark .fcn-howto p,body.theme-dark .fcn-howto ol{color:#cbd5e1}
+body.theme-dark .fcn-howto-btn{background:#1e293b;color:#f1f5f9;border-color:#334155}
+body.theme-dark .fcn-pl-row{border-color:#1e293b}
+body.theme-dark .fcn-pl-note,body.theme-dark .fcn-pl-foot{color:#94a3b8}

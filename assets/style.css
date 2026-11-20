@@ -294,12 +294,6 @@ body.fcn-modal-open{overflow:hidden}
    html.fcn-standalone rule is the JS fallback (iOS navigator.standalone). */
 @media (display-mode: standalone){ .dl-btn{display:none !important} }
 html.fcn-standalone .dl-btn{display:none !important}
-/* v7.4: update-available banner (shown by site.js when a new service
-   worker is waiting). Tap to refresh loads the new version. */
-.fcn-update-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:300;background:#0B1F3A;color:#fff;border:1px solid #F59E0B;border-radius:12px;padding:10px 12px;box-shadow:0 8px 30px rgba(2,6,23,.45);display:flex;gap:10px;align-items:center;font-weight:600;max-width:calc(100vw - 24px)}
-.fcn-update-banner button{border:0;border-radius:9px;padding:8px 12px;font-weight:800;cursor:pointer}
-#fcn-update-btn{background:#F59E0B;color:#1c1005}
-#fcn-update-x{background:rgba(255,255,255,.16);color:#fff}
 
 /* v7.4: custom background picture — keep text readable over any picture.
    A light wash over the picture, plus near-solid backings on the panels

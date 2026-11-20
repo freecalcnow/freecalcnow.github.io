@@ -1,26 +1,145 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Snake - FreeCalcNow Games</title><meta name="description" content="Steer with the arrow buttons (or arrow keys). Eat the food to grow. Don&#x27;t hit the wall or yourself! Play free, endless, no sign-up."><link rel="canonical" href="https://freecalcnow.github.io/games/snake/">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Snake - FreeCalcNow Games</title><meta name="description" content="Classic snake, rebuilt: a cute 3D snake on a green checkered board. Eat strawberries, grow longer, don't crash! Play free, endless, no sign-up."><link rel="canonical" href="https://freecalcnow.github.io/games/snake/">
 <meta property="og:title" content="Snake - FreeCalcNow Games">
-<meta property="og:description" content="Steer with the arrow buttons (or arrow keys). Eat the food to grow. Don&#x27;t hit the wall or yourself! Play free, endless, no sign-up.">
+<meta property="og:description" content="Classic snake, rebuilt: a cute 3D snake on a green checkered board. Eat strawberries, grow longer, don't crash!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://freecalcnow.github.io/games/snake/">
 <meta property="og:site_name" content="FreeCalcNow">
-<meta property="og:image" content="https://freecalcnow.github.io/og-image.png">
-<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#0B1F3A"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="FreeCalcNow"><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-3Y2FGRCKZZ');</script><style>*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#F8FAFC;color:#0F172A}header{background:#166534;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}header a{color:#fff;font-weight:800;text-decoration:none;font-size:18px}header span{font-size:13px;opacity:.9}main{max-width:560px;margin:0 auto;padding:14px 14px 30px}h1{font-size:24px;margin:8px 0 4px}.how{color:#475569;margin:0 0 12px}.bar{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px 12px;margin-bottom:12px;font-weight:700}.bar span{color:#166534}#game{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;min-height:180px}#msg{min-height:24px;margin:10px 0;font-weight:600;color:#166534}#q{font-size:26px;font-weight:800;text-align:center;margin:12px 0}.grid{display:grid;gap:8px}.btn{display:block;width:100%;padding:13px;font-size:17px;font-weight:700;border:0;border-radius:10px;background:#166534;color:#fff;cursor:pointer;margin:6px 0}.btn.amber{background:#F59E0B;color:#0F172A}.btn.ghost{background:#e2e8f0;color:#0F172A}.opt{padding:13px;font-size:18px;font-weight:700;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer}.opt:active{background:#dcfce7}.tile{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;min-height:48px}input[type=text],input[type=number]{width:100%;padding:12px;font-size:18px;border:2px solid #cbd5e1;border-radius:10px;margin:6px 0}.row{display:flex;gap:8px}.row>*{flex:1}.small{font-size:13px;color:#64748b}.vars{margin-top:14px;font-size:13px}.vars a{display:inline-block;background:#fff;border:1px solid #cbd5e1;border-radius:20px;padding:5px 10px;margin:3px;text-decoration:none;color:#166534;font-weight:600}footer{text-align:center;color:#64748b;font-size:13px;padding:16px}footer a{color:#166534}.more{display:block;text-align:center;margin-top:14px;font-weight:700;color:#166534}body.theme-dark{background:#0f172a;color:#e2e8f0}body.theme-dark #game,body.theme-dark .bar{background:#1e293b;border-color:#334155;color:#e2e8f0}body.theme-dark .opt,body.theme-dark .tile{background:#1e293b;color:#e2e8f0;border-color:#334155}body.theme-dark .how,body.theme-dark .small{color:#94a3b8}body.theme-dark .btn.ghost{background:#334155;color:#f1f5f9}body.theme-dark input[type=text],body.theme-dark input[type=number]{background:#0b1220;color:#e2e8f0;border-color:#334155}body.theme-dark .vars a{background:#1e293b;color:#86efac;border-color:#334155}body.theme-neon{background:#0b1020;color:#fef3c7}body.theme-neon #game,body.theme-neon .bar{background:#131a2e;border-color:#f59e0b;color:#fef3c7}body.theme-neon .opt,body.theme-neon .tile{background:#131a2e;color:#fef3c7;border-color:#f59e0b}body.theme-neon .how,body.theme-neon .small{color:#fcd34d}body.theme-neon .btn{background:#f59e0b;color:#1c1005}body.theme-neon .btn.amber{background:#22d3ee;color:#082f49}body.theme-neon .btn.ghost{background:#334155;color:#fef3c7}body.theme-neon .vars a{background:#131a2e;color:#fcd34d;border-color:#f59e0b}</style></head><body><header><a href="/">FreeCalcNow</a><span>Free Games</span></header><main><h1>Snake</h1><p class="how">Steer with the arrow buttons (or arrow keys). Eat the food to grow. Don&#x27;t hit the wall or yourself!</p><div class="bar"><span>Score: <b id="score">0</b></span><span>Best: <b id="best">0</b></span><span style="margin-left:auto" class="small" id="cfgLabel"></span></div><div id="game"><div class="grid" id="board" style="grid-template-columns:repeat(10,1fr);gap:2px"></div><div class="grid" style="grid-template-columns:repeat(3,1fr);margin-top:10px"><span></span><button class="opt" data-dir="up">↑</button><span></span><button class="opt" data-dir="left">←</button><button class="opt" data-dir="down">↓</button><button class="opt" data-dir="right">→</button></div></div><div id="msg"></div><button class="btn" id="startBtn">▶ Start / New game</button><div class="vars"><b>Try a variation:</b><br><a href="?size=8&amp;speed=slow&amp;difficulty=easy">8 · Slow · Easy</a><a href="?size=8&amp;speed=slow&amp;difficulty=medium">8 · Slow · Medium</a><a href="?size=8&amp;speed=slow&amp;difficulty=hard">8 · Slow · Hard</a><a href="?size=8&amp;speed=normal&amp;difficulty=easy">8 · Normal · Easy</a><a href="?size=8&amp;speed=normal&amp;difficulty=medium">8 · Normal · Medium</a><a href="?size=8&amp;speed=normal&amp;difficulty=hard">8 · Normal · Hard</a></div><a class="more" href="/games/">← More games</a></main><footer><a href="/">FreeCalcNow</a> — free calculators &amp; games. No sign-up, no ads covering play.</footer><script>var score=0;var best=0;try{best=parseInt(localStorage.getItem('fcn_best_snake')||'0')||0}catch(e){}function qp(k){try{return new URLSearchParams(window.location.search).get(k)}catch(e){return null}}function setScore(n){score=n;var s=document.getElementById('score');if(s)s.textContent=n;if(n>best){best=n;try{localStorage.setItem('fcn_best_snake',String(best))}catch(e){}}var b=document.getElementById('best');if(b)b.textContent=best;}function msg(t){var m=document.getElementById('msg');if(m)m.textContent=t;}function rnd(n){return Math.floor(Math.random()*n)}function shuffle(a){for(var i=a.length-1;i>0;i--){var j=rnd(i+1);var t=a[i];a[i]=a[j];a[j]=t}return a}function mkOpts(ans,n){var s=[ans];var d=1;while(s.length<n&&d<100){if(ans+d>=0&&s.indexOf(ans+d)<0)s.push(ans+d);if(s.length>=n)break;if(ans-d>=0&&s.indexOf(ans-d)<0)s.push(ans-d);d++}return shuffle(s)}function el(id){return document.getElementById(id)}try{var _b=el('best');if(_b)_b.textContent=best}catch(e){}try{var _th=qp('theme');if(_th==='dark'||_th==='neon'){document.body.classList.add('theme-'+_th)}}catch(e){}
+<meta property="og:image" content="https://freecalcnow.github.io/assets/game-art/snake.svg">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#0B1F3A"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="FreeCalcNow"><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y2FGRCKZZ"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-3Y2FGRCKZZ');</script><link rel="stylesheet" href="/assets/games-v8.css?v=8"><style>*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#F8FAFC;color:#0F172A}header{background:#0B1F3A;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}header a{color:#fff;font-weight:800;text-decoration:none;font-size:18px}header span{font-size:13px;opacity:.9}main{max-width:560px;margin:0 auto;padding:14px 14px 30px}h1{font-size:24px;margin:8px 0 4px}.how{color:#475569;margin:0 0 12px}#msg{min-height:24px;margin:10px 0;font-weight:600;color:#166534}.btn{display:block;width:100%;padding:13px;font-size:17px;font-weight:700;border:0;border-radius:10px;background:#0B1F3A;color:#fff;cursor:pointer;margin:6px 0}.btn.amber{background:#F59E0B;color:#0F172A}.btn.ghost{background:#e2e8f0;color:#0F172A}.opt{padding:13px;font-size:18px;font-weight:700;border:2px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer}.opt:active{background:#dbeafe}.small{font-size:13px;color:#64748b}.vars{margin-top:14px;font-size:13px}.vars a{display:inline-block;background:#fff;border:1px solid #cbd5e1;border-radius:20px;padding:5px 10px;margin:3px;text-decoration:none;color:#0B1F3A;font-weight:600}footer{text-align:center;color:#64748b;font-size:13px;padding:16px}footer a{color:#0B1F3A}.more{display:block;text-align:center;margin-top:14px;font-weight:700;color:#0B1F3A}body.theme-dark{background:#0f172a;color:#e2e8f0}body.theme-dark .how,body.theme-dark .small{color:#94a3b8}body.theme-dark .btn.ghost{background:#334155;color:#f1f5f9}body.theme-dark .vars a{background:#1e293b;color:#93c5fd;border-color:#334155}body.theme-neon{background:#0b1020;color:#fef3c7}body.theme-neon .how,body.theme-neon .small{color:#fcd34d}body.theme-neon .btn{background:#f59e0b;color:#1c1005}body.theme-neon .btn.amber{background:#22d3ee;color:#082f49}body.theme-neon .btn.ghost{background:#334155;color:#fef3c7}body.theme-neon .vars a{background:#131a2e;color:#fcd34d;border-color:#f59e0b}</style></head><body data-fcn-game="snake"><header><a href="/">FreeCalcNow</a><span>Free Games</span></header><main><h1>Snake</h1><p class="how">Steer with the arrow buttons (or arrow keys, or swipe). Eat the strawberries to grow. Don&#x27;t hit the wall or yourself!</p>
+<div class="snake-wrap">
+<div class="snake-hud"><span class="hud-chip">Score: <b id="score">0</b></span><span class="hud-chip trophy">Best: <b id="best">0</b></span><span class="hud-chip" style="margin-left:auto"><small id="cfgLabel"></small></span></div>
+<div class="snake-stage"><canvas id="snake-canvas" width="480" height="480" aria-label="Snake game board"></canvas>
+<div class="snake-over" id="over" hidden><h2 id="overTitle">Game over!</h2><p id="overText"></p><button class="btn amber" id="againBtn" style="width:auto;padding:12px 26px">Play Again</button></div></div>
+<div class="snake-ctl"><span></span><button data-dir="up" aria-label="Up">↑</button><span></span><button data-dir="left" aria-label="Left">←</button><button data-dir="down" aria-label="Down">↓</button><button data-dir="right" aria-label="Right">→</button></div>
+</div>
+<div id="msg"></div>
+<div class="snake-actions"><button class="btn amber" id="startBtn">Start / New game</button><button class="btn ghost" id="shareBtn">Share Score</button><button class="btn ghost" id="boardBtn">Leaderboard</button></div>
+<button class="fcn-howto-btn" id="fcn-howto-btn" hidden>How to play</button>
+<section class="fcn-howto" id="fcn-howto" hidden><h2>How to play Snake</h2><p>Steer the snake, eat strawberries, and grow as long as you can.</p><ol><li><b>Move:</b> tap the arrow buttons, swipe on the board, or use your keyboard arrow keys.</li><li><b>Eat:</b> every strawberry is +1 point and the snake grows one segment longer.</li><li><b>Survive:</b> hitting a wall or your own body ends the game. Longer snake, tighter turns!</li><li><b>Score:</b> your best score is saved on this device. Beat it — and beat the bot players below.</li></ol></section>
+<section class="fcn-players" data-fcn-players></section>
+<div class="vars"><b>Try a variation:</b><br><a href="?size=8&amp;speed=slow&amp;difficulty=easy">8 · Slow · Easy</a><a href="?size=8&amp;speed=slow&amp;difficulty=medium">8 · Slow · Medium</a><a href="?size=8&amp;speed=slow&amp;difficulty=hard">8 · Slow · Hard</a><a href="?size=8&amp;speed=normal&amp;difficulty=easy">8 · Normal · Easy</a><a href="?size=8&amp;speed=normal&amp;difficulty=medium">8 · Normal · Medium</a><a href="?size=8&amp;speed=normal&amp;difficulty=hard">8 · Normal · Hard</a><a href="?size=12&amp;speed=fast&amp;difficulty=hard">12 · Fast · Hard</a></div><a class="more" href="/games/">← More games</a></main><footer><a href="/">FreeCalcNow</a> — free calculators &amp; games. No sign-up, no ads covering play.</footer><script src="/assets/bots.js?v=8" defer></script><script>
+var score=0,best=0;try{best=parseInt(localStorage.getItem('fcn_best_snake')||'0')||0}catch(e){}
+function qp(k){try{return new URLSearchParams(window.location.search).get(k)}catch(e){return null}}
+function el(id){return document.getElementById(id)}
+function setScore(n){score=n;el('score').textContent=n;if(n>best){best=n;try{localStorage.setItem('fcn_best_snake',String(best))}catch(e){}}el('best').textContent=best;}
+function msg(t){el('msg').textContent=t;}
+function rnd(n){return Math.floor(Math.random()*n)}
+try{el('best').textContent=best}catch(e){}
+try{var _th=qp('theme');if(_th==='dark'||_th==='neon'){document.body.classList.add('theme-'+_th)}}catch(e){}
 
-var size=parseInt(qp('size')||'10')||10; if([8,10,12].indexOf(size)<0)size=10;
-var speed=qp('speed')||'normal'; var diff=qp('difficulty')||'medium';
-var ms = speed==='slow'?300:(speed==='fast'?120:200); if(diff==='hard')ms=Math.max(90,ms-40); if(diff==='easy')ms+=60;
-var snake=[], dir={x:1,y:0}, food={x:5,y:5}, timer=null, alive=false;
-if(el('cfgLabel'))el('cfgLabel').textContent=size+'×'+size+' · '+speed;
-el('board').style.gridTemplateColumns='repeat('+size+',1fr)';
-function draw(){el('board').innerHTML=''; for(var y=0;y<size;y++)for(var x=0;x<size;x++){var d=document.createElement('div'); d.style.cssText='aspect-ratio:1;border-radius:4px;background:#f1f5f9';
-  if(food.x===x&&food.y===y){d.style.background='#F59E0B'} snake.forEach(function(s,i){if(s.x===x&&s.y===y)d.style.background=i===0?'#0F172A':'#166534'}); el('board').appendChild(d)}}
-function placeFood(){food={x:rnd(size),y:rnd(size)}; while(snake.some(function(s){return s.x===food.x&&s.y===food.y}))food={x:rnd(size),y:rnd(size)}}
-function step(){if(!alive)return; var h={x:snake[0].x+dir.x, y:snake[0].y+dir.y};
-  if(h.x<0||h.y<0||h.x>=size||h.y>=size||snake.some(function(s){return s.x===h.x&&s.y===h.y})){alive=false; clearInterval(timer); msg('Game over! Score '+score+'. Press Start to play again.'); return}
-  snake.unshift(h); if(h.x===food.x&&h.y===food.y){setScore(score+1); placeFood()} else snake.pop(); draw()}
-function start(){snake=[{x:2,y:5},{x:1,y:5},{x:0,y:5}]; dir={x:1,y:0}; setScore(0); alive=true; placeFood(); draw(); clearInterval(timer); timer=setInterval(step,ms); msg('Use the arrows to steer!')}
-document.querySelectorAll('[data-dir]').forEach(function(b){b.onclick=function(){var d=b.dataset.dir; if(d==='up'&&dir.y!==1)dir={x:0,y:-1}; if(d==='down'&&dir.y!==-1)dir={x:0,y:1}; if(d==='left'&&dir.x!==1)dir={x:-1,y:0}; if(d==='right'&&dir.x!==-1)dir={x:1,y:0};}});
-document.addEventListener('keydown',function(e){var m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'}; if(m[e.key]){e.preventDefault(); document.querySelector('[data-dir="'+m[e.key]+'"]').click()}});
-el('startBtn').onclick=start; start();
+var size=parseInt(qp('size')||'10')||10;if([8,10,12].indexOf(size)<0)size=10;
+var speed=qp('speed')||'normal';var diff=qp('difficulty')||'medium';
+var ms=speed==='slow'?300:(speed==='fast'?120:200);if(diff==='hard')ms=Math.max(90,ms-40);if(diff==='easy')ms+=60;
+if(el('cfgLabel'))el('cfgLabel').textContent=size+'×'+size+' · '+speed+' · '+diff;
+
+var cv=el('snake-canvas'),ctx=cv.getContext('2d');
+var CELL=480/size;
+var snake=[],dir={x:1,y:0},nextDir={x:1,y:0},food={x:5,y:5},timer=null,alive=false,started=false;
+function cellCx(x){return x*CELL+CELL/2}
+function drawBoard(){
+  for(var y=0;y<size;y++)for(var x=0;x<size;x++){
+    ctx.fillStyle=(x+y)%2===0?'#8fd14f':'#7cc242';
+    ctx.fillRect(x*CELL,y*CELL,CELL,CELL);
+  }
+}
+function drawFood(){
+  var cx=cellCx(food.x),cy=cellCx(food.y),r=CELL*0.34;
+  ctx.save();ctx.translate(cx,cy);
+  ctx.fillStyle='#16a34a';
+  ctx.beginPath();ctx.moveTo(0,-r-2);ctx.lineTo(-r*0.55,-r*0.45);ctx.lineTo(0,-r*0.75);ctx.lineTo(r*0.55,-r*0.45);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#ef4444';
+  ctx.beginPath();ctx.moveTo(0,-r*0.5);
+  ctx.bezierCurveTo(-r,-r*0.5,-r*0.95,r*0.55,-r*0.35,r*0.95);
+  ctx.bezierCurveTo(-r*0.15,r*1.12,r*0.15,r*1.12,r*0.35,r*0.95);
+  ctx.bezierCurveTo(r*0.95,r*0.55,r,r*0.5,0,-r*0.5);
+  ctx.fill();
+  ctx.fillStyle='#fca5a5';
+  [[-r*0.4,r*0.1],[r*0.35,r*0.25],[0,r*0.55],[-r*0.1,-r*0.2]].forEach(function(p){ctx.beginPath();ctx.arc(p[0],p[1],r*0.09,0,7);ctx.fill();});
+  ctx.restore();
+}
+function drawSnake(){
+  if(!snake.length)return;
+  ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+  var pts=snake.map(function(s){return[cellCx(s.x),cellCx(s.y)]});
+  var grad=ctx.createLinearGradient(pts[0][0],pts[0][1],pts[pts.length-1][0],pts[pts.length-1][1]);
+  grad.addColorStop(0,'#3b82f6');grad.addColorStop(1,'#1d4ed8');
+  ctx.strokeStyle=grad;ctx.lineWidth=CELL*0.78;
+  ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+  for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);
+  ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=CELL*0.26;
+  ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]-CELL*0.14);
+  for(var j=1;j<pts.length;j++)ctx.lineTo(pts[j][0],pts[j][1]-CELL*0.14);
+  ctx.stroke();
+  var h=pts[0],d=dir;
+  var ex=d.x,ey=d.y,px=-ey,py=ex;
+  var hx=h[0]+ex*CELL*0.16,hy=h[1]+ey*CELL*0.16;
+  ctx.fillStyle='#1d4ed8';ctx.beginPath();ctx.arc(hx,hy,CELL*0.42,0,7);ctx.fill();
+  var e1x=hx+px*CELL*0.17+ex*CELL*0.10,e1y=hy+py*CELL*0.17+ey*CELL*0.10;
+  var e2x=hx-px*CELL*0.17+ex*CELL*0.10,e2y=hy-py*CELL*0.17+ey*CELL*0.10;
+  [[e1x,e1y],[e2x,e2y]].forEach(function(e){
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(e[0],e[1],CELL*0.13,0,7);ctx.fill();
+    ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(e[0]+ex*CELL*0.05,e[1]+ey*CELL*0.05,CELL*0.065,0,7);ctx.fill();
+  });
+  ctx.strokeStyle='#ef4444';ctx.lineWidth=3;ctx.lineCap='round';
+  var tx=hx+ex*CELL*0.42,ty=hy+ey*CELL*0.42;
+  ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx+ex*CELL*0.22+px*CELL*0.1,ty+ey*CELL*0.22+py*CELL*0.1);
+  ctx.moveTo(tx,ty);ctx.lineTo(tx+ex*CELL*0.22-px*CELL*0.1,ty+ey*CELL*0.22-py*CELL*0.1);ctx.stroke();
+  ctx.restore();
+}
+function draw(){drawBoard();drawFood();drawSnake();}
+function placeFood(){food={x:rnd(size),y:rnd(size)};while(snake.some(function(s){return s.x===food.x&&s.y===food.y}))food={x:rnd(size),y:rnd(size)};}
+function gameOver(){
+  alive=false;clearInterval(timer);
+  el('overTitle').textContent='Game over!';
+  el('overText').textContent='Score '+score+' · Best '+best+(score>=best&&score>0?' — new best!':'');
+  el('over').hidden=false;
+  msg('Game over! Score '+score+'. Press Start to play again.');
+}
+function step(){
+  if(!alive)return;
+  dir=nextDir;
+  var h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+  if(h.x<0||h.y<0||h.x>=size||h.y>=size||snake.some(function(s){return s.x===h.x&&s.y===h.y})){gameOver();draw();return;}
+  snake.unshift(h);
+  if(h.x===food.x&&h.y===food.y){setScore(score+1);placeFood();}else snake.pop();
+  draw();
+}
+function start(){
+  snake=[{x:2,y:5},{x:1,y:5},{x:0,y:5}];dir={x:1,y:0};nextDir={x:1,y:0};
+  setScore(0);alive=true;started=true;el('over').hidden=true;placeFood();draw();
+  clearInterval(timer);timer=setInterval(step,ms);msg('Use the arrows, swipe, or keyboard to steer!');
+}
+function setDir(d){
+  if(d==='up'&&dir.y!==1)nextDir={x:0,y:-1};
+  if(d==='down'&&dir.y!==-1)nextDir={x:0,y:1};
+  if(d==='left'&&dir.x!==1)nextDir={x:-1,y:0};
+  if(d==='right'&&dir.x!==-1)nextDir={x:1,y:0};
+}
+document.querySelectorAll('[data-dir]').forEach(function(b){b.addEventListener('click',function(){setDir(b.dataset.dir);if(!started)start();});});
+document.addEventListener('keydown',function(e){
+  var m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};
+  if(m[e.key]){e.preventDefault();setDir(m[e.key]);if(!started)start();}
+});
+var tx0=0,ty0=0;
+cv.addEventListener('touchstart',function(e){var t=e.changedTouches[0];tx0=t.clientX;ty0=t.clientY;},{passive:true});
+cv.addEventListener('touchend',function(e){
+  var t=e.changedTouches[0],dx=t.clientX-tx0,dy=t.clientY-ty0;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;
+  setDir(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));
+  if(!started)start();
+},{passive:true});
+el('startBtn').addEventListener('click',start);
+el('againBtn').addEventListener('click',start);
+el('boardBtn').addEventListener('click',function(){
+  var p=document.querySelector('[data-fcn-players]');
+  if(p)p.scrollIntoView({behavior:'smooth',block:'start'});
+});
+el('shareBtn').addEventListener('click',function(){
+  var text='I scored '+score+' in Snake on FreeCalcNow! Can you beat it? https://freecalcnow.github.io/games/snake/';
+  if(navigator.share){navigator.share({title:'Snake — FreeCalcNow',text:text}).catch(function(){});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){msg('Score copied — paste it anywhere to share!');});}
+  else{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');}
+});
+draw();
 </script></body></html>
