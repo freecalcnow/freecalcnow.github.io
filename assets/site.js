@@ -373,15 +373,21 @@
       compute=new Function("return ("+src+")")();
     }
   }catch(e){ compute=null; computeErr=e.message; }
+  /* Phase 3 (v9 audit): invalid number input is an ERROR, never a silent
+     default. values() records the first error per bad field in lastErrors;
+     run() shows it instead of a (wrong) answer. */
+  var lastErrors=[];
   function values(){
     var v={};
+    lastErrors=[];
     (T.fields||[]).forEach(function(f){
       var el=document.getElementById("f_"+f.id);
       if(!el) return;
       if(f.type==="select") v[f.id]=el.value;
       else if(f.type==="number" || !f.type){
-        var n=parseFloat(el.value);
-        v[f.id]=isFinite(n)? n : f.def;
+        var err=(typeof validateNumField==="function") ? validateNumField(f, el.value) : null;
+        if(err){ lastErrors.push(err); v[f.id]=f.def; }
+        else { var n=parseFloat(String(el.value).replace(/,/g,"")); v[f.id]=isFinite(n)? n : f.def; }
       } else v[f.id]=el.value;
     });
     return v;
@@ -430,10 +436,13 @@
     });
     if(changed) saveVals();
   }
-  /* The result link: every field, so the recipient sees exactly the same
-     numbers and answer the sender saw. */
-  function resultUrl(){
+  /* The result link. Privacy default (v9 audit, Growth Blueprint Tier 1):
+     a plain link carries NO input values — only an explicit "Copy result link"
+     tap includes the numbers. Saved results (localStorage) still keep the
+     values link, because that never leaves the device. */
+  function resultUrl(withValues){
     var base = location.origin + location.pathname;
+    if(!withValues) return base;
     var parts = [];
     (T.fields||[]).forEach(function(f){
       var el=document.getElementById("f_"+f.id);
@@ -495,8 +504,16 @@
   function run(){
     var big=$("#result-big"), sub=$("#result-sub"), note=$("#result-note");
     if(!compute) return; // custom tools (gpa/password-gen/json/qr) own their result area
+    var vals=values();
+    if(lastErrors.length){
+      if(big) big.textContent="—";
+      if(sub) sub.textContent=lastErrors[0] + (lastErrors.length>1 ? " (" + lastErrors.length + " fields need attention.)" : "");
+      if(note) note.textContent="";
+      renderRows([]); renderChart(null);
+      return;
+    }
     var out;
-    try{ out=compute(values()); }catch(e){ if(big) big.textContent="—"; if(sub) sub.textContent="Check your numbers and try again."; return; }
+    try{ out=compute(vals); }catch(e){ if(big) big.textContent="—"; if(sub) sub.textContent="Check your numbers and try again."; return; }
     if(!out) return;
     if(big) big.textContent = out.big==null ? "—" : String(out.big);
     if(sub) sub.textContent = out.sub || "";
@@ -557,7 +574,7 @@
   /* ---------- share / print ---------- */
   document.querySelectorAll("[data-share]").forEach(function(b){
     b.addEventListener("click", function(){
-      var url=resultUrl(), title=document.title, text=bigResultText();
+      var url=resultUrl(false), title=document.title, text=bigResultText();
       if(navigator.share){ navigator.share({title:title, text:text, url:url}).catch(function(){}); }
       else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ b.textContent="Link copied!"; setTimeout(function(){ b.textContent="Share this calculation"; }, 2000); }); }
       else { prompt("Copy this link:", url); }
@@ -565,13 +582,13 @@
   });
   document.querySelectorAll("[data-share-wa]").forEach(function(b){
     b.addEventListener("click", function(){
-      var text = bigResultText() + " — try it: " + resultUrl();
+      var text = bigResultText() + " — try it: " + resultUrl(false);
       window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank", "noopener");
     });
   });
   document.querySelectorAll("[data-copy-link]").forEach(function(b){
     b.addEventListener("click", function(){
-      var url = resultUrl();
+      var url = resultUrl(true);
       function done(ok){ b.textContent = ok ? "Result link copied!" : "Copy failed — long-press the address bar"; setTimeout(function(){ b.textContent = "Copy result link"; }, 2500); }
       if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){ done(true); }).catch(function(){ done(false); }); }
       else { prompt("Copy this link:", url); }
@@ -587,17 +604,17 @@
     if(!sr) return;
     var btn=document.createElement("button");
     btn.type="button"; btn.className="btn btn-ghost";
-    btn.textContent="\u{1F4BE} Save result";
+    btn.textContent="Save result";
     btn.addEventListener("click", function(){
       try{
         var key="fcn-saved-v1";
         var items=JSON.parse(localStorage.getItem(key)||"[]")||[];
-        var url=resultUrl();
+        var url=resultUrl(true);
         items=items.filter(function(it){ return it.url!==url; });
         items.unshift({name:(window.FCN_PAGE&&window.FCN_PAGE.toolName)||document.title.replace(" — FreeCalcNow",""), url:url, result:bigResultText(), ts:Date.now()});
         localStorage.setItem(key, JSON.stringify(items.slice(0,50)));
         btn.textContent="\u2713 Saved — see /saved/";
-        setTimeout(function(){ btn.textContent="\u{1F4BE} Save result"; }, 2500);
+        setTimeout(function(){ btn.textContent="Save result"; }, 2500);
       }catch(e){ btn.textContent="Could not save on this device"; }
     });
     sr.appendChild(btn);
@@ -713,7 +730,7 @@
    owner can see which build is live. */
 (function(){
   "use strict";
-  var VER="v8.1";
+  var VER="v9";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
   function stampVersion(){
     try{
@@ -786,8 +803,34 @@
       });
     });
   }
+  /* Phase 2 (v9 audit): counts come from ONE generated manifest
+     (assets/manifest-data.json). The baked values are correct at deploy time;
+     this stamp corrects them at runtime if a page was ever baked with stale
+     numbers. English text only — translated pages keep their baked text. */
+  function stampCounts(){
+    if(!window.fetch) return;
+    fetch("/assets/manifest-data.json").then(function(r){ return r.json(); }).then(function(m){
+      try{
+        var pill=document.querySelector(".count-pill");
+        if(pill && /free calculators/.test(pill.textContent)){
+          pill.textContent = Number(m.toolsTotal).toLocaleString("en-US") + " free calculators · No sign-up · " + m.version;
+        }
+        var byId={}; (m.categories||[]).forEach(function(c){ byId[c.id]=c.count; });
+        var tiles=document.querySelectorAll(".cat-tile");
+        for(var i=0;i<tiles.length;i++){
+          var a=tiles[i].querySelector('a[href^="/category/"]');
+          var n=tiles[i].querySelector(".n");
+          if(!a||!n) continue;
+          var id=a.getAttribute("href").replace("/category/","").replace("/","");
+          if(byId[id]==null || !/calculators$/.test(n.textContent.trim())) continue;
+          n.textContent = Number(byId[id]).toLocaleString("en-US") + " calculators";
+        }
+      }catch(e){}
+    }).catch(function(){});
+  }
   function init(){
     stampVersion();
+    stampCounts();
     buildModal();
     var c=document.getElementById("fcn-dl-close");
     if(c) c.addEventListener("click",closeModal);

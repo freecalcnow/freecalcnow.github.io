@@ -2,7 +2,7 @@
    Caches the homepage shell + shared assets on first visit; tool and game
    pages are cached as they are visited (network-first, so answers are never
    stale). No push, no background sync, no tracking. */
-var VERSION = "fcn-v8.1";
+var VERSION = "fcn-v9";
 var SHELL = [
   "/",
   "/assets/style.css",
@@ -22,7 +22,8 @@ var SHELL = [
   "/favicon-v8.1.ico",
   "/favicon.ico",
   "/og-image.png",
-  "/manifest.json"
+  "/manifest.json",
+  "/assets/manifest-data.json"
 ];
 /* v8: fully automatic updates (owner correction 20 Nov 2026) — NO banner,
    NO tap, NO reload. skipWaiting() in install + clients.claim() on activate

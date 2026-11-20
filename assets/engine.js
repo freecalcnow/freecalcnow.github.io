@@ -13,6 +13,22 @@ function money(v,dec){
     return fmtCache[k].format(v);
   }catch(e){ return "$"+Number(v).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
 }
+/* Phase 3 (v9 audit) — pure input validation for number fields.
+   Returns null when the raw input is usable, else a short plain-language
+   error. Rules: blank is never silently replaced by the default; commas are
+   thousands separators (en-US); non-numeric, out-of-range and non-finite
+   values are errors. Select/date/text fields are not number fields and are
+   untouched by this helper. Pure + DOM-free so Node tests can require it. */
+function validateNumField(f, raw){
+  var label = (f && (f.label || f.id)) || "This field";
+  if(raw==null || String(raw).trim()==="") return "Enter a number for " + label + ".";
+  var cleaned = String(raw).trim().replace(/,/g, "");
+  var n = Number(cleaned);
+  if(!isFinite(n)) return label + " must be a number — check for letters or symbols.";
+  if(f && f.min!=null && n < f.min) return label + " must be at least " + f.min + ".";
+  if(f && f.max!=null && n > f.max) return label + " must be no more than " + f.max + ".";
+  return null;
+}
 function num(v,dec){ if(!isFinite(v)) return "—"; return Number(v).toLocaleString("en-US",{minimumFractionDigits:dec||0,maximumFractionDigits:dec===undefined?2:dec}); }
 function pct(v,dec){ return num(v,dec===undefined?2:dec)+"%"; }
 function pmtCalc(P,annualRate,n){ const r=annualRate/100/12; if(n<=0) return 0; if(r===0) return P/n; const f=Math.pow(1+r,n); return P*r*f/(f-1); }

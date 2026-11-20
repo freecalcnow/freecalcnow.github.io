@@ -1,0 +1,83 @@
+{
+  "version": "v9",
+  "generated": "2026-11-20",
+  "toolsTotal": 15402,
+  "gamesTotal": 101,
+  "categories": [
+    {
+      "id": "biology",
+      "name": "Biology",
+      "count": 53
+    },
+    {
+      "id": "chemistry",
+      "name": "Chemistry",
+      "count": 63
+    },
+    {
+      "id": "construction",
+      "name": "Construction",
+      "count": 128
+    },
+    {
+      "id": "conversion",
+      "name": "Conversion",
+      "count": 13811
+    },
+    {
+      "id": "ecology",
+      "name": "Ecology",
+      "count": 41
+    },
+    {
+      "id": "everyday",
+      "name": "Everyday life",
+      "count": 150
+    },
+    {
+      "id": "finance",
+      "name": "Finance",
+      "count": 335
+    },
+    {
+      "id": "food",
+      "name": "Food",
+      "count": 79
+    },
+    {
+      "id": "health",
+      "name": "Health",
+      "count": 159
+    },
+    {
+      "id": "math",
+      "name": "Math",
+      "count": 149
+    },
+    {
+      "id": "other",
+      "name": "Other",
+      "count": 107
+    },
+    {
+      "id": "physics",
+      "name": "Physics",
+      "count": 140
+    },
+    {
+      "id": "sports",
+      "name": "Sports",
+      "count": 104
+    },
+    {
+      "id": "statistics",
+      "name": "Statistics",
+      "count": 83
+    }
+  ],
+  "sources": {
+    "tools": "assets/tools-index.json",
+    "games": "games.json",
+    "version": "assets/site.js VER"
+  }
+}
