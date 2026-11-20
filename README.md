@@ -1,6 +1,6 @@
 # FreeCalcNow
 
-**15,402 free calculators, converters and games — live at [freecalcnow.github.io](https://freecalcnow.github.io/).**
+**15,376 free calculators, converters and games — live at [freecalcnow.github.io](https://freecalcnow.github.io/).**
 
 No sign-up. No account. Your numbers never leave your browser: every
 calculation runs on your device, and the site's analytics log page views
@@ -11,7 +11,7 @@ and [How we calculate](https://freecalcnow.github.io/methodology/).
 
 | Area | Count (verified, 20 Nov 2026) |
 | --- | --- |
-| Calculator & converter pages | 15,402 |
+| Calculator & converter pages | 15,376 |
 | Categories | 14 |
 | Mini games | 101 |
 | Languages in the app | 36 |

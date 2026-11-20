@@ -16,7 +16,7 @@ request.
 3. **New tool ideas.** Use the tool-request issue template. One tool per
    issue, with the formula and a worked example. Bulk lists of
    near-duplicate calculators are not accepted — the catalogue already
-   has 15,402 pages and quality matters more than count.
+   has 15,376 pages and quality matters more than count.
 
 ## Pull requests
 
