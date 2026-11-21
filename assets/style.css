@@ -1,7 +1,7 @@
 /* FreeCalcNow — shared site stylesheet. Mobile-first, clean calculator look.
-   Palette: deep navy #0B1F3A, gold #F59E0B, off-white #F8FAFC, ink #0F172A. (The --green variables are the old name for the primary brand colour - now navy.) */
+   Palette: bright blue #2563EB primary, deep navy #0B1F3A for hero/footer backgrounds only, gold #F59E0B for the Download button only, off-white #F8FAFC, ink #0F172A. (The --green variables are the old name for the primary brand colour - now blue.) */
 :root{
-  --accent:#0B1F3A; --green:#0B1F3A; --green-d:#081426; --green-l:#DBEAFE;
+  --accent:#2563EB; --green:#2563EB; --green-d:#1D4ED8; --green-l:#DBEAFE;
   --bg:#F8FAFC; --surface:#ffffff; --ink:#0F172A; --muted:#475569;
   --line:#e2e8f0; --amber:#F59E0B; --amber-l:#fef3c7;
   --radius:14px; --max:1060px;
@@ -26,7 +26,7 @@ p{margin:.5rem 0}
 .site-head{background:var(--green);background-color:var(--green);color:#fff;position:relative}
 .site-head .wrap{display:flex;align-items:center;gap:12px;min-height:56px;flex-wrap:nowrap;padding-top:6px;padding-bottom:6px}
 .logo{font-weight:800;font-size:1.25rem;color:#fff;letter-spacing:.2px;white-space:nowrap}
-.logo b{color:var(--amber)}
+.logo b{color:#BFDBFE} /* v9.6: gold only for the Download button now */
 .logo img{width:36px;height:36px;border-radius:9px;vertical-align:-10px}
 .site-head nav{display:flex;gap:4px;flex-wrap:wrap}
 .site-head nav a{color:#DBEAFE;padding:6px 10px;border-radius:8px;font-size:.95rem}
@@ -39,20 +39,20 @@ p{margin:.5rem 0}
 .site-head #site-nav .menu-top,.site-head #site-nav .menu-browse,.site-head #site-nav .menu-share{display:none}
 .head-search{margin-left:0;display:flex;gap:6px;width:100%;max-width:640px}
 .head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;flex:1;width:auto}
-.head-search button{border:0;border-radius:9px;background:var(--amber);color:#1c1005;font-weight:700;padding:8px 12px;cursor:pointer}
+.head-search button{border:0;border-radius:9px;background:#2563EB;color:#fff;font-weight:700;padding:8px 12px;cursor:pointer} /* v9.6: blue Search button (mockups) */
 /* Search strip: its own row UNDER the header, so it scrolls away with the
    page instead of eating header space on a phone. */
 .head-search-row{background:var(--surface);border-bottom:1px solid var(--line)}
 .head-search-row .wrap{padding-top:8px;padding-bottom:8px}
 .head-search-row .search-results{margin-top:8px}
 /* hero */
-.hero{background:linear-gradient(180deg,#0B1F3A,#081426);background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;padding:28px 0 24px}
+.hero{background:linear-gradient(180deg,#0B1F3A,#081426);color:#fff;padding:28px 0 24px} /* v9.6: hero background stays navy even though --accent is now blue */
 .hero h1{color:#fff;font-size:2rem;margin:0 0 8px}
 .hero p{color:#DBEAFE;margin:0 0 14px}
 .hero .count-pill{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:4px 12px;font-size:.9rem;margin-bottom:12px}
 .search-big{display:flex;gap:8px;max-width:640px}
 .search-big input{flex:1;border:0;border-radius:12px;padding:13px 14px;font-size:1.05rem;min-width:0}
-.search-big button{border:0;border-radius:12px;background:var(--amber);color:#1c1005;font-weight:800;padding:13px 18px;font-size:1.05rem;cursor:pointer}
+.search-big button{border:0;border-radius:12px;background:#2563EB;color:#fff;font-weight:800;padding:13px 18px;font-size:1.05rem;cursor:pointer} /* v9.6: blue Search button (mockups) */
 .search-results{max-width:640px;margin-top:8px;background:#fff;color:var(--ink);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
 .search-results a{display:block;padding:14px 16px;min-height:48px;font-size:1.02rem;border-bottom:1px solid var(--line);color:var(--ink)}
 .search-results a:last-child{border-bottom:0}
@@ -92,7 +92,7 @@ p{margin:.5rem 0}
 .btn-go{background:var(--green);color:#fff}
 .btn-go:hover{background:var(--green-d)}
 .btn-ghost{background:#e2e8f0;color:#0F172A}
-.btn-amber{background:var(--amber);color:#1c1005}
+.btn-amber{background:#2563EB;color:#fff} /* v9.6: gold only for the Download button now */
 .result{margin-top:16px;border-top:2px solid var(--line);padding-top:14px}
 .result .big{font-size:2rem;font-weight:800;line-height:1.15;overflow-wrap:anywhere}
 .result .sub{color:var(--muted);margin-top:4px}
@@ -138,7 +138,7 @@ p{margin:.5rem 0}
    and while the user is typing in a form control (see assistant.js), so it can
    never cover a result, an input or a button. Tapping it opens the chat panel;
    the panel's × closes it back to just the bubble. */
-.ask-fab{position:fixed;right:16px;bottom:16px;z-index:60;border:0;border-radius:50%;background:var(--amber);color:#1c1005;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.30);cursor:pointer;transition:opacity .2s ease,transform .2s ease}
+.ask-fab{position:fixed;right:16px;bottom:16px;z-index:60;border:0;border-radius:50%;background:#2563EB;color:#fff; /* v9.6: blue, was gold */width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.30);cursor:pointer;transition:opacity .2s ease,transform .2s ease}
 .ask-fab svg{display:block}
 /* Hidden while the hero is still on screen, so the button never covers
    hero text on first paint (toggled by JS in assistant.js). */
@@ -192,7 +192,7 @@ p{margin:.5rem 0}
 .share-row{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0;align-items:center}
 .share-row .btn{padding:8px 12px;font-size:.92rem;border-radius:9px}
 .share-row .fav-btn{padding:8px 12px !important;font-size:.92rem !important}
-@media (max-width:640px){
+@media (max-width:700px){ /* v9.6: mobile header range widened 640 -> 700 so the hamburger + compact header cover the whole phone range */
   h1{font-size:1.45rem}
   .hero h1{font-size:1.6rem}
   /* v9.1 mobile header fix (owner report 20 Nov): the header is ONE row —
@@ -230,9 +230,9 @@ p{margin:.5rem 0}
 }
 @media (prefers-color-scheme:dark){
   :root{--bg:#0b1220;--surface:#111c33;--ink:#e2e8f0;--muted:#94a3b8;--line:#243449}
-  a{color:#FBBF24}
-  .feedback .thanks,.cat-tile .n{color:var(--cat-c,#FBBF24)}
-  .ask-msg a{color:#FBBF24}
+  a{color:#93C5FD}
+  .feedback .thanks,.cat-tile .n{color:var(--cat-c,#93C5FD)}
+  .ask-msg a{color:#93C5FD}
   .ask-msg.user a{color:var(--accent)}
   .head-search input,.search-big input,.ask-input input,.feedback textarea{background:#0b1220;color:var(--ink);border-color:#334155}
   .search-results,.search-results a{color:var(--ink)}
@@ -252,9 +252,9 @@ p{margin:.5rem 0}
 }
 
 /* --- Round 6: daily hero, streak, WhatsApp share --- */
-.btn-wa{background:#0B1F3A;color:#fff} /* v9.1 no-green rule: was WhatsApp brand green #25D366; the label still says WhatsApp and it still opens wa.me */
-.btn-wa:hover{background:#1E3A5F}
-.daily-hero{background:linear-gradient(135deg,#0B1F3A,#081426);background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 72%,#000));color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0}
+.btn-wa{background:#2563EB;color:#fff} /* v9.6 blue; v9.1 no-green rule kept: was WhatsApp brand green #25D366; the label still says WhatsApp and it still opens wa.me */
+.btn-wa:hover{background:#1D4ED8}
+.daily-hero{background:linear-gradient(135deg,#0B1F3A,#081426);color:#fff;border-radius:14px;padding:18px 20px;margin:18px 0} /* v9.6: daily hero stays navy */
 .daily-hero h2{color:#fff;margin-top:0}
 .daily-hero a{color:#fde68a}
 .daily-hero .streak-pill{display:inline-block;background:#f59e0b;color:#1c1005;font-weight:800;border-radius:999px;padding:4px 12px;margin:4px 0}
@@ -450,3 +450,62 @@ html[data-fcn-mode="dark"] body.fcn-custom-bg #set-lang{background:#0b1220;color
   .games-mini a{font-size:.85rem}
   .pk-hub{padding:14px 16px}
 }
+
+/* v9.6 — blue theme + pastel cards + mobile hero art + compact mobile header
+   (owner mockups 21 Nov 2026: Image 1 base + Image 4 pastel cards).
+   Bright blue #2563EB is the primary brand colour (default theme only — the
+   saved ocean/sunset/grape/midnight themes still override --accent, and the
+   head script's saved-accent override still works). Navy #0B1F3A stays ONLY
+   for the hero and footer backgrounds. Gold stays ONLY for the Download app
+   button (.dl-btn / .home-nav-dl). Later rules win over the v9.5 block. */
+.hero{background:linear-gradient(180deg,#0B1F3A,#081426)}
+.hero h1 .hl{color:#38BDF8}
+.hero .search-hint a{color:#BFDBFE}
+.trust-row svg{color:#93C5FD}
+.top-list .num{background:#2563EB}
+.top-list .go{color:#2563EB}
+.foot-stats span::before{background:#2563EB}
+.daily-card95 h3 svg{color:#93C5FD}
+.daily-card95 .btn-gold{background:#2563EB;color:#fff}
+.daily-card95 .btn-gold:hover{background:#1D4ED8}
+/* hero art: visible on mobile too — scaled, below the hero text, never hidden */
+.hero-art{display:block;width:min(200px,56vw);height:auto;margin:18px auto 0}
+@media (min-width:900px){
+  .hero .wrap>.hero-art{margin:0}
+}
+/* pastel category cards (Image 4 palette) — --cat-bg is set per tile in the
+   markup; /tools/ tiles have no --cat-bg and keep the plain surface. */
+.cat-pastel .cat-tile{background:var(--cat-bg,var(--surface));border-top:0;border-color:color-mix(in srgb,var(--cat-c) 28%,var(--line))}
+.cat-pastel .cat-tile .cat-ico{background:transparent;width:56px;height:56px;margin-bottom:6px}
+.cat-pastel .cat-tile .cat-ico svg{width:32px;height:32px}
+/* dark mode: darker muted versions of the same pastels, still distinct per
+   category; icon + count lighten so they stay readable on the dark pastel. */
+@media (prefers-color-scheme:dark){
+  .cat-pastel .cat-tile{background:color-mix(in srgb,var(--cat-bg) 22%,var(--surface))}
+  .cat-pastel .cat-tile .cat-ico,.cat-pastel .cat-tile .n{color:color-mix(in srgb,var(--cat-c) 60%,#fff)}
+}
+html[data-fcn-mode="dark"] .cat-pastel .cat-tile{background:color-mix(in srgb,var(--cat-bg) 22%,var(--surface))}
+html[data-fcn-mode="dark"] .cat-pastel .cat-tile .cat-ico,html[data-fcn-mode="dark"] .cat-pastel .cat-tile .n{color:color-mix(in srgb,var(--cat-c) 60%,#fff)}
+html[data-fcn-theme="midnight"] .cat-pastel .cat-tile{background:color-mix(in srgb,var(--cat-bg) 22%,var(--surface))}
+html[data-fcn-theme="midnight"] .cat-pastel .cat-tile .cat-ico,html[data-fcn-theme="midnight"] .cat-pastel .cat-tile .n{color:color-mix(in srgb,var(--cat-c) 60%,#fff)}
+/* explicit dark mode: links go light blue (the default #2563EB is too dark
+   on the dark navy background). :where() keeps this below every component
+   rule, so tile titles, nav links and buttons keep their own colours. */
+html[data-fcn-mode="dark"] :where(a:not(.dl-btn):not(.btn)){color:#93C5FD}
+/* compact mobile header (<=700px): logo + hamburger + Download only.
+   The pill quick-nav row hides; its 7 links live in the hamburger menu. */
+@media (max-width:700px){
+  .home-nav{display:none}
+  .site-head .wrap{padding-left:12px;padding-right:12px}
+  .site-head .wrap .dl-btn{display:inline-block;flex:none;padding:7px 8px;font-size:.82rem}
+  .logo{font-size:1rem}
+  .logo img{width:28px;height:28px;vertical-align:-8px}
+  .menu-btn{width:38px;height:38px}
+}
+
+/* v9.6b — the menu's Download button must stay hidden on desktop: the base
+   .nav-dl{display:none} loses to the later .dl-btn{display:inline-block}
+   (same specificity, later wins — and flex blockifies it), so the desktop
+   header showed TWO Download buttons. This higher-specificity rule hides
+   it; the .menu-open rule still wins when the mobile menu is open. */
+.site-head #site-nav a.nav-dl{display:none}

@@ -872,7 +872,7 @@
    owner can see which build is live. */
 (function(){
   "use strict";
-  var VER="v9.5";
+  var VER="v9.6";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
   function stampVersion(){
     try{
