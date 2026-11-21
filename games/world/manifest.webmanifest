@@ -1,0 +1,10 @@
+{
+  "name": "FreeCalcNow Games World",
+  "short_name": "Games World",
+  "description": "100 playable browser game experiences.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090d1c",
+  "theme_color": "#090d1c",
+  "icons": [{"src":"assets/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
