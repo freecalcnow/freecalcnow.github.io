@@ -381,3 +381,72 @@ html[data-fcn-mode="dark"] body.fcn-custom-bg #set-lang{background:#0b1220;color
 /* v9.3 Tier 1 — formula/source line under a tool's formula (golden-tested tools only). */
 .formula-src{font-size:.9rem;color:var(--muted);margin:6px 0 0}
 .formula-src b{color:var(--ink)}
+
+/* v9.5 — homepage redesign (owner mockups 21 Nov 2026: Image 1 base +
+   Image 5 Pakistan Hub). Navy #0B1F3A + gold brand kept; bright blue is
+   accent only. Every new component uses theme vars (--surface/--ink/
+   --muted/--line) so light + dark both work; the hero and the Daily
+   Challenge card are dark by design in both themes. */
+.hero h1 .hl{color:#FBBF24}
+.hero-art{display:none}
+@media (min-width:900px){
+  .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:20px;align-items:center}
+  .hero .wrap>*{grid-column:1}
+  /* NOTE: .hero-art needs a MORE specific selector than .hero .wrap>* above,
+     or the art lands in column 1 and pushes all hero text below it. */
+  .hero .wrap>.hero-art{display:block;grid-column:2;grid-row:1/span 9;justify-self:center}
+}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 4px}
+.chip-row .lbl{color:#DBEAFE;font-weight:700;margin-right:2px}
+.chip{display:inline-block;padding:6px 14px;border:1px solid rgba(255,255,255,.4);border-radius:999px;color:#fff;background:rgba(255,255,255,.12);font-weight:700;text-decoration:none}
+.chip:hover{background:rgba(255,255,255,.24);text-decoration:none}
+.trust-row{display:flex;flex-wrap:wrap;gap:8px 22px;margin:18px 0 4px}
+.trust-row span{display:inline-flex;gap:8px;align-items:center;color:#DBEAFE;font-weight:600;font-size:.95rem}
+.trust-row svg{color:#FBBF24;flex:none;width:20px;height:20px}
+.hero .share-row{margin-top:16px}
+.cat-head{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;justify-content:space-between}
+.cat-head h2{margin-bottom:0}
+.cat-head .meta{color:var(--muted);font-weight:700;margin:0}
+.cat-head .view-all{font-weight:800;white-space:nowrap}
+.cat-tile .cat-ico{display:flex;width:52px;height:52px;border-radius:12px;align-items:center;justify-content:center;background:color-mix(in srgb,var(--cat-c) 14%,var(--surface));color:var(--cat-c);margin-bottom:10px}
+.cat-tile .cat-ico svg{width:26px;height:26px}
+.home-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;align-items:start}
+@media (max-width:860px){.home-trio{grid-template-columns:1fr}}
+.trio-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.trio-card>h3{margin-top:0}
+.top-list{list-style:none;margin:0;padding:0}
+.top-list li{border-bottom:1px solid var(--line)}
+.top-list li:last-child{border-bottom:0}
+.top-list a{display:flex;gap:10px;align-items:flex-start;padding:10px 2px;color:var(--ink)}
+.top-list a:hover{text-decoration:none}
+.top-list .num{flex:none;width:26px;height:26px;border-radius:50%;background:#0B1F3A;color:#fff;font-weight:800;text-align:center;line-height:26px;font-size:.85rem}
+.top-list b{display:block}
+.top-list small{display:block;color:var(--muted);font-weight:400}
+.top-list .go{margin-left:auto;color:#F59E0B;font-weight:800}
+.games-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.games-mini a{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:1px solid var(--line);border-radius:12px;color:var(--ink);font-weight:700;font-size:.9rem;text-align:center}
+.games-mini a:hover{border-color:#F59E0B;text-decoration:none}
+.games-mini img{width:44px;height:44px}
+.daily-card95{background:linear-gradient(135deg,#2E1065,#6D28D9);color:#fff;border:0}
+.daily-card95 h3{color:#fff}
+.daily-card95 h3 svg{color:#FBBF24;vertical-align:-4px;margin-right:6px}
+.daily-card95 p{color:#EDE9FE}
+.daily-card95 .btn-gold{display:inline-block;background:#F59E0B;color:#1c1005;font-weight:800;border-radius:999px;padding:10px 18px;text-decoration:none}
+.daily-card95 .btn-gold:hover{background:#FBBF24}
+.daily-card95 .small{color:#C4B5FD}
+.pk-hub{background:color-mix(in srgb,#15803D 9%,var(--surface));border:1px solid color-mix(in srgb,#15803D 35%,var(--line));border-radius:var(--radius);padding:18px 20px;margin:18px 0;box-shadow:var(--shadow)}
+.pk-hub h2{margin-top:0}
+.pk-hub h2 svg{vertical-align:-5px;margin-right:8px}
+.pk-links{list-style:none;margin:12px 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 20px}
+.pk-links a{display:flex;gap:10px;align-items:flex-start;color:var(--ink);font-weight:700}
+.pk-links a small{display:block;color:var(--muted);font-weight:400}
+.pk-links svg{color:#15803D;flex:none;width:22px;height:22px;margin-top:2px}
+.pk-hub .btn{margin-top:6px}
+.foot-stats{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;padding:14px 0;border-top:1px solid #243449;border-bottom:1px solid #243449;margin-bottom:18px}
+.foot-stats span{color:#e2e8f0;font-weight:700}
+.foot-stats span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#F59E0B;margin-right:8px;vertical-align:1px}
+@media (max-width:640px){
+  .hero h1{font-size:1.7rem}
+  .games-mini a{font-size:.85rem}
+  .pk-hub{padding:14px 16px}
+}
