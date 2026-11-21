@@ -38,7 +38,7 @@ p{margin:.5rem 0}
    they appear only inside the open mobile menu (see the 640px block). */
 .site-head #site-nav .menu-top,.site-head #site-nav .menu-browse,.site-head #site-nav .menu-share{display:none}
 .head-search{margin-left:0;display:flex;gap:6px;width:100%;max-width:640px}
-.head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;flex:1;width:auto}
+.head-search input{border:1px solid transparent;border-radius:9px;padding:8px 10px;font-size:1rem;min-width:0;flex:1;width:auto;background:var(--surface);color:var(--ink)} /* v9.6c: typed text follows the theme vars */
 .head-search button{border:0;border-radius:9px;background:#2563EB;color:#fff;font-weight:700;padding:8px 12px;cursor:pointer} /* v9.6: blue Search button (mockups) */
 /* Search strip: its own row UNDER the header, so it scrolls away with the
    page instead of eating header space on a phone. */
@@ -51,9 +51,9 @@ p{margin:.5rem 0}
 .hero p{color:#DBEAFE;margin:0 0 14px}
 .hero .count-pill{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:4px 12px;font-size:.9rem;margin-bottom:12px}
 .search-big{display:flex;gap:8px;max-width:640px}
-.search-big input{flex:1;border:0;border-radius:12px;padding:13px 14px;font-size:1.05rem;min-width:0}
+.search-big input{flex:1;border:0;border-radius:12px;padding:13px 14px;font-size:1.05rem;min-width:0;background:var(--surface);color:var(--ink)} /* v9.6c: typed text follows the theme vars */
 .search-big button{border:0;border-radius:12px;background:#2563EB;color:#fff;font-weight:800;padding:13px 18px;font-size:1.05rem;cursor:pointer} /* v9.6: blue Search button (mockups) */
-.search-results{max-width:640px;margin-top:8px;background:#fff;color:var(--ink);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.search-results{max-width:640px;margin-top:8px;background:var(--surface);color:var(--ink);border-radius:12px;box-shadow:var(--shadow);overflow:hidden} /* v9.6c: box follows the theme vars — was hardcoded #fff, dark only via the media query */
 .search-results a{display:block;padding:14px 16px;min-height:48px;font-size:1.02rem;border-bottom:1px solid var(--line);color:var(--ink)}
 .search-results a:last-child{border-bottom:0}
 .search-results a small{display:block;color:var(--muted)}
@@ -234,9 +234,8 @@ p{margin:.5rem 0}
   .feedback .thanks,.cat-tile .n{color:var(--cat-c,#93C5FD)}
   .ask-msg a{color:#93C5FD}
   .ask-msg.user a{color:var(--accent)}
-  .head-search input,.search-big input,.ask-input input,.feedback textarea{background:#0b1220;color:var(--ink);border-color:#334155}
-  .search-results,.search-results a{color:var(--ink)}
-  .search-results{background:#111c33}
+  .ask-input input,.feedback textarea{background:#0b1220;color:var(--ink);border-color:#334155} /* v9.6c: search inputs no longer forced dark here — they follow var(--surface) now */
+  .search-results,.search-results a{color:var(--ink)} /* v9.6c: the old background:#111c33 override is gone — it forced a dark box even when the theme vars were light (saved themes, or site-light + OS-dark) */
   .field input,.field select,.field textarea{background:#0b1220;color:var(--ink);border-color:#334155}
   .ask-panel,.ask-msg{background:#111c33}
   .ask-msg{background:#1e293b}
@@ -509,3 +508,19 @@ html[data-fcn-mode="dark"] :where(a:not(.dl-btn):not(.btn)){color:#93C5FD}
    header showed TWO Download buttons. This higher-specificity rule hides
    it; the .menu-open rule still wins when the mobile menu is open. */
 .site-head #site-nav a.nav-dl{display:none}
+
+/* v9.6c — dark-mode search contrast (owner complaint 21 Nov 13:54, TOP
+   priority): result titles were invisible in two real combinations —
+   site mode light + OS dark (dark text on the media-query's dark box) and
+   site mode dark + OS light (light text on the base white box), plus saved
+   themes (e.g. ocean) + OS dark. Root cause: the results box background
+   was hardcoded (#fff base, #111c33 in the prefers-dark block) while the
+   text colours came from theme vars — the two mechanisms disagreed. The
+   box now follows var(--surface) like everything else, so background and
+   text can never disagree again. The selected (arrow-key) row finally has
+   a visible highlight too — it had class="active" with no CSS at all. */
+html[data-fcn-mode="dark"] .search-results{background:var(--surface);color:var(--ink)}
+html[data-fcn-mode="dark"] .search-results a{color:var(--ink)}
+html[data-fcn-mode="dark"] .search-results a small{color:var(--muted)}
+html[data-fcn-mode="dark"] .head-search input,html[data-fcn-mode="dark"] .search-big input{background:var(--surface);color:var(--ink)}
+.search-results a.active,.search-results a:hover{background:color-mix(in srgb,var(--accent) 14%,var(--surface))}
