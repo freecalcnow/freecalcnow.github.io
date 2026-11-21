@@ -1,4 +1,4 @@
-const CACHE = 'freecalcnow-games-world-v1';
+const CACHE = 'freecalcnow-games-world-v2';
 const GAME_ART = Array.from({length:100}, (_,i) => `./assets/games/${String(i+1).padStart(3,'0')}.svg`);
 const FILES = ['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./assets/favicon.svg',...GAME_ART];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)).then(() => self.skipWaiting())));

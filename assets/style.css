@@ -234,14 +234,13 @@ p{margin:.5rem 0}
   .feedback .thanks,.cat-tile .n{color:var(--cat-c,#93C5FD)}
   .ask-msg a{color:#93C5FD}
   .ask-msg.user a{color:var(--accent)}
-  .ask-input input,.feedback textarea{background:#0b1220;color:var(--ink);border-color:#334155} /* v9.6c: search inputs no longer forced dark here — they follow var(--surface) now */
+  .ask-input input,.feedback textarea{background:var(--surface);color:var(--ink);border-color:var(--line)} /* v9.8: was background:#0b1220 — dark box, dark ink in site-light + OS-dark */
   .search-results,.search-results a{color:var(--ink)} /* v9.6c: the old background:#111c33 override is gone — it forced a dark box even when the theme vars were light (saved themes, or site-light + OS-dark) */
-  .field input,.field select,.field textarea{background:#0b1220;color:var(--ink);border-color:#334155}
-  .ask-panel,.ask-msg{background:#111c33}
-  .ask-msg{background:#1e293b}
-  .ask-chips button{background:#111c33;color:var(--ink)}
-  .game-tile{background:#0b1220;color:var(--ink)}
-  .ad-slot{background:#111c33}
+  .field input,.field select,.field textarea{background:var(--surface);color:var(--ink);border-color:var(--line)}
+  .ask-panel,.ask-msg,.ask-inline{background:var(--surface)}
+  .ask-chips button{background:var(--surface);color:var(--ink)}
+  .game-tile{background:var(--surface);color:var(--ink)}
+  .ad-slot{background:var(--surface)}
 }
 /* printing a tool: only the calculator and its answer, nothing else */
 @media print{
@@ -348,13 +347,13 @@ body.fcn-custom-bg .ask-msg.user{background:#DBEAFE}
 body.fcn-custom-bg .game-tile{background:#fff}
 body.fcn-custom-bg #set-lang{background:#fff}
 @media (prefers-color-scheme:dark){
-body.fcn-custom-bg::before{background:rgba(11,18,32,.80)}
-body.fcn-custom-bg .tool-card,body.fcn-custom-bg .cat-tile,body.fcn-custom-bg .rel-card,body.fcn-custom-bg .game-box,body.fcn-custom-bg .feedback,body.fcn-custom-bg .tool-list li,body.fcn-custom-bg .ad-slot,body.fcn-custom-bg .teaser,body.fcn-custom-bg .search-results,body.fcn-custom-bg .sponsor-box,body.fcn-custom-bg .ask-panel{background:rgba(17,28,51,.94)}
-body.fcn-custom-bg .tool-card .formula{background:#1e3a5f}
-body.fcn-custom-bg .ask-msg{background:#1e293b}
-body.fcn-custom-bg .ask-msg.user{background:#1e3a5f}
-body.fcn-custom-bg .game-tile{background:#0b1220}
-body.fcn-custom-bg #set-lang{background:#0b1220;color:#e2e8f0}
+html:not([data-fcn-mode="light"]) body.fcn-custom-bg::before{background:rgba(11,18,32,.80)}
+html:not([data-fcn-mode="light"]) body.fcn-custom-bg .tool-card,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .cat-tile,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .rel-card,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .game-box,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .feedback,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .tool-list li,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .ad-slot,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .teaser,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .search-results,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .sponsor-box,html:not([data-fcn-mode="light"]) body.fcn-custom-bg .ask-panel{background:rgba(17,28,51,.94)}
+html:not([data-fcn-mode="light"]) body.fcn-custom-bg .tool-card .formula{background:#1e3a5f}
+html:not([data-fcn-mode="light"]) body.fcn-custom-bg .ask-msg{background:#1e293b}
+html:not([data-fcn-mode="light"]) body.fcn-custom-bg .ask-msg.user{background:#1e3a5f}
+html:not([data-fcn-mode="light"]) body.fcn-custom-bg .game-tile{background:#0b1220}
+html:not([data-fcn-mode="light"]) body.fcn-custom-bg #set-lang{background:#0b1220;color:#e2e8f0}
 }
 html[data-fcn-mode="dark"] body.fcn-custom-bg::before{background:rgba(11,18,32,.80)}
 html[data-fcn-mode="dark"] body.fcn-custom-bg .tool-card,html[data-fcn-mode="dark"] body.fcn-custom-bg .cat-tile,html[data-fcn-mode="dark"] body.fcn-custom-bg .rel-card,html[data-fcn-mode="dark"] body.fcn-custom-bg .game-box,html[data-fcn-mode="dark"] body.fcn-custom-bg .feedback,html[data-fcn-mode="dark"] body.fcn-custom-bg .tool-list li,html[data-fcn-mode="dark"] body.fcn-custom-bg .ad-slot,html[data-fcn-mode="dark"] body.fcn-custom-bg .teaser,html[data-fcn-mode="dark"] body.fcn-custom-bg .search-results,html[data-fcn-mode="dark"] body.fcn-custom-bg .sponsor-box,html[data-fcn-mode="dark"] body.fcn-custom-bg .ask-panel{background:rgba(17,28,51,.94)}
@@ -609,3 +608,65 @@ html[data-fcn-mode="dark"] .head-search input,html[data-fcn-mode="dark"] .search
 }
 /* v9.7 add-on — hide card rows while searching/filtering */
 .g97-main.g97-searching #sec-trending,.g97-main.g97-searching #sec-new,.g97-main.g97-searching #sec-most-played,.g97-main.g97-searching #sec-continue{display:none}
+
+/* ============================================================
+   v9.8a — CONTRAST: explicit site-dark + OS-light, and saved themes.
+   The base rules paint hardcoded LIGHT boxes (#fff) with theme-var text;
+   in site-dark + OS-light the prefers-dark block does not apply, so the
+   text went light on a light box (invisible). These mirror rules force
+   var(--surface) whenever the site mode is dark, regardless of the OS.
+   ============================================================ */
+html[data-fcn-mode="dark"] .field input,
+html[data-fcn-mode="dark"] .field select,
+html[data-fcn-mode="dark"] .field textarea,
+html[data-fcn-mode="dark"] .ask-input input,
+html[data-fcn-mode="dark"] .feedback textarea,
+html[data-fcn-mode="dark"] .ask-panel,
+html[data-fcn-mode="dark"] .ask-inline,
+html[data-fcn-mode="dark"] .ask-msg,
+html[data-fcn-mode="dark"] .ask-chips button,
+html[data-fcn-mode="dark"] .game-tile,
+html[data-fcn-mode="dark"] .ad-slot{background:var(--surface);color:var(--ink);border-color:var(--line)}
+/* Midnight theme (saved theme, --green-l is dark #0c4a6e): three light-text-on-
+   light-bg pairs were invisible. Force light text on the dark green-l. */
+html[data-fcn-theme="midnight"] .tool-card .formula,
+html[data-fcn-theme="midnight"] .ask-msg.user,
+html[data-fcn-theme="midnight"] .game-tile.sel{color:#e0f2fe}
+html[data-fcn-theme="midnight"] .pill{color:#bae6fd}
+html[data-fcn-theme="midnight"] .teaser{color:#0F172A}
+html[data-fcn-theme="midnight"] .site-head,
+html[data-fcn-theme="midnight"] .ask-head,
+html[data-fcn-theme="midnight"] .ask-input button{background:#0284c7}
+/* ============================================================
+   v9.8c — LEFT SIDE PANEL (owner 21 Nov 2026). The mobile nav becomes a
+   left drawer (min 320px / 86vw) with a backdrop; sections are built by
+   site.js at runtime (Games + Tools + every category, each with its own
+   icon). Icons are panel-only — desktop keeps the plain inline links.
+   ============================================================ */
+.site-head #site-nav a .nav-ico{display:none}
+.site-head #site-nav .nav-panel-only{display:none}
+.site-head .menu-backdrop{display:none}
+@media (max-width:700px){
+  .site-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:var(--surface);color:var(--ink);padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .site-head.menu-open #site-nav{transform:none;visibility:visible}
+  /* v9.8c-fix: the pre-v9.8 rule (.site-head.menu-open #site-nav) sets
+     background:var(--green) at HIGHER specificity than the drawer base
+     above, so without this same-specificity override the panel stayed
+     blue instead of the theme surface. */
+  .site-head.menu-open #site-nav{right:auto;width:min(320px,86vw);background:var(--surface);color:var(--ink);padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 0 60px rgba(2,6,23,.35)}
+  .site-head.menu-open #site-nav a{color:var(--ink)}
+  .site-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .site-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:var(--muted);font-weight:600;font-size:.78rem}
+  .site-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:var(--accent)}
+  .site-head.menu-open #site-nav .nav-panel-only{display:block}
+  .site-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:var(--muted);text-transform:uppercase;margin:14px 4px 6px}
+  .site-head.menu-open #site-nav .nav-head .nav-ico{color:var(--accent)}
+  .site-head.menu-open #site-nav .menu-top{display:flex}
+  .site-head.menu-open #site-nav .menu-top .logo{color:var(--ink)}
+  .site-head.menu-open #site-nav .menu-top .logo b{color:var(--accent)}
+  .site-head.menu-open #site-nav .menu-close{border-color:var(--line);color:var(--ink)}
+  .site-head.menu-open #site-nav .menu-browse{color:var(--muted)}
+  .site-head.menu-open #site-nav .menu-browse a{color:var(--accent)}
+  .site-head.menu-open #site-nav .menu-share{border-color:var(--line);color:var(--ink)}
+  .site-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}

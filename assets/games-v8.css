@@ -158,3 +158,1135 @@ html[data-fcn-mode="dark"] body .ask-msg a,html.fcn-os-dark body .ask-msg a,body
 html[data-fcn-mode="dark"] body .ask-chips button,html.fcn-os-dark body .ask-chips button,body.theme-dark .ask-chips button{background:#111c33;color:#e2e8f0;border-color:#334155}
 html[data-fcn-mode="dark"] body .ask-input,html.fcn-os-dark body .ask-input,body.theme-dark .ask-input{border-top-color:#243449}
 html[data-fcn-mode="dark"] body .ask-input input,html.fcn-os-dark body .ask-input input,body.theme-dark .ask-input input{background:#0b1220;color:#e2e8f0;border-color:#334155}
+
+/* v9.4 — dark-mode safety net: when the user has NOT explicitly chosen
+   light, the OS dark preference darkens game pages through CSS alone.
+   The head script also sets the fcn-os-dark class in auto+OS-dark, but
+   this block keeps the page dark even if that script is bypassed, and
+   live OS switches keep working because this is a media query. */
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) body{background:#0f172a;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) body #game,html:not([data-fcn-mode="light"]) body .bar{background:#1e293b;border-color:#334155;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) body .opt,html:not([data-fcn-mode="light"]) body .tile{background:#1e293b;color:#e2e8f0;border-color:#334155}
+  html:not([data-fcn-mode="light"]) body .how,html:not([data-fcn-mode="light"]) body .small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) body .btn.ghost{background:#334155;color:#f1f5f9}
+  html:not([data-fcn-mode="light"]) body input[type=text],html:not([data-fcn-mode="light"]) body input[type=number]{background:#0b1220;color:#e2e8f0;border-color:#334155}
+  html:not([data-fcn-mode="light"]) body .vars a{background:#1e293b;color:#FCD34D;border-color:#334155}
+  html:not([data-fcn-mode="light"]) body .fcn-players,html:not([data-fcn-mode="light"]) body .fcn-howto{background:#1e293b;border-color:#334155;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) body .fcn-howto p,html:not([data-fcn-mode="light"]) body .fcn-howto ol{color:#cbd5e1}
+  html:not([data-fcn-mode="light"]) body .fcn-howto-btn{background:#1e293b;color:#f1f5f9;border-color:#334155}
+  html:not([data-fcn-mode="light"]) body .fcn-pl-row{border-color:#1e293b}
+  html:not([data-fcn-mode="light"]) body .fcn-pl-note,html:not([data-fcn-mode="light"]) body .fcn-pl-foot{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) body .ask-panel{background:#111c33;border-color:#243449}
+  html:not([data-fcn-mode="light"]) body .ask-msg{background:#1e293b;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) body .ask-msg.user{background:#1e3a5f;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) body .ask-msg a{color:#FBBF24}
+  html:not([data-fcn-mode="light"]) body .ask-chips button{background:#111c33;color:#e2e8f0;border-color:#334155}
+  html:not([data-fcn-mode="light"]) body .ask-input{border-top-color:#243449}
+  html:not([data-fcn-mode="light"]) body .ask-input input{background:#0b1220;color:#e2e8f0;border-color:#334155}
+  html:not([data-fcn-mode="light"]) body footer{color:#94a3b8}
+}
+
+/* v9.4 — game boards go FULL-WIDTH on phones (owner report 20 Nov 2026:
+   Pac-Man maze small with empty space on its sides). The game card breaks
+   out to the full viewport width (100vw breakout, no padding/border) so
+   the board spans the whole screen; the arrow pad gets compact so the
+   game fills more of the screen. games-v8.css loads after each page's
+   inline <style>, so these rules win the tie against the v9.3 small-screen
+   media query. Scoped to phones (overlay scrollbars), so 100vw cannot
+   cause a horizontal scrollbar. */
+@media (max-width:480px){
+  #game{width:100vw;margin-left:calc(50% - 50vw);padding:0;border:0;border-radius:0;background:transparent}
+  #game canvas{width:100%;height:auto;display:block}
+  #game .grid{margin-top:8px;gap:6px;padding:0 8px}
+  #game .grid .opt{padding:9px 0;font-size:17px}
+  #game .small{margin-top:6px;padding:0 8px}
+}
+
+/* v9.4 — on-page dark/light toggle in the game header (owner report
+   20 Nov 2026: game pages stay white even though his phone is dark —
+   his Chrome UI is dark but the system may be light, so no automatic
+   rule can help; one tap on the moon switches the page dark and
+   remembers it in fcn-settings-v1). Moon shows in light mode, sun in
+   dark mode. */
+.game-head .theme-btn{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.35);border-radius:10px;background:transparent;color:#F59E0B;cursor:pointer}
+.game-head .theme-btn:focus-visible{outline:3px solid #FDE68A;outline-offset:2px}
+.game-head .theme-btn .ic-sun{display:none}
+html[data-fcn-mode="dark"] .game-head .theme-btn .ic-sun,html.fcn-os-dark .game-head .theme-btn .ic-sun{display:block}
+html[data-fcn-mode="dark"] .game-head .theme-btn .ic-moon,html.fcn-os-dark .game-head .theme-btn .ic-moon{display:none}
+@media (max-width:640px){
+  .game-head .theme-btn{margin-left:auto}
+  .game-head .menu-btn{margin-left:0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  /* v9.8-fix: same specificity issue as style.css — without this the
+     light-mode game panel stayed navy (#0B1F3A) with dark text. Dark-mode
+     rules below (higher specificity) still win when dark. */
+  .game-head.menu-open #site-nav{right:auto;width:min(320px,86vw);background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 0 60px rgba(2,6,23,.35)}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}
+
+/* ============================================================
+   v9.8 — CONTRAST on game pages. (a) .fcn-pl-rank/.fcn-pl-games kept
+   #64748b in dark mode (~2.6:1 on #1e293b — invisible for a player list).
+   (b) .fcn-pl-row.fcn-you painted #fffbeb (light amber) and inherited the
+   dark-mode light text — invisible. Force a dark readable text on it.
+   (c) LEFT SIDE PANEL for game-head pages (mirror of style.css v9.8c,
+   using this file's own dark-mode approach: explicit attribute rules
+   plus the not-light media query).
+   ============================================================ */
+html[data-fcn-mode="dark"] .fcn-pl-rank,
+html.fcn-os-dark .fcn-pl-rank,
+body.theme-dark .fcn-pl-rank,
+html[data-fcn-mode="dark"] .fcn-pl-games,
+html.fcn-os-dark .fcn-pl-games,
+body.theme-dark .fcn-pl-games{color:#94a3b8}
+html[data-fcn-mode="dark"] .fcn-pl-row.fcn-you,
+html.fcn-os-dark .fcn-pl-row.fcn-you,
+body.theme-dark .fcn-pl-row.fcn-you{color:#78350f}
+.game-head #site-nav a .nav-ico{display:none}
+.game-head #site-nav .nav-panel-only{display:none}
+.game-head .menu-backdrop{display:none}
+@media (max-width:640px){
+  .game-head #site-nav{display:flex;position:fixed;top:0;left:0;right:auto;bottom:0;width:min(320px,86vw);max-width:86vw;flex-direction:column;align-items:stretch;gap:2px;background:#fff;color:#0F172A;padding:10px 12px calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto;z-index:200;box-shadow:0 0 60px rgba(2,6,23,.35);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s}
+  .game-head.menu-open #site-nav{transform:none;visibility:visible}
+  .game-head.menu-open #site-nav a{color:#0F172A}
+  .game-head.menu-open #site-nav a.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px}
+  .game-head.menu-open #site-nav a.nav-item small{margin-left:auto;color:#475569;font-weight:600;font-size:.78rem}
+  .game-head.menu-open #site-nav a .nav-ico{display:inline-flex;flex:none;color:#2563EB}
+  .game-head.menu-open #site-nav .nav-panel-only{display:block}
+  .game-head.menu-open #site-nav .nav-head{display:flex;align-items:center;gap:8px;font-size:.78rem;letter-spacing:1.5px;font-weight:800;color:#475569;text-transform:uppercase;margin:14px 4px 6px}
+  .game-head.menu-open #site-nav .nav-head .nav-ico{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-top{display:flex}
+  .game-head.menu-open #site-nav .menu-top .logo{color:#0F172A}
+  .game-head.menu-open #site-nav .menu-close{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open #site-nav .menu-browse{color:#475569}
+  .game-head.menu-open #site-nav .menu-browse a{color:#2563EB}
+  .game-head.menu-open #site-nav .menu-share{border-color:#e2e8f0;color:#0F172A}
+  .game-head.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:199}
+}
+html[data-fcn-mode="dark"] .game-head #site-nav,
+html.fcn-os-dark .game-head #site-nav,
+body.theme-dark .game-head #site-nav{background:#111c33;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a,
+html.fcn-os-dark .game-head.menu-open #site-nav a,
+body.theme-dark .game-head.menu-open #site-nav a{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a.nav-item small,
+html.fcn-os-dark .game-head.menu-open #site-nav a.nav-item small,
+body.theme-dark .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav a .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav a .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head,
+body.theme-dark .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .nav-head .nav-ico,
+html.fcn-os-dark .game-head.menu-open #site-nav .nav-head .nav-ico,
+body.theme-dark .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-top .logo,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-top .logo,
+body.theme-dark .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-close,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-close,
+body.theme-dark .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-browse a,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-browse a,
+body.theme-dark .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+html[data-fcn-mode="dark"] .game-head.menu-open #site-nav .menu-share,
+html.fcn-os-dark .game-head.menu-open #site-nav .menu-share,
+body.theme-dark .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+@media (prefers-color-scheme:dark){
+  html:not([data-fcn-mode="light"]) .game-head #site-nav{background:#111c33;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .fcn-pl-rank,
+  html:not([data-fcn-mode="light"]) .fcn-pl-games{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .fcn-pl-row.fcn-you{color:#78350f}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a.nav-item small{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav a .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .nav-head .nav-ico{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-top .logo{color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-close{border-color:#243449;color:#e2e8f0}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse{color:#94a3b8}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-browse a{color:#7dd3fc}
+  html:not([data-fcn-mode="light"]) .game-head.menu-open #site-nav .menu-share{border-color:#243449;color:#e2e8f0}
+}

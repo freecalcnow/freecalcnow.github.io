@@ -2,7 +2,7 @@
    Caches the homepage shell + shared assets on first visit; tool and game
    pages are cached as they are visited (network-first, so answers are never
    stale). No push, no background sync, no tracking. */
-var VERSION = "fcn-v9.7";
+var VERSION = "fcn-v9.8";
 var SHELL = [
   "/",
   "/assets/style.css",

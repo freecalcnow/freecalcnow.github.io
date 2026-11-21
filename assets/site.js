@@ -864,7 +864,7 @@
 })();
 
 /* ---------- v7.3: download modal + version marker ----------
-   The header "Download app" button opens a popup over the current page
+   The header "Download" button opens a popup over the current page
    instead of navigating to /download/. The modal carries the same honest
    install options as the download page (real PWA install via
    window.FCN_INSTALL, manual steps where the browser offers no prompt,
@@ -872,7 +872,7 @@
    owner can see which build is live. */
 (function(){
   "use strict";
-  var VER="v9.7";
+  var VER="v9.8";
   function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
   function stampVersion(){
     try{
@@ -993,7 +993,7 @@
 /* ---------- v8: hide Download button when installed + fully automatic updates ----------
    (1) Installed-app detection: when the site runs as the installed PWA
    (display-mode: standalone, or iOS navigator.standalone), the header
-   "Download app" button is hidden — it must only show in a regular
+   "Download" button is hidden — it must only show in a regular
    browser tab. CSS hides it too (@media display-mode: standalone);
    this JS covers iOS and any browser without that media query.
    (2) Auto-update (owner correction, 20 Nov 2026): NO banner, NO tap, NO
@@ -1066,4 +1066,126 @@
     var links=header.querySelectorAll("#site-nav a");
     for(var i=0;i<links.length;i++){ links[i].addEventListener("click", function(){ set(false); }); }
   });
+})();
+
+/* v9.8 — left side panel (owner 21 Nov 2026): the hamburger opens a left
+   drawer, not a full-screen menu. Games section (own icon), Tools section
+   (own icon), EVERY category with its own icon + honest count from the
+   manifest. Built at runtime so the 15,555 v9.4-tree HTML files are never
+   edited; the panel is idempotent (data-fcn-panel marker). */
+(function(){
+  "use strict";
+  var ICONS = {
+  'home': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>',
+  'calculator': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h2M13 11h2M9 15h2M13 15h2"/></svg>',
+  'gamepad': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10a5 5 0 0 1 5 5v2a3 3 0 0 1-5.4 1.8L15 15H9l-1.6 1.8A3 3 0 0 1 2 14v-2a5 5 0 0 1 5-5Z"/><path d="M8 11v3M6.5 12.5h3"/><path d="M16 11h.01M17.5 13h.01"/></svg>',
+  'dice': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="8.5" cy="8.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1" fill="currentColor" stroke="none"/></svg>',
+  'calendar': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  'chat': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 13h5"/></svg>',
+  'info': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
+  'heart': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.3-7-9.5A4 4 0 0 1 12 7a4 4 0 0 1 7 3.5C19 15.7 12 20 12 20Z"/></svg>',
+  'gear': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>',
+  'dollar': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 1.8 2.6 5 3.2 5 1.4 5 3.3-2.2 3-5 3-5-1.1-5-3"/></svg>',
+  'activity': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+  'sigma': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5H7l6 7-6 7h10"/></svg>',
+  'ruler': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17L17 3l4 4L7 21l-4-4Z"/><path d="M8 16l1.5 1.5M11 13l1.5 1.5M14 10l1.5 1.5"/></svg>',
+  'clock': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  'trophy': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"/><path d="M8 5H4a4 4 0 0 0 4 5M16 5h4a4 4 0 0 1-4 5M12 13v4M8 21h8M10 17h4"/></svg>',
+  'chart': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M8 17v-5M12 17V7M16 17v-3"/></svg>',
+  'atom': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="9" ry="3.5"/><ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(120 12 12)"/></svg>',
+  'flask': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 18a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg>',
+  'leaf': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-9 5-14 14-14-1 8-5 13-14 14Z"/><path d="M5 19c3-5 7-9 11-11"/></svg>',
+  'apple': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-1-2-3-3-5-2-2.5 1.2-3.5 4.5-2.5 8 .8 2.8 3 5 7.5 5s6.7-2.2 7.5-5c1-3.5 0-6.8-2.5-8-2-1-4 0-5 2Z"/><path d="M12 7c0-2 1-3.5 3-4"/></svg>',
+  'globe': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>',
+  'swap': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v13M7 4L3 8M7 4l4 4"/><path d="M17 20V7M17 20l4-4M17 20l-4-4"/></svg>',
+  'grid': '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>'
+  };
+  var CATS = [
+  ['biology','Biology',53,'leaf'],
+  ['chemistry','Chemistry',63,'flask'],
+  ['construction','Construction',128,'ruler'],
+  ['conversion','Conversion',13789,'swap'],
+  ['ecology','Ecology',41,'globe'],
+  ['everyday','Everyday life',149,'clock'],
+  ['finance','Finance',332,'dollar'],
+  ['food','Food',79,'apple'],
+  ['health','Health',159,'activity'],
+  ['math','Math',149,'sigma'],
+  ['other','Other',107,'grid'],
+  ['physics','Physics',140,'atom'],
+  ['sports','Sports',104,'trophy'],
+  ['statistics','Statistics',83,'chart']
+  ];
+  var NAV_ICONS = {'/':'home','/tools/':'calculator','/games/':'gamepad',
+    '/ask/':'chat','/about/':'info','/favourites/':'heart','/settings/':'gear'};
+  function svg(k){ return ICONS[k] || ''; }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function item(href, icon, label, small){
+    return '<a class="nav-item" href="'+href+'"><span class="nav-ico" aria-hidden="true">'+svg(icon)+'</span><span>'+esc(label)+'</span>'+(small?'<small>'+esc(small)+'</small>':'')+'</a>';
+  }
+  function buildCats(cats){
+    var rows = cats.map(function(c){
+      return item('/category/'+c[0]+'/', c[3], c[1],
+        Number(c[2]).toLocaleString('en-US') + (c[2]===1?' tool':' tools'));
+    }).join('');
+    return '<div class="nav-sec nav-panel-only"><p class="nav-head"><span class="nav-ico" aria-hidden="true">'+svg('calculator')+'</span>Tools</p>'
+      + item('/tools/','calculator','All tools', '15,376 tools') + rows + '</div>';
+  }
+  function buildGames(){
+    return '<div class="nav-sec nav-panel-only"><p class="nav-head"><span class="nav-ico" aria-hidden="true">'+svg('gamepad')+'</span>Games</p>'
+      + item('/games/','gamepad','Games','164 games')
+      + item('/games/world/','dice','Games World','100 arcade games')
+      + item('/daily-number/','calendar','Daily Number','New puzzle daily') + '</div>';
+  }
+  function enhance(headerSel){
+    var header = document.querySelector(headerSel);
+    if(!header) return false;
+    var nav = header.querySelector('#site-nav');
+    if(!nav || nav.getAttribute('data-fcn-panel')) return false;
+    nav.setAttribute('data-fcn-panel','1');
+    var links = nav.querySelectorAll(':scope > a[href]');
+    for(var i=0;i<links.length;i++){
+      var a = links[i];
+      if(a.classList.contains('nav-dl')) continue;
+      var key = NAV_ICONS[a.getAttribute('href')];
+      if(!key || a.querySelector('.nav-ico')) continue;
+      var sp = document.createElement('span');
+      sp.className = 'nav-ico'; sp.setAttribute('aria-hidden','true');
+      sp.innerHTML = svg(key);
+      a.insertBefore(sp, a.firstChild);
+    }
+    var dl = nav.querySelector('a.nav-dl');
+    var frag = document.createElement('div');
+    frag.innerHTML = buildGames() + buildCats(CATS);
+    while(frag.firstChild) nav.insertBefore(frag.firstChild, dl);
+    if(window.fetch){
+      fetch('/assets/manifest-data.json').then(function(r){ return r.json(); }).then(function(m){
+        try{
+          var byId = {}; (m.categories||[]).forEach(function(c){ byId[c.id]=c.count; });
+          var changed = false;
+          CATS.forEach(function(c){ if(byId[c[0]]!=null && byId[c[0]]!==c[2]){ c[2]=byId[c[0]]; changed=true; } });
+          if(!changed) return;
+          var secs = nav.querySelectorAll('.nav-sec');
+          var toolsSec = null;
+          for(var j=0;j<secs.length;j++){ if(secs[j].textContent.indexOf('All tools')>=0) toolsSec = secs[j]; }
+          if(!toolsSec) return;
+          var tmp = document.createElement('div');
+          tmp.innerHTML = buildCats(CATS);
+          toolsSec.parentNode.replaceChild(tmp.firstChild, toolsSec);
+        }catch(e){}
+      }).catch(function(){});
+    }
+    var bd = document.createElement('div');
+    bd.className = 'menu-backdrop'; bd.setAttribute('aria-hidden','true');
+    bd.addEventListener('click', function(){
+      header.classList.remove('menu-open');
+      document.body.classList.remove('menu-open');
+      var btn = header.querySelector('.menu-btn');
+      if(btn) btn.setAttribute('aria-expanded','false');
+    });
+    header.appendChild(bd);
+    return true;
+  }
+  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fn); else fn(); }
+  ready(function(){ enhance('.site-head'); });
 })();
